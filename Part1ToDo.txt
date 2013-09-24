@@ -1,0 +1,5 @@
+1)notify other team members to modify and commit TestFile.txt
+
+2)when all members confirmed have mode mods
+    give team TA access to repo and wiki
+    send him email per project part 1 spec
