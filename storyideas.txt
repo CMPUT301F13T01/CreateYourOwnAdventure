@@ -1,0 +1,42 @@
+MAIN ACTIVITY PAGE:
+
+- App name up top
+- Listview of local stories
+   - Displays title and author
+   - Click opens option menu; Start From Beginning OR Continue
+
+- Action bar:
+   - Web Story Browse
+   - Up Arrow (Quit Application)
+   - Create New Story
+
+-----
+
+READ STORY MODE (automatic upon story listview click):
+
+- Start from beginning:
+   - Delete history, goes to Title Fragment
+
+- Continue:
+   - Loads up particular story's history, goes to latest fragment on stack
+   
+- Action bar:
+   - Edit Story
+   - Edit Page
+   - Previous Story Fragment (destroys current, starts previous, pops off stack)
+   - Return to Story Selection (either online or local, automatic history save)
+   - Return to Title Fragment
+
+- Fragment types:
+   - Title Fragment; one choice, go to initial Intermediate Page
+   - Intermediate Fragment; 0 to multiple choices, goes to appropriate Intermediate Page
+
+-----
+
+BROWSE WEB STORIES:
+
+- Initial Options Menu
+   - Search By:
+      - Author
+      - Title
+      - Content (later implementation)
