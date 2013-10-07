@@ -1,0 +1,14 @@
+media storage space added to dropbox by Gerald Oct 7th
+email link sent to team members by Gerald Oct 7th
+
+folder structure:
+- https://www.dropbox.com/home/Cmput301
+  - https://www.dropbox.com/home/Cmput301/Project/
+    - https://www.dropbox.com/home/Cmput301/Project/Media
+      - https://www.dropbox.com/home/Cmput301/Project/Media/Audio
+      - https://www.dropbox.com/home/Cmput301/Project/Media/Picture
+      - https://www.dropbox.com/home/Cmput301/Project/Media/Text
+      - https://www.dropbox.com/home/Cmput301/Project/Media/Video
+    - https://www.dropbox.com/home/Cmput301/Project/Part2
+
+planning meeting Oct 6th screenshots added to https://www.dropbox.com/home/Cmput301/Project/Part2 by Gerald Oct 7th
