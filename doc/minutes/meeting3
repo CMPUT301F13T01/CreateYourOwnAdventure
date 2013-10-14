@@ -1,0 +1,28 @@
+Team 1
+Meeting 3
+oct 8 2013 1530-1730
+attending:
+Eddie Tai, Gerald Manweiler, Jesse Chu, Jesse Huard, Reggie Miller
+
+Activity:
+- whiteboard author storyboards
+- whiteboard wiki layout
+
+Discussion:
+- authoring layouts
+	-linear layout selected
+	-programmatic adding of elements
+	-possible future implementation - resizable media
+- next group only meeting: Oct 15th 1530
+
+to do:
+-Eddie: implement wiki layout
+-Eddie: keeper of glossary and document manager
+-Gerald: book meeting room for Oct 15th
+-Gerald: upload authoring whiteboard screenshots
+-Gerald: upload local read only mode storyboards
+-Gerald: upload UI model whiteboard screenshots
+-Jesse C: OOA
+-Jesse H: throw-away prototype of author GUI(drag and drop into linear layout)
+-Jesse H: investigate how to upload media files and link to wiki page
+-Reggie: requirement specs
