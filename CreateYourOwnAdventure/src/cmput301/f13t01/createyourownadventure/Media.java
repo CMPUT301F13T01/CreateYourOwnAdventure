@@ -1,16 +1,18 @@
 package cmput301.f13t01.createyourownadventure;
 
 /* 
- * Generic abstract base class for classes which hold story fragment media. Child classes
- * must implement the getView() method.
+ * Generic base class for classes which hold story fragment media. Note that the class
+ * is generic, but must specify what type of media it falls under.
  */
 
-public abstract class Media<T> implements Viewable {
+public class Media<T> {
 	private T content;
+	private MediaType type;
 	private InteractionManager<T> manager;
 
-	public Media(T content) {
+	public Media(T content, MediaType type) {
 		this.content = content;
+		this.type = type;
 		this.setManager(new InteractionManager<T>());
 	}
 
@@ -29,4 +31,9 @@ public abstract class Media<T> implements Viewable {
 	public void setManager(InteractionManager<T> manager) {
 		this.manager = manager;
 	}
+
+	public MediaType getType() {
+		return type;
+	}
+
 }
