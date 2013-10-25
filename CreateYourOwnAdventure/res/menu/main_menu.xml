@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+        
+    <!--  browse online stories -->
+    <item android:id="@+id/action_browse_online_stories"
+          android:title="@string/action_browse_online_stories" 
+          android:icon="@drawable/browse_online_stories" 
+          android:showAsAction="ifRoom" /> 
+           
+    <!--  create new story  -->
+    <item android:id="@+id/action_create_new_story" 
+          android:title="@string/action_create_new_story" 
+          android:icon="@drawable/create_new_story" 
+          android:showAsAction="ifRoom" />    
+
+</menu>
