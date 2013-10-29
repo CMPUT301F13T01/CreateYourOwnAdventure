@@ -8,6 +8,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
+/**
+ * @author Eddie
+ *
+ */
 public class ReadStoryManager implements OnItemClickListener {
 
 	ReadFragmentView view = null;
@@ -15,14 +19,16 @@ public class ReadStoryManager implements OnItemClickListener {
 	Context context = null;
 	Story story;
 
-	public ReadStoryManager(final Story story, final String fragment_name,
+	
+	public ReadStoryManager(final Story story, final Integer fragment_id,
 			final ReadFragmentView view, final ReadFragmentActivity context) {
 		this.story = story;
 		this.view = view;
 		this.context = context;
 		
-		// fetch the fragment using the fragment name at story level?
-		fragment = story.fragment_list.get(fragment_name);
+		// fetch the fragment from the story level
+		FragmentList fragmentlist = story.get_fragmentlist();
+		fragment = fragmentlist.get_fragment(fragment_id);
 
 		// set view's media according to media in fragment
 		
@@ -49,7 +55,7 @@ public class ReadStoryManager implements OnItemClickListener {
 			//else if type is video
 		}
 
-		// from story level with fragment name, get the choice array list
+		// from story level with fragment id, get the choice array list
 		story.choice_map.get(fragment)
 		
 		// if choice array list isn't null:
@@ -62,7 +68,7 @@ public class ReadStoryManager implements OnItemClickListener {
 	 * Go to the beginning of a story
 	 */
 	public void toBeginning() {
-		String first_fragment_name = story.first_page;
+		Integer first_page_id = story.get_first_page();
 
 	}
 
@@ -70,11 +76,15 @@ public class ReadStoryManager implements OnItemClickListener {
 	 * Go back to the previous page dictated by the history stack
 	 */
 	public void toPrevious() {
-		String back_fragment_name = story.history_stack.go_back();
+		Integer previous_page_id = story.history_stack.go_back();
 		// history remove last from stack
 
 	}
 
+	/**
+	 * On selection of a choice in view, direct the user to the next story fragment
+	 * according to the choice map.
+	 */
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {

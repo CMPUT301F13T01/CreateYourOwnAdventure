@@ -27,7 +27,7 @@ public class ReadFragmentView extends ScrollView {
 	 * with multiple views, depending on the story fragment and its content
 	 * media files.
 	 * 
-	 * @param context
+	 * @param context the activity that the view belongs to
 	 */
 	public ReadFragmentView(Context c) {
 		super(c);
@@ -77,6 +77,7 @@ public class ReadFragmentView extends ScrollView {
 				R.layout.list_choices, choice_text);
 		lv.setAdapter(adapter);
 
+		// set the controller for these list items
 		lv.setOnItemClickListener(onItemClickListener);
 	}
 
