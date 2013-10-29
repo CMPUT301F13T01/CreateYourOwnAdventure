@@ -12,5 +12,7 @@
     <string name="edit_section1">Info</string>
     <string name="edit_section2">Edit</string>
     <string name="edit_section3">Preview</string>
+    <string name="info_title_hint">Fragment Title</string>
+    <string name="info_description_hint">Fragment Description</string>
 
 </resources>
