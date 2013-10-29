@@ -10,6 +10,11 @@ package cmput301.f13t01.createyourownadventure;
  * Fragment: is there a getter for content_list?
  * MediaHandler: how do I get a media's type?
  * Choice_map: there's some sort of changes to it afaik?
+ * 
+ * Self reminder for git usages:
+ * git status
+ * git commit -m -a "comments"
+ * git push http://github.com/CMPUT301F13T01/CreateYourOwnAdventure etai
  */
 
 import android.app.Activity;
