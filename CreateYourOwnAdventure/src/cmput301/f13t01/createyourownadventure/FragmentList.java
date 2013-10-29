@@ -43,6 +43,23 @@ public class FragmentList {
 	}
 	
 	/**
+	 * Returns requested Fragment from FragmentList.
+	 * Bad request returns null.
+	 * 
+	 * @param id ID of requested Fragment
+	 * @return the Fragment associated with the given ID, null if it doesn't exist
+	 */
+	public Fragment get_fragment(Integer id) {
+		// Fragment exists, is returned
+		if (fragment_list.containsKey(id)) {
+			return fragment_list.get(id);
+		} else {
+			// Fragment does not exist, null
+			return null;
+		}
+	}
+	
+	/**
 	 * Creates and places a new fragment into the FragmentList.
 	 * A new ID is automatically generated for each fragment.
 	 */
@@ -52,7 +69,7 @@ public class FragmentList {
 		// Non-empty FragmentList, make new id
 		if (!this.fragment_list.isEmpty()) {
 			// New ID is 1 greater than the current largest ID, for uniqueness
-			id = Collections.max(this.fragment_list.keySet()) + 1; 
+			id = Collections.max(this.fragment_list.keySet()) + 1;
 		}
 		// Creates new Fragment to insert
 		Fragment new_fragment = new Fragment();
@@ -80,21 +97,38 @@ public class FragmentList {
 			return false;
 		}
 	}
-
+	
 	/**
-	 * Returns requested Fragment from FragmentList.
-	 * Bad request returns null.
+	 * Updates the Fragment associated with a given ID.
+	 * Fragment ID must have been in use to be valid
 	 * 
-	 * @param id ID of requested Fragment
-	 * @return the Fragment associated with the given ID, null if it doesn't exist
+	 * @param id ID of the Fragment in to updated
+	 * @param fragment Fragment to update to
+	 * @returns true is successful, false otherwise
 	 */
-	public Fragment get_fragment(Integer id) {
-		// Fragment exists, is returned
+	public boolean update_fragment(Integer id, Fragment fragment) {
+		// Fragment ID exists, update the fragment
 		if (fragment_list.containsKey(id)) {
-			return fragment_list.get(id);
+			// Updates HashMap entry for the given ID:Fragment pair
+			this.fragment_list.put(id, fragment);
+			return true;
 		} else {
-			// Fragment does not exist, null
-			return null;
+			// Fragment ID doesn't exist, update fails
+			return false;
 		}
+		
 	}
+	
+	/**
+	 * Adds an existing giving fragment to the FragmentList.
+	 * 
+	 * @param fragment Fragment being imported
+	 */
+	public void import_fragment(Fragment fragment) {
+		// ID is 1 greater than the current largest ID, for uniqueness
+		Integer id = Collections.max(this.fragment_list.keySet()) + 1;
+		// Places Fragment into the FragmentList with a new ID
+		this.fragment_list.put(id, fragment);
+	}
+
 }
