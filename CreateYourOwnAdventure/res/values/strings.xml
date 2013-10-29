@@ -8,5 +8,8 @@
     <!--  main screen action bar items -->
     <string name="action_browse_online_stories">Browse Online Stories</string>
     <string name="action_create_new_story">Create New Story</string>       
-
+    <!--  main screen action bar items -->
+    <string name="action_return_to_previous_page">Return to Previous Page</string>
+    <string name="action_return_to_beginning">Return to Beginning</string>   
+    
 </resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <!--  return to beginning of story -->
+    <item android:id="@+id/action_return_to_beginning"
+          android:title="@string/action_return_to_beginning" 
+          android:showAsAction="ifRoom" /> 
+           
+    <!--  return to previous page according to history  -->
+    <item android:id="@+id/action_return_to_previous_page" 
+          android:title="@string/action_return_to_previous_page" 
+          android:showAsAction="ifRoom" />  
+
+</menu>
