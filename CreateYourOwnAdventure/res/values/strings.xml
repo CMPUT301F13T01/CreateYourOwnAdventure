@@ -3,10 +3,14 @@
 
     <string name="app_name">T01-Create!</string>
     <string name="hello_world">Hello world!</string>
-    <!--  action bar items -->
+    <!-- action bar items -->
     <string name="action_settings">Settings</string>
-    <!--  main screen action bar items -->
+    <!-- main screen action bar items -->
     <string name="action_browse_online_stories">Browse Online Stories</string>
-    <string name="action_create_new_story">Create New Story</string>       
+    <string name="action_create_new_story">Create New Story</string>
+    <string name="title_activity_edit_fragment">Edit Fragment</string>
+    <string name="edit_section1">Info</string>
+    <string name="edit_section2">Edit</string>
+    <string name="edit_section3">Preview</string>
 
 </resources>

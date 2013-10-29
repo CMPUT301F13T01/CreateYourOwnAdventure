@@ -16,6 +16,10 @@
         <activity
             android:name="cmput301.f13t01.createyourownadventure.MainActivity"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="cmput301.f13t01.createyourownadventure.EditFragment"
+            android:label="@string/title_activity_edit_fragment" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
