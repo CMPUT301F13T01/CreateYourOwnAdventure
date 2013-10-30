@@ -144,12 +144,12 @@ public class Story {
 	}
 	
 	public Integer new_session() {
-		this.history_stack.clear_history();
+		this.history_stack.clearHistory();
 		return this.first_page;
 	}
 	
 	public Integer resume_session() {
-		Integer fragment_id = this.history_stack.get_most_recent();
+		Integer fragment_id = this.history_stack.getMostRecent();
 		return fragment_id;
 	}
 	

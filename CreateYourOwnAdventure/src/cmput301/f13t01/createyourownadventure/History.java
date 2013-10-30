@@ -1,7 +1,3 @@
-/* Change it to allow empty stack, manager will
- * deal with if they hit continue or not
- */
-
 /*
 History class for CreateYourOwnAdventure.
 Keeps a memory of past read fragments
@@ -41,10 +37,10 @@ import java.util.ArrayList;
 
 public class History {
 
-	private ArrayList<Integer> history_stack;
+	private ArrayList<Integer> historyStack;
 	
 	public History() {
-		history_stack = new ArrayList<Integer>();
+		historyStack = new ArrayList<Integer>();
 	}
 	
 	/**
@@ -53,13 +49,13 @@ public class History {
 	 * 
 	 * @return Integer ID of last-viewed fragment.
 	 */
-	public Integer get_most_recent() {
+	public Integer getMostRecent() {
 		
-		int size = history_stack.size();
+		int size = historyStack.size();
 				
 		if (size > 0) {
-			int last_index = size - 1;
-			return history_stack.get(last_index);
+			int lastIndex = size - 1;
+			return historyStack.get(lastIndex);
 		}
 		//Returns -1 if stack is empty
 		return null;
@@ -74,19 +70,20 @@ public class History {
 	 * 
 	 * @return Second-last-viewed fragment.
 	 */
-	public Integer go_back() {
+	public Integer goBack() {
 		
-		int size = history_stack.size();
+		int size = historyStack.size();
 		
 		if (size > 1) {
-			int last_index = size - 1;
-			history_stack.remove(last_index);
-			return history_stack.get(last_index - 1);
+			int lastIndex = size - 1;
+			historyStack.remove(lastIndex);
+			return historyStack.get(lastIndex - 1);
 		}
 		//If currently on first fragment, return itself
 		else if (size == 1) {
-			int last_index = size - 1;
-			return history_stack.get(last_index);
+			int lastIndex = size - 1;
+			historyStack.remove(lastIndex);
+			return null;
 		}
 		//If stack is empty
 		else {
@@ -94,14 +91,13 @@ public class History {
 		}
 	}
 	
-	//New fragment being viewed, pushed to the stack
 	/**
 	 * Pushes the newest fragment being viewed to the stack.
 	 * 
 	 * @param fragment_id   ID of fragment to be pushed to stack.
 	 */
-	public void push_to_stack(Integer fragment_id) {
-		history_stack.add(fragment_id);
+	public void pushToStack(Integer fragmentId) {
+		historyStack.add(fragmentId);
 		return;
 	}
 	
@@ -109,8 +105,8 @@ public class History {
 	/**
 	 * Clears the stack so that user may start again.
 	 */
-	public void clear_history() {
-		history_stack.clear();
+	public void clearHistory() {
+		historyStack.clear();
 		return;
 	}
 	
