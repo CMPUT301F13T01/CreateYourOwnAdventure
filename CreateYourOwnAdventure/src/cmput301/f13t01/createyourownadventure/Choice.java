@@ -26,6 +26,10 @@ text of the particular choice.
 
 package cmput301.f13t01.createyourownadventure;
 
+import java.io.IOException;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+
 /**
  * This is a simple object that will contain the information
  * related to a particular choice, which will allow the
@@ -35,7 +39,7 @@ package cmput301.f13t01.createyourownadventure;
  *
  */
 
-public class Choice {
+public class Choice implements Serializable {
 
 	private int sourceId;
 	private int destinationId;
@@ -93,6 +97,23 @@ public class Choice {
 	 */
 	public void setFlavourText(String flavourText) {
 		this.flavourText = flavourText;
+	}
+	
+	private void writeObject(java.io.ObjectOutputStream out)
+		     throws IOException {
+		out.writeObject(sourceId);
+		out.writeObject(destinationId);
+		out.writeObject(flavourText);
+	}
+	private void readObject(java.io.ObjectInputStream in)
+		     throws IOException, ClassNotFoundException {
+		sourceId = (Integer) in.readObject();
+		destinationId = (Integer) in.readObject();
+		flavourText = (String) in.readObject();
+	}
+		 
+	private void readObjectNoData() 
+		     throws ObjectStreamException {
 	}
 	
 }

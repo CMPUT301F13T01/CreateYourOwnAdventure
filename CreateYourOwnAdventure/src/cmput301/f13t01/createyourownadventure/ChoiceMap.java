@@ -24,6 +24,9 @@ Allows for access to all choices linking fragments in a story
 
 package cmput301.f13t01.createyourownadventure;
 
+import java.io.IOException;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,7 +38,7 @@ import java.util.HashMap;
  *
  */
 
-public class ChoiceMap {
+public class ChoiceMap implements Serializable {
 
 	//Maps Fragment IDs to Fragment ArrayList, to be indexed
 	private HashMap<Integer, ArrayList<Choice>> choiceMapping;
@@ -178,6 +181,31 @@ public class ChoiceMap {
 		else {
 			return destinations;
 		}
+	}
+	
+	/**
+	 * 
+	 * @param out   ObjectOutputStream to write with
+	 * @throws IOException
+	 */
+	private void writeObject(java.io.ObjectOutputStream out)
+		     throws IOException {
+		out.writeObject(choiceMapping);
+	}
+	
+	/**
+	 * 
+	 * @param in   ObjectInputStream to read with
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private void readObject(java.io.ObjectInputStream in)
+		     throws IOException, ClassNotFoundException {
+		choiceMapping = (HashMap<Integer, ArrayList<Choice>>) in.readObject();
+	}
+		 
+	private void readObjectNoData() 
+		     throws ObjectStreamException {
 	}
 	
 }

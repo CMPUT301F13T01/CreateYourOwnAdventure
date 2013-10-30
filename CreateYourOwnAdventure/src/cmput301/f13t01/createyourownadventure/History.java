@@ -24,6 +24,9 @@ Keeps a memory of past read fragments
 
 package cmput301.f13t01.createyourownadventure;
 
+import java.io.IOException;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -35,7 +38,7 @@ import java.util.ArrayList;
  *
  */
 
-public class History {
+public class History implements Serializable {
 
 	private ArrayList<Integer> historyStack;
 	
@@ -107,6 +110,34 @@ public class History {
 	 */
 	public void clearHistory() {
 		historyStack.clear();
+		return;
+	}
+	
+	/**
+	 * 
+	 * @param out   ObjectOutputStream to write with
+	 * @throws IOException
+	 */
+	private void writeObject(java.io.ObjectOutputStream out)
+		     throws IOException {
+		out.writeObject(historyStack);
+		return;
+	}
+	
+	/**
+	 * 
+	 * @param in   ObjectInputStream to read with
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private void readObject(java.io.ObjectInputStream in)
+		     throws IOException, ClassNotFoundException {
+		historyStack = (ArrayList<Integer>) in.readObject();
+		return;
+	}
+		 
+	private void readObjectNoData() 
+		     throws ObjectStreamException {
 		return;
 	}
 	

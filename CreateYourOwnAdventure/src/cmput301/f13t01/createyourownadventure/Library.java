@@ -1,6 +1,7 @@
 /*
 Library class for CreateYourOwnAdventure.
-Keeps a list of all local stories
+This deals with the high-level maintenance of stories and how
+they are handled.
 
      Copyright  ©2013 Reginald Miller
     <Contact: rmiller3@ualberta.ca>
@@ -24,6 +25,9 @@ Keeps a list of all local stories
 
 package cmput301.f13t01.createyourownadventure;
 
+import java.io.IOException;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -35,7 +39,7 @@ import java.util.ArrayList;
  *
  */
 
-public class Library {
+public class Library implements Serializable {
 	
 	private StoryList storyList;
 	
@@ -47,7 +51,7 @@ public class Library {
 	 * Creates a new story and adds it to the list
 	 */
 	public void createNewStory() {
-		storyList.add(new Story());
+		storyList.addStory(new Story());
 		return;
 	}
 	
@@ -55,59 +59,72 @@ public class Library {
 	 * Gets the story to the list and passes it to whoever
 	 * requests it. Returns null if pos is out of range.
 	 * 
-	 * @param pos   Story's position in list
-	 * @return   Returns the story at the position
+	 * @param storyId   ID of the story
+	 * @return   Returns the story with that ID
 	 */
-	public Story getStory(int pos) {
-		if (pos >= 0 && pos < storyList.size() - 1) {
-			return storyList.get(pos);
-		}
-		else {
-			return null;
-		}
+	public Story getStory(int storyId) {
+		return storyList.getStory(storyId);
 	}
 	
 	/**
 	 * Deletes the story at a given position in the list
 	 * 
-	 * @param pos   Position in list of story to delete
-	 * @return   Returns true if successfully deleted, if pos out of range returns false
+	 * @param storyId   ID of story to remove
 	 */
-	public boolean deleteStory(int pos) {
-		if (pos >= 0 && pos < storyList.size() - 1) {
-			storyList.remove(pos);
-			return true;
-		}
-		else {
-			return false;
+	public void removeStory(int storyId) {
+		storyList.removeStory(storyId);
+		return;
+	}
+	
+	/**
+	 * 
+	 * @param ArrayList of story IDs to be removed
+	 */
+	public void removeMultipleStories(ArrayList<Integer> stories) {
+		for (int storyId : stories) {
+			storyList.removeStory(storyId);
+			return;
 		}
 	}
 	
 	/**
 	 * Puts a new or updated story into the list of stories
-	 * at the desired position.
+	 * with the ID
 	 * 
-	 * @param pos   Position to update story
+	 * @param storyId   ID of story to update
 	 * @param story   Story that has been updated
-	 * @return   Returns true if pos in range; returns false otherwise
 	 */
-	public boolean updateStory(int pos, Story story) {
-		if (pos >= 0 && pos < storyList.size() - 1) {
-			storyList.set(pos, story);
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	public void loadStories() {
+	public void updateStory(int storyId, Story story) {
+		storyList.updateStory(storyId, story);
 		return;
 	}
 	
-	public void saveStories() {
+	/**
+	 * 
+	 * @param out   ObjectOutputStream to write with
+	 * @throws IOException
+	 */
+	private void writeObject(java.io.ObjectOutputStream out)
+		     throws IOException {
+		out.writeObject(storyList);
 		return;
 	}
 	
+	/**
+	 * 
+	 * @param in   ObjectInputStream to read with
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private void readObject(java.io.ObjectInputStream in)
+		     throws IOException, ClassNotFoundException {
+		storyList = (StoryList) in.readObject();
+		return;
+	}
+		 
+	private void readObjectNoData() 
+		     throws ObjectStreamException {
+		return;
+	}
 
 }
