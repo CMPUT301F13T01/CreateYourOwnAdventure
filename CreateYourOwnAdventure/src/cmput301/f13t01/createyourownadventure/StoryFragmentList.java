@@ -23,6 +23,7 @@ package cmput301.f13t01.createyourownadventure;
 import java.io.IOException;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,6 +65,12 @@ public class StoryFragmentList implements Serializable {
 		}
 	}
 	
+	/**
+	 * Returns the ID of a given StoryFragment.
+	 * 
+	 * @param fragment the StoryFragment to get the ID of
+	 * @return the ID of the StoryFragment, null if not found
+	 */
 	public Integer getFragmentId(StoryFragment fragment) {
 		// Default return ID
 		Integer id = null;
@@ -77,6 +84,41 @@ public class StoryFragmentList implements Serializable {
 		}
 		// Return the ID
 		return id;
+	}
+	
+	/**
+	 * Returns a StoryFragmentInfo object for the given ID.
+	 * Used to display StoryFragmentInfo in lists.
+	 * 
+	 * @param id the ID of the fragment to get the info of
+	 * @return a StoryFragmentInfo object for that ID
+	 */
+	public StoryFragmentInfo getFragmentInfo(Integer id) {
+		// Fetch the fragment
+		StoryFragment fragment = this.fragmentList.get(id);
+		if (fragment != null) {
+			// Return for valid id
+			return new StoryFragmentInfo(id, fragment);
+		} else {
+			// Return null if not found
+			return new StoryFragmentInfo();
+		}
+	}
+	
+	/**
+	 * Returns an ArrayList of StoryFragmentInfo objects for
+	 * all StoryFragment objects.
+	 * 
+	 * @return an ArrayList of all StoryFragmentInfo
+	 */
+	public ArrayList<StoryFragmentInfo> getFragmentInfoList() {
+		ArrayList<StoryFragmentInfo> fragmentInfoList = new ArrayList<StoryFragmentInfo>();
+		for (Map.Entry<Integer, StoryFragment> entry:this.fragmentList.entrySet()) {
+			Integer id = entry.getKey();
+			StoryFragment fragment = entry.getValue();
+			fragmentInfoList.add(new StoryFragmentInfo(id, fragment));
+		}
+		return fragmentInfoList;
 	}
 	
 	/**
@@ -135,8 +177,7 @@ public class StoryFragmentList implements Serializable {
 		} else {
 			// Fragment ID doesn't exist, update fails
 			return false;
-		}
-		
+		}		
 	}
 	
 	/**
@@ -153,16 +194,15 @@ public class StoryFragmentList implements Serializable {
 	
 	private void writeObject(java.io.ObjectOutputStream out)
 		     throws IOException {
-		
+		out.writeObject(this.fragmentList);
 	}
 	private void readObject(java.io.ObjectInputStream in)
 	    throws IOException, ClassNotFoundException {
-		
+		this.fragmentList = (HashMap<Integer, StoryFragment>) in.readObject();
 	}
 	private void readObjectNoData()
 	    throws ObjectStreamException{
 		
 	}
 	
-
 }

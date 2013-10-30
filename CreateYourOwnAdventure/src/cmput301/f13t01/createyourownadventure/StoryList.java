@@ -26,6 +26,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Jesse Chu <jhchu@ualberta.ca>
@@ -37,7 +39,7 @@ import java.util.HashMap;
 public class StoryList implements Serializable {
 	
 	// HashMap of Story ID's to Story Objects
-	private ArrayList<StoryListEntry> storyList;
+	private HashMap<Integer, Story> storyList;
 
 	/**
 	 * Constructor. Creates an empty HashMap for use.
@@ -61,6 +63,62 @@ public class StoryList implements Serializable {
 			// Story does not exist, null
 			return null;
 		}
+	}
+	
+	/**
+	 * Returns the ID of a given StoryFragment.
+	 * 
+	 * @param fragment the StoryFragment to get the ID of
+	 * @return the ID of the StoryFragment, null if not found
+	 */
+	public Integer getStoryId(Story story){
+		// Default return ID
+		Integer id = null;
+		// Check entrySet of the HashMap for given Story
+		Set<Map.Entry<Integer, Story>> set = this.storyList.entrySet();
+		for (Map.Entry<Integer, Story> entry : set) {
+			if (entry.getValue() == story) {
+				// Found Fragment, save its ID
+				id = entry.getKey();
+			}
+		}
+		// Return the ID
+		return id;
+	}
+	
+	/**
+	 * Returns a StoryInfo object for the given ID.
+	 * Used to display StoryInfo in lists.
+	 * 
+	 * @param id the ID of the Story to get the info of
+	 * @return a StoryInfo object for that ID
+	 */
+	public StoryInfo getStoryInfo(Integer id) {
+		// Fetch the story
+		Story story = this.storyList.get(id);
+		if (story != null) {
+			// Return for valid id
+			return new StoryInfo(id, story);
+		} else {
+			// Return null if not found
+			return new StoryInfo();
+		}
+	}
+	
+	/**
+	 * Returns an ArrayList of StoryInfo objects for
+	 * all Story objects.
+	 * 
+	 * @return an ArrayList of all StoryInfo
+	 */
+	public ArrayList<StoryInfo> getStoryInfoList() {
+		ArrayList<StoryInfo> storyInfoList = new ArrayList<StoryInfo>();
+		for (Map.Entry<Integer, Story> entry:this.storyList.entrySet()) {
+			Integer id = entry.getKey();
+			Story story = entry.getValue();
+			storyInfoList.add(new StoryInfo(id, story));
+		}
+		return storyInfoList;
 	}
 	
 	/**
@@ -119,8 +177,7 @@ public class StoryList implements Serializable {
 		} else {
 			// Story ID doesn't exist, update fails
 			return false;
-		}
-		
+		}	
 	}
 	
 	/**
@@ -137,16 +194,14 @@ public class StoryList implements Serializable {
 	
 	private void writeObject(java.io.ObjectOutputStream out)
 		     throws IOException {
-		
+		out.writeObject(storyList);
 	}
 	private void readObject(java.io.ObjectInputStream in)
 	    throws IOException, ClassNotFoundException {
-		
+		this.storyList = (HashMap<Integer, Story>) in.readObject();
 	}
 	private void readObjectNoData()
 	    throws ObjectStreamException{
-		
 	}
 	
-
 }

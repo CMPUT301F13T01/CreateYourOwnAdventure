@@ -118,6 +118,27 @@ public class Story implements Serializable {
 	}
 	
 	/**
+	 * Returns the ID of a given StoryFragment.
+	 * 
+	 * @param fragment the StoryFragment to get the ID of
+	 * @return the ID of the StoryFragment, null if not found
+	 */
+	public Integer getFragmentId(StoryFragment fragment) {
+		return this.fragmentList.getFragmentId(fragment);
+	}
+	
+	/**
+	 * Returns a StoryFragmentInfo object for the given ID.
+	 * Used to display StoryFragmentInfo in lists.
+	 * 
+	 * @param id the ID of the fragment to get the info of
+	 * @return a StoryFragmentInfo object for that ID
+	 */
+	public StoryFragmentInfo getFragmentInfo(Integer id) {
+		return this.fragmentList.getFragmentInfo(id);
+	}
+	
+	/**
 	 * Getter for the ChoiceMap object of a Story
 	 * 
 	 * @return the ChoiceMap of the Story
@@ -191,11 +212,23 @@ public class Story implements Serializable {
 	
 	private void writeObject(java.io.ObjectOutputStream out)
 		     throws IOException {
-		
+		out.writeObject(this.title);
+		out.writeObject(this.author);
+		out.writeObject(this.description);
+		out.writeObject(this.firstPage);
+		out.writeObject(this.historyStack);
+		out.writeObject(this.fragmentList);
+		out.writeObject(this.choiceMap);
 	}
 	private void readObject(java.io.ObjectInputStream in)
 	    throws IOException, ClassNotFoundException {
-		
+		this.title = (String) in.readObject();
+		this.author = (String) in.readObject();
+		this.description = (String) in.readObject();
+		this.firstPage = (Integer) in.readObject();
+		this.historyStack = (History) in.readObject();
+		this.fragmentList = (StoryFragmentList) in.readObject();
+		this.choiceMap = (ChoiceMap) in.readObject();
 	}
 	private void readObjectNoData()
 	    throws ObjectStreamException{

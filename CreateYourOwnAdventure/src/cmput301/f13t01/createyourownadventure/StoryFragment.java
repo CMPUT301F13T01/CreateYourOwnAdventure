@@ -164,11 +164,17 @@ public class StoryFragment implements Serializable {
 	
 	private void writeObject(java.io.ObjectOutputStream out)
 		     throws IOException {
-		
+		out.writeObject(this.title);
+		out.writeObject(this.description);
+		out.writeObject(this.contentList);
+		out.writeObject(this.annotationList);
 	}
 	private void readObject(java.io.ObjectInputStream in)
 	    throws IOException, ClassNotFoundException {
-		
+		this.title = (String) in.readObject();
+		this.description = (String) in.readObject();
+		this.contentList = (ArrayList<Media>) in.readObject();
+		this.annotationList = (ArrayList<Media>) in.readObject();
 	}
 	private void readObjectNoData()
 	    throws ObjectStreamException{
