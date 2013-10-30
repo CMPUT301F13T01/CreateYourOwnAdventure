@@ -8,6 +8,7 @@
     <!--  main screen action bar items -->
     <string name="action_browse_online_stories">Browse Online Stories</string>
     <string name="action_create_new_story">Create New Story</string>
-    <string name="story_fragment">Story Fragment</string>       
+    <string name="story_fragment">Story Fragment</string>
+    <string name="story_id">Story ID</string>       
 
 </resources>
