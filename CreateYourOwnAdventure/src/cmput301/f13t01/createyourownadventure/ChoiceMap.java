@@ -1,3 +1,19 @@
+/*Add choice class with attributes sourceId, destinationId
+ * and flavourText. Switch inner hashmap here to be 
+ * an arraylist of these choice objects
+ * 
+ * update_choice(fragment id, index, choice object)
+ * 
+ * add_choice(fragment id, choice object)
+ * 
+ * delete_choice(fragment id, index)
+ * 
+ * get_choices(fragment id)
+ * 
+ * Go to src -> make new package
+ */
+
+
 /*
 ChoiceMap class for CreateYourOwnAdventure.
 Allows for access to all choices linking fragments in a story

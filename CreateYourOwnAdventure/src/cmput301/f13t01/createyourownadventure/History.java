@@ -1,3 +1,7 @@
+/* Change it to allow empty stack, manager will
+ * deal with if they hit continue or not
+ */
+
 /*
 History class for CreateYourOwnAdventure.
 Keeps a memory of past read fragments
