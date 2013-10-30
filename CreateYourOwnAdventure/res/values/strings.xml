@@ -14,5 +14,6 @@
     <string name="edit_section3">Preview</string>
     <string name="info_title_hint">Fragment Title</string>
     <string name="info_description_hint">Fragment Description</string>
+    <string name="story_fragment">Story Fragment</string>
 
 </resources>
