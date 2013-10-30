@@ -20,6 +20,10 @@ Aggregates functionality and data for a single story.
  */
 package cmput301.f13t01.createyourownadventure;
 
+import java.io.IOException;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+
 /**
  * @author Jesse Chu <jhchu@ualberta.ca>
  * 
@@ -31,18 +35,18 @@ package cmput301.f13t01.createyourownadventure;
  * - ChoiceMap stores the choices and associates for the Fragments
  */
 
-public class Story {
+public class Story implements Serializable {
 	
 	/* Instance Variables for a Story */
 	// Story Attributes
 	private String title;
 	private String author;
 	private String description;
-	private Integer first_page;
+	private Integer firstPage;
 	// Aggregated objects for functionality
-	private History history_stack;
-	private FragmentList fragment_list;
-	private ChoiceMap choice_map;
+	private History historyStack;
+	private StoryFragmentList fragmentList;
+	private ChoiceMap choiceMap;
 
 	/**
 	 * Constructor. Creates a new instance of a Story.
@@ -52,10 +56,10 @@ public class Story {
 		this.title = "New Story";
 		this.author = "";
 		this.description = "A new Story";
-		this.first_page = null;
-		this.history_stack = new History();
-		this.fragment_list = new FragmentList();
-		this.choice_map = new ChoiceMap();
+		this.firstPage = null;
+		this.historyStack = new History();
+		this.fragmentList = new StoryFragmentList();
+		this.choiceMap = new ChoiceMap();
 	}
 	
 	/**
@@ -63,7 +67,7 @@ public class Story {
 	 * 
 	 * @return the title of the story
 	 */
-	public String get_title() {
+	public String getTitle() {
 		return this.title;
 	}
 	
@@ -72,7 +76,7 @@ public class Story {
 	 * 
 	 * @return the author of the story
 	 */
-	public String get_author() {
+	public String getAuthor() {
 		return this.author;
 	}
 	
@@ -81,7 +85,7 @@ public class Story {
 	 * 
 	 * @return the description of the story
 	 */
-	public String get_description() {
+	public String getDescription() {
 		return this.description;
 	}
 	
@@ -90,8 +94,36 @@ public class Story {
 	 * 
 	 * @return the ID of the first fragment of the story
 	 */
-	public Integer get_first_page() {
-		return this.first_page;
+	public Integer getFirstPage() {
+		return this.firstPage;
+	}
+	
+	/**
+	 * Getter for the FragmentList object of a Story
+	 * 
+	 * @return the FragmentList of the Story
+	 */
+	public StoryFragmentList getFragmentList() {
+		return this.fragmentList;
+	}
+	
+	/**
+	 * Fetches a requested StoryFragment by ID from FragmentList
+	 * 
+	 * @param id the id of the StoryFragment to return
+	 * @return the requested StoryFragment, null if it doesn't exist
+	 */
+	public StoryFragment getFragment(Integer id) {
+		return this.fragmentList.getFragment(id);
+	}
+	
+	/**
+	 * Getter for the ChoiceMap object of a Story
+	 * 
+	 * @return the ChoiceMap of the Story
+	 */
+	public ChoiceMap getChoiceMap() {
+		return this.choiceMap;
 	}
 	
 	/**
@@ -100,7 +132,7 @@ public class Story {
 	 * @param title the string to set the title to
 	 * @return true if successful, false otherwise
 	 */
-	public boolean set_title(String title) {
+	public boolean setTitle(String title) {
 		this.title = title;
 		return true;
 	}
@@ -111,7 +143,7 @@ public class Story {
 	 * @param author the string to set the author to
 	 * @return true if successful, false otherwise
 	 */
-	public boolean set_author(String author) {
+	public boolean setAuthor(String author) {
 		this.author = author;
 		return true;
 	}
@@ -122,7 +154,7 @@ public class Story {
 	 * @param description the string to set the description to
 	 * @return true if successful, false otherwise
 	 */
-	public boolean set_description(String description) {
+	public boolean setDescription(String description) {
 		this.description = description;
 		return true;
 	}
@@ -133,28 +165,42 @@ public class Story {
 	 * @param id the id of the fragment to set as first page
 	 * @return true if successful, false otherwise
 	 */
-	public boolean set_first_page(Integer id) {
-		Fragment check_fragment = fragment_list.get_fragment(id);
-		if (check_fragment != null) {
-			this.first_page = id;
+	public boolean setFirstPage(Integer id) {
+		StoryFragment checkFragment = fragmentList.getFragment(id);
+		if (checkFragment != null) {
+			this.firstPage = id;
 			return true;
 		} else {
 			return false;
 		}
 	}
 	
-	public Integer new_session() {
-		this.history_stack.clear_history();
-		return this.first_page;
+	public Integer newSession() {
+		this.historyStack.clearHistory();
+		return this.firstPage;
 	}
 	
-	public Integer resume_session() {
-		Integer fragment_id = this.history_stack.get_most_recent();
+	public Integer resumeSession() {
+		Integer fragment_id = this.historyStack.getMostRecent();
 		return fragment_id;
 	}
 	
-	public void save_story() {
+	public void saveStory() {
 		
 	}
+	
+	private void writeObject(java.io.ObjectOutputStream out)
+		     throws IOException {
+		
+	}
+	private void readObject(java.io.ObjectInputStream in)
+	    throws IOException, ClassNotFoundException {
+		
+	}
+	private void readObjectNoData()
+	    throws ObjectStreamException{
+		
+	}
+	
 
 }

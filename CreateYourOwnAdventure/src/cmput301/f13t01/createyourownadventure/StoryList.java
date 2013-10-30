@@ -1,23 +1,152 @@
+/*
+StoryList Class for CreateYourOwnAdventure App.
+Maps ID numbers to Story objects.
+    
+    License GPLv3: GNU GPL Version 3
+    <http://gnu.org/licenses/gpl.html>.
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package cmput301.f13t01.createyourownadventure;
 
-import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
+import java.io.IOException;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
-public class StoryList extends Activity {
+/**
+ * @author Jesse Chu <jhchu@ualberta.ca>
+ *
+ * StoryList, holds all Story objects and gives each a unique ID.
+ * Used by Library object.
+ */
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_story_list);
-    }
+public class StoryList implements Serializable {
+	
+	// HashMap of Story ID's to Story Objects
+	private ArrayList<StoryListEntry> storyList;
 
+	/**
+	 * Constructor. Creates an empty HashMap for use.
+	 */
+	public StoryList() {
+		this.storyList = new HashMap<Integer, Story>();
+	}
+	
+	/**
+	 * Returns requested Story from StoryList.
+	 * Bad request returns null.
+	 * 
+	 * @param id ID of requested Story
+	 * @return the Story associated with the given ID, null if it doesn't exist
+	 */
+	public Story getStory(Integer id) {
+		// Story exists, is returned
+		if (storyList.containsKey(id)) {
+			return storyList.get(id);
+		} else {
+			// Story does not exist, null
+			return null;
+		}
+	}
+	
+	/**
+	 * Creates and places a new story into the StoryList.
+	 * A new ID is automatically generated for each story.
+	 */
+	public void addStory() {
+		// Empty StoryList, first ID is 0
+		Integer id = 0;
+		// Non-empty StoryList, make new id
+		if (!this.storyList.isEmpty()) {
+			// New ID is 1 greater than the current largest ID, for uniqueness
+			id = Collections.max(this.storyList.keySet()) + 1;
+		}
+		// Creates new Story to insert
+		Story newStory = new Story();
+		// Sets Story's name to Story #
+		Integer storyNumber = this.storyList.size() + 1;
+		newStory.setTitle("Story " + storyNumber.toString());
+		// Places new Story into StoryList
+		this.storyList.put(id, newStory);
+	}
+	
+	/**
+	 * Removes a requested Story from the StoryList.
+	 * Returns boolean based on success/failure.
+	 * 
+	 * @param id ID of the Story to remove
+	 * @return true if successful, false otherwise
+	 */
+	public boolean removeStory(Integer id) {
+		// Story exists, removed
+		if (storyList.containsKey(id)) {
+			this.storyList.remove(id);
+			return true;
+		} else {
+			// Story does not exist, failure
+			return false;
+		}
+	}
+	
+	/**
+	 * Updates the Story associated with a given ID.
+	 * Story ID must have been in use to be valid
+	 * 
+	 * @param id ID of the Story in to updated
+	 * @param story Story to update to
+	 * @returns true is successful, false otherwise
+	 */
+	public boolean updateStory(Integer id, Story story) {
+		// Story ID exists, update the story
+		if (storyList.containsKey(id)) {
+			// Updates HashMap entry for the given ID:Story pair
+			this.storyList.put(id, story);
+			return true;
+		} else {
+			// Story ID doesn't exist, update fails
+			return false;
+		}
+		
+	}
+	
+	/**
+	 * Adds an existing giving story to the StoryList.
+	 * 
+	 * @param story Story being imported
+	 */
+	public void importStory(Story story) {
+		// ID is 1 greater than the current largest ID, for uniqueness
+		Integer id = Collections.max(this.storyList.keySet()) + 1;
+		// Places Story into the StoryList with a new ID
+		this.storyList.put(id, story);
+	}
+	
+	private void writeObject(java.io.ObjectOutputStream out)
+		     throws IOException {
+		
+	}
+	private void readObject(java.io.ObjectInputStream in)
+	    throws IOException, ClassNotFoundException {
+		
+	}
+	private void readObjectNoData()
+	    throws ObjectStreamException{
+		
+	}
+	
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.story_list, menu);
-        return true;
-    }
-    
 }
