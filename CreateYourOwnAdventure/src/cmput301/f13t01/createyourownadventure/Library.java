@@ -37,17 +37,17 @@ import java.util.ArrayList;
 
 public class Library {
 	
-	private ArrayList<Story> story_list;
+	private StoryList storyList;
 	
 	public Library() {
-		this.story_list = new ArrayList<Story>();
+		this.storyList = new StoryList();
 	}
 	
 	/**
 	 * Creates a new story and adds it to the list
 	 */
-	public void create_new_story() {
-		story_list.add(new Story());
+	public void createNewStory() {
+		storyList.add(new Story());
 		return;
 	}
 	
@@ -58,9 +58,9 @@ public class Library {
 	 * @param pos   Story's position in list
 	 * @return   Returns the story at the position
 	 */
-	public Story get_story(int pos) {
-		if (pos >= 0 && pos < story_list.size() - 1) {
-			return story_list.get(pos);
+	public Story getStory(int pos) {
+		if (pos >= 0 && pos < storyList.size() - 1) {
+			return storyList.get(pos);
 		}
 		else {
 			return null;
@@ -73,9 +73,9 @@ public class Library {
 	 * @param pos   Position in list of story to delete
 	 * @return   Returns true if successfully deleted, if pos out of range returns false
 	 */
-	public boolean delete_story(int pos) {
-		if (pos >= 0 && pos < story_list.size() - 1) {
-			story_list.remove(pos);
+	public boolean deleteStory(int pos) {
+		if (pos >= 0 && pos < storyList.size() - 1) {
+			storyList.remove(pos);
 			return true;
 		}
 		else {
@@ -91,9 +91,9 @@ public class Library {
 	 * @param story   Story that has been updated
 	 * @return   Returns true if pos in range; returns false otherwise
 	 */
-	public boolean update_story(int pos, Story story) {
-		if (pos >= 0 && pos < story_list.size() - 1) {
-			story_list.set(pos, story);
+	public boolean updateStory(int pos, Story story) {
+		if (pos >= 0 && pos < storyList.size() - 1) {
+			storyList.set(pos, story);
 			return true;
 		}
 		else {
@@ -101,11 +101,11 @@ public class Library {
 		}
 	}
 	
-	public void load_stories() {
+	public void loadStories() {
 		return;
 	}
 	
-	public void save_stories() {
+	public void saveStories() {
 		return;
 	}
 	

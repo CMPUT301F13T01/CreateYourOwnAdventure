@@ -26,6 +26,15 @@ text of the particular choice.
 
 package cmput301.f13t01.createyourownadventure;
 
+/**
+ * This is a simple object that will contain the information
+ * related to a particular choice, which will allow the
+ * transition from one fragment to another while reading.
+ * 
+ * @author Reginald Miller, October 2013
+ *
+ */
+
 public class Choice {
 
 	private int sourceId;
@@ -45,42 +54,42 @@ public class Choice {
 	}
 
 	/**
-	 * @return the sourceId
+	 * @return the fragment's source ID
 	 */
 	public int getSourceId() {
 		return sourceId;
 	}
 
 	/**
-	 * @param sourceId the sourceId to set
+	 * @param sourceId the fragment's source ID to set
 	 */
 	public void setSourceId(int sourceId) {
 		this.sourceId = sourceId;
 	}
 
 	/**
-	 * @return the destinationId
+	 * @return the fragment's destination ID
 	 */
 	public int getDestinationId() {
 		return destinationId;
 	}
 
 	/**
-	 * @param destinationId the destinationId to set
+	 * @param destinationId the fragment's destination ID to set
 	 */
 	public void setDestinationId(int destinationId) {
 		this.destinationId = destinationId;
 	}
 
 	/**
-	 * @return the flavourText
+	 * @return the flavour text of the choice
 	 */
 	public String getFlavourText() {
 		return flavourText;
 	}
 
 	/**
-	 * @param flavourText the flavourText to set
+	 * @param flavourText the flavour text to set
 	 */
 	public void setFlavourText(String flavourText) {
 		this.flavourText = flavourText;
