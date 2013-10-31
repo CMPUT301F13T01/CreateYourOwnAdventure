@@ -22,9 +22,13 @@ import android.widget.TextView;
 public class FragmentListAdapter extends ArrayAdapter<FragmentInfo> {
 
 	/**
-	 * Holds t
+	 * Holds the application context.
 	 */
 	private final Context context;
+
+	/**
+	 * The array of StoryFragment information displayed in the list.
+	 */
 	private final FragmentInfo[] info;
 
 	public FragmentListAdapter(Context context, FragmentInfo[] info) {
