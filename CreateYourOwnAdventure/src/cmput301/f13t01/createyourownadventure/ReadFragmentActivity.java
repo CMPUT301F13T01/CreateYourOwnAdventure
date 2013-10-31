@@ -15,6 +15,9 @@ package cmput301.f13t01.createyourownadventure;
  * git status
  * git commit -m -a "comments"
  * git push http://github.com/CMPUT301F13T01/CreateYourOwnAdventure etai
+ * 
+ * do not use name of class in a class's locat variable
+ * use camel case (no understore style)
  */
 
 import android.app.Activity;
