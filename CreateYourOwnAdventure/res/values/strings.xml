@@ -21,6 +21,8 @@
     <string name="info_title_hint">Fragment Title</string>
     <string name="info_description_hint">Fragment Description</string>
     <string name="story_fragment">Story Fragment</string>
+    <string name="story_title">Story Title</string>
+    <string name="story_author">Story Author</string>
     <string name="action_edit_add_choice">Add Choice</string>
     <string name="action_edit_delete">Delete</string>
     <string name="action_edit_cancel">Cancel</string>
