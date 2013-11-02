@@ -68,7 +68,7 @@ public class History implements Serializable {
 	 * Pops the latest-viewed fragment from the stack
 	 * and returns the id of the next most recently viewed
 	 * fragment.
-	 * If on the first-viewed fragment, returns itself.
+	 * If on the first-viewed fragment, returns null.
 	 * If stack is empty, returns null.
 	 * 
 	 * @return Second-last-viewed fragment.
@@ -82,7 +82,7 @@ public class History implements Serializable {
 			historyStack.remove(lastIndex);
 			return historyStack.get(lastIndex - 1);
 		}
-		//If currently on first fragment, return itself
+		//If currently on first fragment, return null
 		else if (size == 1) {
 			int lastIndex = size - 1;
 			historyStack.remove(lastIndex);
@@ -104,7 +104,7 @@ public class History implements Serializable {
 		return;
 	}
 	
-	//Called if user wishes to start from beginning of story
+	
 	/**
 	 * Clears the stack so that user may start again.
 	 */
@@ -114,6 +114,8 @@ public class History implements Serializable {
 	}
 	
 	/**
+	 * Writes the Serializable historyStack object to
+	 * a file.
 	 * 
 	 * @param out   ObjectOutputStream to write with
 	 * @throws IOException
@@ -125,6 +127,8 @@ public class History implements Serializable {
 	}
 	
 	/**
+	 * Reads the Serializable historyStack object from
+	 * a file.
 	 * 
 	 * @param in   ObjectInputStream to read with
 	 * @throws IOException

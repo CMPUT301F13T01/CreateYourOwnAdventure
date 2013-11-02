@@ -77,6 +77,7 @@ public class Library implements Serializable {
 	}
 	
 	/**
+	 * Removes multiple stories at once from the storyList.
 	 * 
 	 * @param ArrayList of story IDs to be removed
 	 */
@@ -100,6 +101,7 @@ public class Library implements Serializable {
 	}
 	
 	/**
+	 * Writes the Serializable StoryList object to a file.
 	 * 
 	 * @param out   ObjectOutputStream to write with
 	 * @throws IOException
@@ -111,6 +113,7 @@ public class Library implements Serializable {
 	}
 	
 	/**
+	 * Reads the Serializable StoryList object from a file.
 	 * 
 	 * @param in   ObjectInputStream to read with
 	 * @throws IOException

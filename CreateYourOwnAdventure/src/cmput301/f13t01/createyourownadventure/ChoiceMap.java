@@ -184,6 +184,8 @@ public class ChoiceMap implements Serializable {
 	}
 	
 	/**
+	 * Writes the Serializable choiceMapping HashMap to
+	 * a file.
 	 * 
 	 * @param out   ObjectOutputStream to write with
 	 * @throws IOException
@@ -194,6 +196,8 @@ public class ChoiceMap implements Serializable {
 	}
 	
 	/**
+	 * Reads the Serializable choiceMapping HashMap from
+	 * a file
 	 * 
 	 * @param in   ObjectInputStream to read with
 	 * @throws IOException

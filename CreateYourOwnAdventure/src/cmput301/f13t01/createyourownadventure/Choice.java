@@ -45,12 +45,20 @@ public class Choice implements Serializable {
 	private int destinationId;
 	private String flavourText;
 	
-	//No initializations
+	/**
+	 * Default constructor doesn't initialize anything.
+	 */
 	public Choice() {
 		
 	}
 	
-	//Can choose to initialize
+	/**
+	 * Choice can be initialized with the choice's attributes
+	 * 
+	 * @param sourceId   ID of choice's source story fragment.
+	 * @param destinationId   ID of choice's destination story fragment.
+	 * @param flavourText   Flavour text of choice
+	 */
 	public Choice(int sourceId, int destinationId, String flavourText) {
 		this.sourceId = sourceId;
 		this.destinationId = destinationId;
@@ -58,6 +66,8 @@ public class Choice implements Serializable {
 	}
 
 	/**
+	 * Getter for the ID of the choice's source story fragment.
+	 * 
 	 * @return the fragment's source ID
 	 */
 	public int getSourceId() {
@@ -65,6 +75,8 @@ public class Choice implements Serializable {
 	}
 
 	/**
+	 * Setter for the ID of the choice's source story fragment.
+	 * 
 	 * @param sourceId the fragment's source ID to set
 	 */
 	public void setSourceId(int sourceId) {
@@ -72,6 +84,8 @@ public class Choice implements Serializable {
 	}
 
 	/**
+	 * Getter for the ID of the choice's destination story fragment.
+	 * 
 	 * @return the fragment's destination ID
 	 */
 	public int getDestinationId() {
@@ -79,6 +93,8 @@ public class Choice implements Serializable {
 	}
 
 	/**
+	 * Setter for the ID of the choice's destination story fragment.
+	 * 
 	 * @param destinationId the fragment's destination ID to set
 	 */
 	public void setDestinationId(int destinationId) {
@@ -86,6 +102,8 @@ public class Choice implements Serializable {
 	}
 
 	/**
+	 * Getter for the flavour text of the choice.
+	 * 
 	 * @return the flavour text of the choice
 	 */
 	public String getFlavourText() {
@@ -93,18 +111,34 @@ public class Choice implements Serializable {
 	}
 
 	/**
+	 * Setter for the flavour text of the choice.
+	 * 
 	 * @param flavourText the flavour text to set
 	 */
 	public void setFlavourText(String flavourText) {
 		this.flavourText = flavourText;
 	}
 	
+	/**
+	 * Writes the Serializable attributes of the Choice object.
+	 * 
+	 * @param out   ObjectOutputStream to write with
+	 * @throws IOException
+	 */
 	private void writeObject(java.io.ObjectOutputStream out)
 		     throws IOException {
 		out.writeObject(sourceId);
 		out.writeObject(destinationId);
 		out.writeObject(flavourText);
 	}
+	
+	/**
+	 * Reads the Serializable attributes of the Choice object.
+	 * 
+	 * @param in   ObjectInputStream to read with
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	private void readObject(java.io.ObjectInputStream in)
 		     throws IOException, ClassNotFoundException {
 		sourceId = (Integer) in.readObject();
