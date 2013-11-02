@@ -229,26 +229,104 @@ public class Story implements Serializable {
 
 
         /* Functions that deal with the ChoiceMap */
-        /**
-         * Getter for the ChoiceMap object of a Story
-         *
-         * @return the ChoiceMap of the Story
-         */
-        public ChoiceMap getChoiceMap() {
-                return this.choiceMap;
-        }
+    	/**
+    	 * Adds a new given Choice to a StoryFragment (by ID)
+    	 * 
+    	 * @param fragmentId ID of StoryFragment to add Choice to
+    	 * @param choice Choice object to add to the ChoiceMap
+    	 */
+    	public void addChoice(int fragmentId, Choice choice) {
+    		this.choiceMap.addChoice(fragmentId, choice);
+    	}
+    	
+    	/**
+    	 * Removes a choice from the ChoiceMap, using a given
+    	 * StoryFragment ID and index
+    	 * 
+    	 * @param fragmentId ID of StoryFragment where choice is located
+    	 * @param index Index of the choice to remove
+    	 * @return Returns true if choice existed, otherwise returns false
+    	 */
+    	public boolean deleteChoice(int fragmentId, int index) {
+    		return this.choiceMap.deleteChoice(fragmentId, index);
+    	}
+    	
+    	/**
+    	 * Updates a Choice for a given StoryFragment with a new given
+    	 * Choice, using its index
+    	 * 
+    	 * @param fragmentId ID of StoryFragment where choice is located
+    	 * @param index Index of choice to change
+    	 * @param choice New choice to put in there
+    	 * @return Returns true if choice already existed, false otherwise
+    	 */
+    	public boolean updateChoice(int fragmentId, int index, Choice choice) {
+    		return this.choiceMap.updateChoice(fragmentId, index, choice);
+    	}
+    	
+    	/**
+    	 * Used to remove all references to a given StoryFragment ID.
+    	 * Should be called when a StoryFragment is deleted.
+    	 * 
+    	 * @param fragmentId   ID of StoryFragment to remove references to
+    	 */
+    	public void cleanFragmentReferences(int fragmentId) {
+    		this.choiceMap.cleanFragmentReferences(fragmentId);
+    	}
+    	
+    	/**
+    	 * Returns an ArrayList of all Choices for a given StoryFragment ID
+    	 * Entries are sorted by destination StoryFragment ID
+    	 * 
+    	 * @param fragmentId ID of StoryFragment to get the choices for
+    	 * @return ArrayList of Choice objects for the given StoryFragment ID
+    	 */
+    	public ArrayList<Choice> getChoices(int fragmentId) {
+    		return this.choiceMap.getChoices(fragmentId);
+    	}
         
+    	
         /* Functions that deal with the History */
-        public Integer newSession() {
-                this.historyStack.clearHistory();
-                return this.firstPage;
-        }
+    	/**
+    	 * Returns the ID of the last-viewed Story Fragment.
+    	 * If History is empty, returns null.
+    	 * 
+    	 * @return Integer ID of last-viewed fragment
+    	 */
+    	public Integer getMostRecent() {
+    		return this.historyStack.getMostRecent();
+    	}
+    	
+    	/**
+    	 * Removes the most recent StoryFragment ID from the stack,
+    	 * and returns the previous StoryFragment ID.
+    	 * When there is no previous ID to return, returns null.
+    	 * 
+    	 * @return StoryFragmentID of previous StoryFragment
+    	 */
+    	public Integer goBack() {
+    		return this.historyStack.goBack();
+    	}
+    	
+    	/**
+    	 * Pushes a StoryFragment ID onto the History Stack.
+    	 * Should be called for every new StoryFragment viewed.
+    	 * 
+    	 * @param fragment_id ID of StoryFragment to be pushed to stack
+    	 */
+    	public void pushToStack(Integer fragmentId) {
+    		
+    	}
         
-        public Integer resumeSession() {
-                Integer fragment_id = this.historyStack.getMostRecent();
-                return fragment_id;
-        }
+    	/**
+    	 * Clears the History stack.
+    	 * Used when a user decides to start a new reading session.
+    	 */
+    	public void clearHistory() {
+    		
+    	}
         
+    	
         /* Methods required for Serializable Interface */
         private void writeObject(java.io.ObjectOutputStream out)
                  throws IOException {
