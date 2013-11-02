@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!--  main screen story listview on click contextual menu -->
+        
+    <!--  read from beginning -->
+    <item android:id="@+id/action_beginning"
+          android:title="@string/action_beginning" /> 
+           
+    <!--  continue from last history  -->
+    <item android:id="@+id/action_continue" 
+          android:title="@string/action_continue" />        
+
+</menu>
