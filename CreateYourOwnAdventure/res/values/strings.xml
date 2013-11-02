@@ -23,5 +23,10 @@
     <string name="story_fragment">Story Fragment</string>
     <string name="story_title">Story Title</string>
     <string name="story_author">Story Author</string>
+    <string name="action_edit_add_choice">Add Choice</string>
+    <string name="action_edit_delete">Delete</string>
+    <string name="action_edit_cancel">Cancel</string>
+    <string name="pick_choice">Choose Choice</string>
+    <string name="choice_list">Choice List</string>
     
 </resources>

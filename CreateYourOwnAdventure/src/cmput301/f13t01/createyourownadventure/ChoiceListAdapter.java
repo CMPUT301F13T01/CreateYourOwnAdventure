@@ -43,7 +43,7 @@ public class ChoiceListAdapter extends ArrayAdapter<Choice> {
 
 		Activity activity = (Activity) context;
 		GlobalManager app = (GlobalManager) activity.getApplication();
-		EditManager manager = app.getEditManager();
+		ReadStoryManager manager = app.getStoryManager();
 
 		// Inflate the view
 		View rowView = inflater.inflate(R.layout.choice_list_item, parent,

@@ -37,8 +37,8 @@ import android.widget.TextView;
 /**
  * @author Eddie Tai <eddie@ualberta.ca>
  * 
- * The view for the ReadFragmentActivity. Constructs the required view
- * to display the media of the story fragment properly.
+ *         The view for the ReadFragmentActivity. Constructs the required view
+ *         to display the media of the story fragment properly.
  * 
  */
 public class ReadFragmentView extends ScrollView {
@@ -92,8 +92,8 @@ public class ReadFragmentView extends ScrollView {
 	}
 
 	/**
-	 * Shows the list of choices using their given flavour text and sets
-	 * the manager for these choice options.
+	 * Shows the list of choices using their given flavour text and sets the
+	 * manager for these choice options.
 	 * 
 	 * @param choice_text
 	 *            Arraylist of strings indicating the flavour text

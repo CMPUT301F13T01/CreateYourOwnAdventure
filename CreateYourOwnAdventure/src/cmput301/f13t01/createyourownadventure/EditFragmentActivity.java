@@ -6,6 +6,7 @@ import java.util.Locale;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -85,8 +87,34 @@ public class EditFragmentActivity extends FragmentActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.edit, menu);
+		getMenuInflater().inflate(R.menu.activity_edit_actionbar, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle presses on the action bar items
+	    switch (item.getItemId()) {
+	        case R.id.action_edit_cancel:
+	            return true;
+	        case R.id.action_edit_delete:
+	            return true;
+	        case R.id.action_edit_edit_choice:
+	        	showChoiceSelection();
+	        	return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+
+	private void showChoiceSelection() {
+	    DialogFragment newFragment = new ChoiceListFragment();
+	    newFragment.show(getSupportFragmentManager(), getResources().getString(R.string.choice_list));
+	}
+	
+	public void onChoiceSelected(Choice choice) {
+		// TODO: Start the edit choice activity
+		return;
 	}
 
 	@Override

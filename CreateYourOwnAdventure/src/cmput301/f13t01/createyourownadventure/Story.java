@@ -315,7 +315,7 @@ public class Story implements Serializable {
     	 * @param fragment_id ID of StoryFragment to be pushed to stack
     	 */
     	public void pushToStack(Integer fragmentId) {
-    		
+    		this.historyStack.pushToStack(fragmentId);
     	}
         
     	/**
@@ -323,7 +323,7 @@ public class Story implements Serializable {
     	 * Used when a user decides to start a new reading session.
     	 */
     	public void clearHistory() {
-    		
+    		this.historyStack.clearHistory();
     	}
         
     	
