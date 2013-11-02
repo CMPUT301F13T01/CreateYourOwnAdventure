@@ -1,7 +1,30 @@
+/*
+FragmentList Class for CreateYourOwnAdventure App.
+The view for the ReadFragmentActivity. Constructs the required view
+to display the media of the story fragment properly.
+    
+    License GPLv3: GNU GPL Version 3
+    <http://gnu.org/licenses/gpl.html>.
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
 
+import android.R;
 import android.content.Context;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -12,7 +35,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 /**
- * @author Eddie
+ * @author Eddie Tai <eddie@ualberta.ca>
+ * 
+ * The view for the ReadFragmentActivity. Constructs the required view
+ * to display the media of the story fragment properly.
  * 
  */
 public class ReadFragmentView extends ScrollView {
@@ -27,7 +53,8 @@ public class ReadFragmentView extends ScrollView {
 	 * with multiple views, depending on the story fragment and its content
 	 * media files.
 	 * 
-	 * @param context the activity that the view belongs to
+	 * @param context
+	 *            the activity that the view belongs to
 	 */
 	public ReadFragmentView(Context c) {
 		super(c);
@@ -65,13 +92,18 @@ public class ReadFragmentView extends ScrollView {
 	}
 
 	/**
-	 * Shows the list of choices using their given flavor text
-	 * @param choice_text Arraylist of strings indicating the flavor text
-	 * @param onItemClickListener controller for the views
+	 * Shows the list of choices using their given flavour text and sets
+	 * the manager for these choice options.
+	 * 
+	 * @param choice_text
+	 *            Arraylist of strings indicating the flavour text
+	 * @param onItemClickListener
+	 *            controller for the views
 	 */
 	public void setChoiceView(ArrayList<String> choice_text,
 			OnItemClickListener onItemClickListener) {
-		
+
+		// populate the list with choices' flavour text
 		ListView lv = new ListView(context);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
 				R.layout.list_choices, choice_text);
