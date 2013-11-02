@@ -127,14 +127,13 @@ public class ReadStoryManager implements OnItemClickListener {
 	/**
 	 * Go to the beginning (first page) of a story
 	 * Apprehend the current page to the history stack
+	 * History is cleared.
 	 */
 	public void toBeginning() {
 
 		// get the fragment id of the story's first page
 		Integer destinationId = story.getFirstPage();
-
-		// add to the history stack
-		history.pushToStack(destinationId);
+		story.clearHistory();
 
 		// read the next story fragment
 		readNextFragment(storyId, destinationId);
@@ -146,8 +145,8 @@ public class ReadStoryManager implements OnItemClickListener {
 	 */
 	public void toPrevious() {
 
-		// go back to previous
-		Integer destinationId = history.goBack();
+		// go back to previous, adjusting history stack properly
+		Integer destinationId = story.getMostRecent();
 
 		// read the next story fragment
 		readNextFragment(storyId, destinationId);
