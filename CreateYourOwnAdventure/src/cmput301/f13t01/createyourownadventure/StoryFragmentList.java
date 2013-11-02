@@ -122,10 +122,13 @@ public class StoryFragmentList implements Serializable {
 	}
 	
 	/**
-	 * Creates and places a new fragment into the FragmentList.
+	 * Places a new fragment into the FragmentList.
 	 * A new ID is automatically generated for each fragment.
+	 * 
+	 * @param newFragment The StoryFragment to add to StoryFragmentList
+	 * @return the ID given to the added StoryFragment
 	 */
-	public void addFragment() {
+	public Integer addFragment(StoryFragment newFragment) {
 		// Empty FragmentList, first ID is 0
 		Integer id = 0;
 		// Non-empty FragmentList, make new id
@@ -133,13 +136,9 @@ public class StoryFragmentList implements Serializable {
 			// New ID is 1 greater than the current largest ID, for uniqueness
 			id = Collections.max(this.fragmentList.keySet()) + 1;
 		}
-		// Creates new Fragment to insert
-		StoryFragment newFragment = new StoryFragment();
-		// Sets Fragment's name to Page #
-		Integer pageNumber = this.fragmentList.size() + 1;
-		newFragment.setTitle("Page " + pageNumber.toString());
 		// Places new Fragment into FragmentList
 		this.fragmentList.put(id, newFragment);
+		return id;
 	}
 	
 	/**
@@ -180,29 +179,20 @@ public class StoryFragmentList implements Serializable {
 		}		
 	}
 	
-	/**
-	 * Adds an existing giving fragment to the FragmentList.
-	 * 
-	 * @param fragment Fragment being imported
-	 */
-	public void importFragment(StoryFragment fragment) {
-		// ID is 1 greater than the current largest ID, for uniqueness
-		Integer id = Collections.max(this.fragmentList.keySet()) + 1;
-		// Places Fragment into the FragmentList with a new ID
-		this.fragmentList.put(id, fragment);
-	}
 	
+	/* Methods required for Serializable Interface */
 	private void writeObject(java.io.ObjectOutputStream out)
 		     throws IOException {
 		out.writeObject(this.fragmentList);
 	}
+	
 	private void readObject(java.io.ObjectInputStream in)
 	    throws IOException, ClassNotFoundException {
 		this.fragmentList = (HashMap<Integer, StoryFragment>) in.readObject();
 	}
+	
 	private void readObjectNoData()
 	    throws ObjectStreamException{
-		
 	}
 	
 }
