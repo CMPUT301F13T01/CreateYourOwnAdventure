@@ -65,7 +65,7 @@ public class ReadStoryManager implements OnItemClickListener {
 		// set the story using storyId through global manager
 		GlobalManager globalmanager = (GlobalManager) ((Activity) context)
 				.getApplication();
-		globalmanager.setStoryManagers(storyId);
+		globalmanager.setStoryManager(storyId);
 
 		// fetch the fragment from the story level
 		fragment = story.getFragment(fragmentId);

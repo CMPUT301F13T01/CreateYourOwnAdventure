@@ -48,8 +48,9 @@ public class ChoiceListFragment extends DialogFragment {
 				R.string.story_id));
 
 		GlobalManager app = (GlobalManager) getActivity().getApplication();
-		ArrayList<Choice> choices = app.getStoryManager().getChoiceList(
-				fragmentId);
+		ArrayList<Choice> choices = new ArrayList<Choice>();
+				//app.getStoryManager().getChoiceList(
+				//fragmentId);
 
 		ChoiceListAdapter adapter = new ChoiceListAdapter(getActivity(),
 				choices);

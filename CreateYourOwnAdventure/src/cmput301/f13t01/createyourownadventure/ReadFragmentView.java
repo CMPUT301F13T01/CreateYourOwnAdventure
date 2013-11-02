@@ -24,7 +24,6 @@ package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
 
-import android.R;
 import android.content.Context;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
