@@ -1,9 +1,12 @@
 package cmput301.f13t01.createyourownadventure;
 
+import java.io.IOException;
+import java.io.Serializable;
+
 /*
  * Class for Sound type Media. Uses a String which refers to the resource name.
  */
-public class Sound implements Media<String> {
+public class Sound implements Media<String>, Serializable {
 	private String content;
 	private MediaInteractionManager manager;
 
@@ -29,5 +32,14 @@ public class Sound implements Media<String> {
 	
 	public String toString() {
 		return this.content.toString();
+	}
+	
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeObject(content);
+	}
+
+	private void readObject(java.io.ObjectInputStream in) throws IOException,
+			ClassNotFoundException {
+		content = (String) in.readObject();
 	}
 }
