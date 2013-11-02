@@ -25,27 +25,19 @@ public class GlobalManager extends Application {
 	private static ReadStoryManager readManager;
 
 	/**
-	 * The Application's EditStoryManager.
-	 * 
-	 * @see #getEditManager()
-	 * @see #setEditManager()
-	 */
-	private static EditStoryManager editManager;
-
-	/**
 	 * The Application's LibraryManager.
 	 * 
 	 * @see #getLibraryManager()
 	 * @see #setLibraryManager()
 	 */
-	private static LibraryManager libraryManager;
+	private static Library libraryManager;
 
 	/**
 	 * Get the Application's LibraryManager.
 	 * 
 	 * @return the Application's LibraryManager.
 	 */
-	public LibraryManager getLibraryManager() {
+	public Library getLibraryManager() {
 		return libraryManager;
 	}
 
@@ -54,31 +46,8 @@ public class GlobalManager extends Application {
 	 * 
 	 * @return the Application's ReadStoryManager.
 	 */
-	public ReadStoryManager getReadManager() {
+	public ReadStoryManager getStoryManager() {
 		return readManager;
-	}
-
-	/**
-	 * Get the Application's EditStoryManager.
-	 * 
-	 * @return the Application's EditStoryManager.
-	 */
-	public EditStoryManager getEditManager() {
-		return editManager;
-	}
-
-	/**
-	 * Simultaneously set the Read and Edit Managers for the story described in
-	 * the library by the ID argument. This is the preferred method for setting
-	 * the managers for local reading.
-	 * 
-	 * @param storyId
-	 *            the ID of the story to be managed.
-	 */
-	public void setStoryManagers(int storyId) {
-		Story story = libraryManager.getStory(storyId);
-		readManager.setStory(story); // Do we want to just construct a new one?
-		editManager.setStory(story);
 	}
 
 	/**
@@ -88,20 +57,8 @@ public class GlobalManager extends Application {
 	 * @param storyId
 	 *            the ID of the story to be managed.
 	 */
-	public void setReadManager(int storyId) {
+	public void setStoryManager(int storyId) {
 		Story story = libraryManager.getStory(storyId);
 		readManager.setStory(story); // Do we want to just construct a new one?
-	}
-
-	/**
-	 * Set the EditStoryManager for the story described in the library by the ID
-	 * argument.
-	 * 
-	 * @param storyId
-	 *            the ID of the story to be managed.
-	 */
-	public void setEditManager(int storyId) {
-		Story story = libraryManager.getStory(storyId);
-		editManager.setStory(story); // Do we want to just construct a new one?
 	}
 }

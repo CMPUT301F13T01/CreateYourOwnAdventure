@@ -3,15 +3,19 @@ package cmput301.f13t01.createyourownadventure;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.ListFragment;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.ListView;
 
-public class ChoiceListFragment extends ListFragment {
-	
+public class ChoiceListFragment extends DialogFragment {
+
 	private ChoiceListListener listener;
-	
+	private ChoiceListAdapter adapter;
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -22,26 +26,32 @@ public class ChoiceListFragment extends ListFragment {
 					+ " must implement ChoiceListListener");
 		}
 	}
-	
+
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		int fragmentId = savedInstanceState.getInt(getResources().getString(R.string.story_id));
-
-
-		GlobalManager app = (GlobalManager) getActivity().getApplication();
-		ArrayList<Choice> choices = app.getEditManager().getChoiceList(fragmentId);
-
-		ChoiceListAdapter adapter = new ChoiceListAdapter(getActivity(),
-				choices);
-		setListAdapter(adapter);
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle(R.string.pick_choice);
+		builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int item) {
+				Choice choice = adapter.getChoiceAtPosition(item);
+				listener.onChoiceSelected(choice);
+			}
+		});
+		return builder.create();
 	}
 
 	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-		ChoiceListAdapter adapter = (ChoiceListAdapter) getListAdapter();
-		Choice choice = adapter.getChoiceAtPosition(position)
-		listener.onChoiceSelected(choice);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		int fragmentId = savedInstanceState.getInt(getResources().getString(
+				R.string.story_id));
+
+		GlobalManager app = (GlobalManager) getActivity().getApplication();
+		ArrayList<Choice> choices = app.getStoryManager().getChoiceList(
+				fragmentId);
+
+		ChoiceListAdapter adapter = new ChoiceListAdapter(getActivity(),
+				choices);
 	}
 }
