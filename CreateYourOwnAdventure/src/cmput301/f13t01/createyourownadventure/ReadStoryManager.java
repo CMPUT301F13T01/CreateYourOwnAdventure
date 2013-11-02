@@ -68,9 +68,6 @@ public class ReadStoryManager implements OnItemClickListener {
 		GlobalManager globalmanager = (GlobalManager) ((Activity) context)
 				.getApplication();
 		globalmanager.setStoryManagers(storyId);
-		
-		// any getter for history stack?
-		history = story.history_stack;
 
 		// fetch the fragment from the story level
 		fragment = story.getFragment(fragmentId);
@@ -81,7 +78,7 @@ public class ReadStoryManager implements OnItemClickListener {
 		// cycle through the media list
 		for (int i = 0; i < media_list.size(); i++) {
 
-			// get media file, is there a getter?
+			// get media file
 			Media media = media_list.get(i);
 
 			// get media's type
@@ -114,7 +111,7 @@ public class ReadStoryManager implements OnItemClickListener {
 		// if there are choices, cycle through them and extract the flavour
 		// texts
 		if (choices != null) {
-			ArrayList<String> flavourText;
+			ArrayList<String> flavourText = new ArrayList<String>();
 
 			for (int i = 0; i < choices.size(); i++) {
 				String s = choices.get(i).getFlavourText();
@@ -148,8 +145,6 @@ public class ReadStoryManager implements OnItemClickListener {
 	 * Remove the current page from the history stack
 	 */
 	public void toPrevious() {
-		// any getter for history stack?
-		History history = story.historyStack;
 
 		// go back to previous
 		Integer destinationId = history.goBack();
