@@ -12,6 +12,10 @@ import android.text.SpannableString;
 public class Text implements Media<SpannableString>, Serializable {
 	private SpannableString content;
 	private MediaInteractionManager manager;
+	
+	public Text(SpannableString content) {
+		this.content = content;
+	}
 
 	@Override
 	public SpannableString getContent() {

@@ -1,5 +1,6 @@
 package cmput301.f13t01.createyourownadventure;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 import android.app.ActionBar;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -19,7 +21,7 @@ import android.widget.TextView;
 public class EditFragmentActivity extends FragmentActivity implements
 		ActionBar.TabListener {
 	
-	private Fragment storyFragment;
+	private StoryFragment storyFragment = new StoryFragment();
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -38,6 +40,9 @@ public class EditFragmentActivity extends FragmentActivity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		SpannableString string = new SpannableString("blah");
+		this.storyFragment.addContent(new Text(string));
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_fragment);
 
@@ -118,21 +123,21 @@ public class EditFragmentActivity extends FragmentActivity implements
 			if(position == 0) {
 				Fragment fragment = new InfoFragment();
 				Bundle args = new Bundle();
-				args.putSerializable(getResources().getString(R.string.story_fragment), storyFragment);
+				args.putSerializable(getResources().getString(R.string.story_fragment), (Serializable) storyFragment);
 				fragment.setArguments(args);
 				return fragment;							
 			}
 			else if(position == 1) {
 				Fragment fragment = new EditFragment();
 				Bundle args = new Bundle();
-				args.putSerializable(getResources().getString(R.string.story_fragment), storyFragment);
+				args.putSerializable(getResources().getString(R.string.story_fragment), (Serializable) storyFragment);
 				fragment.setArguments(args);
 				return fragment;
 			}
 			else if(position == 2) {
 				Fragment fragment = new PreviewFragment();
 				Bundle args = new Bundle();
-				args.putSerializable(getResources().getString(R.string.story_fragment), storyFragment);
+				args.putSerializable(getResources().getString(R.string.story_fragment), (Serializable) storyFragment);
 				fragment.setArguments(args);
 				return fragment;
 			}

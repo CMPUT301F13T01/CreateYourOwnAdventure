@@ -28,7 +28,7 @@ public class StoryFragmentListFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 
 		GlobalManager app = (GlobalManager) getActivity().getApplication();
-		ArrayList<FragmentInfo> info = app.getEditManager()
+		ArrayList<StoryFragmentInfo> info = app.getEditManager()
 				.getFragmentInfoList();
 
 		FragmentListAdapter adapter = new FragmentListAdapter(getActivity(),

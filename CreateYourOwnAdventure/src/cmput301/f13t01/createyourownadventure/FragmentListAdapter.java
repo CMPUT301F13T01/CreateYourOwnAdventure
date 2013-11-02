@@ -20,7 +20,7 @@ import android.widget.TextView;
  * 
  */
 
-public class FragmentListAdapter extends ArrayAdapter<FragmentInfo> {
+public class FragmentListAdapter extends ArrayAdapter<StoryFragmentInfo> {
 
 	/**
 	 * Holds the application context.
@@ -30,9 +30,9 @@ public class FragmentListAdapter extends ArrayAdapter<FragmentInfo> {
 	/**
 	 * The array of StoryFragment information displayed in the list.
 	 */
-	private final ArrayList<FragmentInfo> info;
+	private final ArrayList<StoryFragmentInfo> info;
 
-	public FragmentListAdapter(Context context, ArrayList<FragmentInfo> info) {
+	public FragmentListAdapter(Context context, ArrayList<StoryFragmentInfo> info) {
 		super(context, R.layout.story_fragment_list_item, info);
 		this.context = context;
 		this.info = info;
@@ -68,6 +68,6 @@ public class FragmentListAdapter extends ArrayAdapter<FragmentInfo> {
 	 * @return the ID of the selected story fragment
 	 */
 	public int getIdAtPosition(int position) {
-		return info.get(position).getFragmentId();
+		return info.get(position).getId();
 	}
 }
