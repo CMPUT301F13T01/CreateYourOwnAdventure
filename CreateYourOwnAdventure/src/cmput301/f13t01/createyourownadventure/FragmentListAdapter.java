@@ -1,11 +1,12 @@
 package cmput301.f13t01.createyourownadventure;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -29,9 +30,9 @@ public class FragmentListAdapter extends ArrayAdapter<FragmentInfo> {
 	/**
 	 * The array of StoryFragment information displayed in the list.
 	 */
-	private final FragmentInfo[] info;
+	private final ArrayList<FragmentInfo> info;
 
-	public FragmentListAdapter(Context context, FragmentInfo[] info) {
+	public FragmentListAdapter(Context context, ArrayList<FragmentInfo> info) {
 		super(context, R.layout.story_fragment_list_item, info);
 		this.context = context;
 		this.info = info;
@@ -53,8 +54,8 @@ public class FragmentListAdapter extends ArrayAdapter<FragmentInfo> {
 				.findViewById(R.id.fragment_list_description);
 
 		// Copy the story fragment's information into the view
-		title.setText(info[position].getTitle());
-		description.setText(info[position].getDescription());
+		title.setText(info.get(position).getTitle());
+		description.setText(info.get(position).getDescription());
 
 		return rowView;
 	}
@@ -67,6 +68,6 @@ public class FragmentListAdapter extends ArrayAdapter<FragmentInfo> {
 	 * @return the ID of the selected story fragment
 	 */
 	public int getIdAtPosition(int position) {
-		return info[position].getFragmentId();
+		return info.get(position).getFragmentId();
 	}
 }

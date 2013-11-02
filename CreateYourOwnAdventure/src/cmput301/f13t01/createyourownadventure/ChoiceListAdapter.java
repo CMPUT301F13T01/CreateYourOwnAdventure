@@ -26,9 +26,9 @@ public class ChoiceListAdapter extends ArrayAdapter<Choice> {
 	 * Holds the application context.
 	 */
 	private final Context context;
-	private final Choice[] choices;
+	private final ArrayList<Choice> choices;
 
-	public ChoiceListAdapter(Context context, Choice[] choices) {
+	public ChoiceListAdapter(Context context, ArrayList<Choice> choices) {
 		super(context, R.layout.choice_list_item, choices);
 		this.context = context;
 		this.choices = choices;
@@ -54,13 +54,13 @@ public class ChoiceListAdapter extends ArrayAdapter<Choice> {
 				.findViewById(R.id.choice_list_flavour);
 
 		String sourceTitle = manager.getFragmentInfo(
-				choices[position].getSourceId()).getTitle();
+				choices.get(position).getSourceId()).getTitle();
 		String destTitle = manager.getFragmentInfo(
-				choices[position].getDestinationId()).getTitle();
+				choices.get(position).getDestinationId()).getTitle();
 
 		// Copy the story fragment's information into the view
 		direction.setText(sourceTitle + " to " + destTitle);
-		flavour.setText(choices[position].getFlavourText());
+		flavour.setText(choices.get(position).getFlavourText());
 
 		return rowView;
 	}
@@ -73,6 +73,6 @@ public class ChoiceListAdapter extends ArrayAdapter<Choice> {
 	 * @return the selected Choice
 	 */
 	public Choice getChoiceAtPosition(int position) {
-		return choices[position];
+		return choices.get(position);
 	}
 }
