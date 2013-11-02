@@ -35,17 +35,17 @@ public class ReadFragmentActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// intent has the Story, and name of the fragment to display
+		// intent has the story ID, and story fragment ID to display
 		Intent intent = getIntent();
-		// receive story via intent
-		Bundle passed_story = intent.getExtras();
-		Story story = (Story) passed_story.getSerializable("story");
 		// receive id of story fragment to show
-		Integer fragment_id = intent.getIntExtra("fragment_id", 0);
+		Integer storyId = intent.getIntExtra("storyId", 0);
+		Integer fragmentId = intent.getIntExtra("fragmentId", 0);
 
 		// set the view and controller
 		final ReadFragmentView thisView = new ReadFragmentView(this);
-		manager = new ReadStoryManager(story, fragment_id, thisView, this);
+		manager = new ReadStoryManager(fragmentId, thisView, this);
+		GlobalManager globalmanager = (GlobalManager)getApplication();
+		globalmanager.setStoryManagers(storyId);
 
 		// display the fragment with the view
 		this.setContentView(thisView);

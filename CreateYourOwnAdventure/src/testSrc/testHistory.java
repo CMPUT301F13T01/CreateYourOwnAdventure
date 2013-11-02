@@ -1,10 +1,9 @@
 package testSrc;
 
-import junit.framework.TestCase;
-
 import org.junit.Before;
 import org.junit.Test;
 
+import junit.framework.TestCase;
 import cmput301.f13t01.createyourownadventure.History;
 
 public class testHistory extends TestCase {

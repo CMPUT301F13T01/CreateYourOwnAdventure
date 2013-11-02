@@ -2,6 +2,7 @@ package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -18,16 +19,14 @@ public class ReadStoryManager implements OnItemClickListener {
 	Fragment fragment = null;
 	Context context = null;
 	Story story;
-
 	
-	public ReadStoryManager(final Story story, final Integer fragment_id,
+	public ReadStoryManager(final Integer fragment_id,
 			final ReadFragmentView view, final ReadFragmentActivity context) {
-		this.story = story;
 		this.view = view;
 		this.context = context;
 		
 		// fetch the fragment from the story level
-		FragmentList fragmentlist = story.getFragmentList();
+		StoryFragmentList fragmentlist = story.getFragmentList();
 		fragment = fragmentlist.get_fragment(fragment_id);
 
 		// set view's media according to media in fragment
@@ -90,6 +89,13 @@ public class ReadStoryManager implements OnItemClickListener {
 		
 		// 
 
+	}
+	
+	/**
+	 * @param story
+	 */
+	public void setStory(Story story) {
+		this.story = story;
 	}
 
 	/**
