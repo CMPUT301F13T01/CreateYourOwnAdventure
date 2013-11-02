@@ -50,8 +50,8 @@ public class Library implements Serializable {
 	/**
 	 * Creates a new story and adds it to the list
 	 */
-	public void createNewStory() {
-		storyList.addStory(new Story());
+	public void createNewStory(Story newStory) {
+		storyList.addStory(newStory);
 		return;
 	}
 	

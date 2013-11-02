@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!--  main screen story listview on long click contextual menu -->
+    
+    <!--  edit story -->
+    <item android:id="@+id/action_edit_story"
+          android:title="@string/action_edit_story" /> 
+           
+    <!--  delete story  -->
+    <item android:id="@+id/action_delete_story" 
+          android:title="@string/action_delete_story" />        
+
+</menu>

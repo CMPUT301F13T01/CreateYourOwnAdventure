@@ -1,24 +1,27 @@
-package cmput301.f13t01.createyourownadventure;
+/*
+FragmentList Class for CreateYourOwnAdventure App.
+ReadFragmentActivity, the activity called for reading any story
+fragment. Relies on ReadFragmentView for the display and
+ReadStoryManager to control the content and interaction.
+    
+    License GPLv3: GNU GPL Version 3
+    <http://gnu.org/licenses/gpl.html>.
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-/**
- * List of things to ask team about:
- * 
- * Story/Fragment attributes: manager cannot access them if they are private
- * Story: getter for a fragment using fragment name at story level?
- * History_stack: what is the setter for adding to the stack (save history)?
- * History_stack: what is the setter for deleting most recent of stack?
- * Fragment: is there a getter for content_list?
- * MediaHandler: how do I get a media's type?
- * Choice_map: there's some sort of changes to it afaik?
- * 
- * Self reminder for git usages:
- * git status
- * git commit -m -a "comments"
- * git push http://github.com/CMPUT301F13T01/CreateYourOwnAdventure etai
- * 
- * do not use name of class in a class's locat variable
- * use camel case (no understore style)
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+package cmput301.f13t01.createyourownadventure;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,6 +29,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/**
+ * @author Eddie <eddie@ualberta.ca>
+ * 
+ *         ReadFragmentActivity, the activity called for reading any story
+ *         fragment. Relies on ReadFragmentView for the display and
+ *         ReadStoryManager to control the content and interaction.
+ */
 public class ReadFragmentActivity extends Activity {
 
 	ReadStoryManager manager;
@@ -43,20 +53,11 @@ public class ReadFragmentActivity extends Activity {
 
 		// set the view and controller
 		final ReadFragmentView thisView = new ReadFragmentView(this);
-		manager = new ReadStoryManager(fragmentId, thisView, this);
-		GlobalManager globalmanager = (GlobalManager)getApplication();
-		globalmanager.setStoryManagers(storyId);
+		manager = new ReadStoryManager(storyId, fragmentId, thisView, this);
 
 		// display the fragment with the view
 		this.setContentView(thisView);
 
-	}
-
-	/**
-	 * when activity pauses, need to save history stack
-	 */
-	protected void onPause() {
-		super.onPause();
 	}
 
 	/**
@@ -69,6 +70,10 @@ public class ReadFragmentActivity extends Activity {
 		return true;
 	}
 
+	/**
+	 * Determines the resulting action of choosing a particular action in the
+	 * action bar.
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
