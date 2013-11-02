@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">T01-Create!</string>
-    <string name="hello_world">Hello world!</string>
-    <!-- action bar items -->
+    <string name="app_name">Create!</string>
+    <!--  action bar items -->
     <string name="action_settings">Settings</string>
-    <!-- main screen action bar items -->
+    <!--  main screen action bar items -->
     <string name="action_browse_online_stories">Browse Online Stories</string>
-    <string name="action_create_new_story">Create New Story</string>
-    <string name="story_id">Story ID</string>       
-    <string name="title_activity_edit_fragment">Edit Fragment</string>
-    <string name="edit_section1">Info</string>
-    <string name="edit_section2">Edit</string>
-    <string name="edit_section3">Preview</string>
-    <string name="info_title_hint">Fragment Title</string>
-    <string name="info_description_hint">Fragment Description</string>
-    <string name="story_fragment">Story Fragment</string>
-
+    <string name="action_create_new_story">Create New Story</string> 
+    <!--  read story on click contextual menu -->
+    <string name="action_beginning">Start at Beginning</string>
+    <string name="action_continue">Continue</string>
+    <!--  edit story on long click contextual menu -->
+    <string name="action_edit_story">Edit Story</string>
+    <string name="action_delete_story">Delete Story</string>
+    
 </resources>
