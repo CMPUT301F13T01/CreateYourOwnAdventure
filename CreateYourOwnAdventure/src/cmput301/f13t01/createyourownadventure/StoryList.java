@@ -122,10 +122,12 @@ public class StoryList implements Serializable {
 	}
 	
 	/**
-	 * Creates and places a new story into the StoryList.
+	 * Places a new story into the StoryList.
 	 * A new ID is automatically generated for each story.
+	 * 
+	 * @param newStory Story object to add to StoryList
 	 */
-	public void addStory() {
+	public void addStory(Story newStory) {
 		// Empty StoryList, first ID is 0
 		Integer id = 0;
 		// Non-empty StoryList, make new id
@@ -133,11 +135,6 @@ public class StoryList implements Serializable {
 			// New ID is 1 greater than the current largest ID, for uniqueness
 			id = Collections.max(this.storyList.keySet()) + 1;
 		}
-		// Creates new Story to insert
-		Story newStory = new Story();
-		// Sets Story's name to Story #
-		Integer storyNumber = this.storyList.size() + 1;
-		newStory.setTitle("Story " + storyNumber.toString());
 		// Places new Story into StoryList
 		this.storyList.put(id, newStory);
 	}
@@ -180,26 +177,18 @@ public class StoryList implements Serializable {
 		}	
 	}
 	
-	/**
-	 * Adds an existing giving story to the StoryList.
-	 * 
-	 * @param story Story being imported
-	 */
-	public void importStory(Story story) {
-		// ID is 1 greater than the current largest ID, for uniqueness
-		Integer id = Collections.max(this.storyList.keySet()) + 1;
-		// Places Story into the StoryList with a new ID
-		this.storyList.put(id, story);
-	}
 	
+	/* Methods required for Serializable Interface */
 	private void writeObject(java.io.ObjectOutputStream out)
 		     throws IOException {
 		out.writeObject(storyList);
 	}
+	
 	private void readObject(java.io.ObjectInputStream in)
 	    throws IOException, ClassNotFoundException {
 		this.storyList = (HashMap<Integer, Story>) in.readObject();
 	}
+	
 	private void readObjectNoData()
 	    throws ObjectStreamException{
 	}

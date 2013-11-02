@@ -162,6 +162,7 @@ public class StoryFragment implements Serializable {
 		}
 	}
 	
+	/* Methods required for Serializable Interface */
 	private void writeObject(java.io.ObjectOutputStream out)
 		     throws IOException {
 		out.writeObject(this.title);
@@ -169,6 +170,7 @@ public class StoryFragment implements Serializable {
 		out.writeObject(this.contentList);
 		out.writeObject(this.annotationList);
 	}
+	
 	private void readObject(java.io.ObjectInputStream in)
 	    throws IOException, ClassNotFoundException {
 		this.title = (String) in.readObject();
@@ -176,9 +178,9 @@ public class StoryFragment implements Serializable {
 		this.contentList = (ArrayList<Media>) in.readObject();
 		this.annotationList = (ArrayList<Media>) in.readObject();
 	}
+	
 	private void readObjectNoData()
 	    throws ObjectStreamException{
-		
 	}
 	
 }
