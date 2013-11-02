@@ -61,13 +61,13 @@ public class ReadFragmentActivity extends Activity {
 	}
 
 	/**
-	 * deals with user action bar selection
+	 * places menu in action bar as specified
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.read_menu, menu);
-		return true;
+		getMenuInflater().inflate(R.menu.read_actionbar_menu, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	/**
@@ -80,9 +80,11 @@ public class ReadFragmentActivity extends Activity {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
 		case R.id.action_return_to_beginning:
+			// Go back to the start of the story, clearing history stack
 			manager.toBeginning();
 			return true;
 		case R.id.action_return_to_previous_page:
+			// Go back to the previous story fragment according to history stack
 			manager.toPrevious();
 			return true;
 		default:

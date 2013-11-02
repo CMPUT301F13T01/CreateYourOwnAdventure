@@ -36,28 +36,26 @@ import android.widget.AdapterView.OnItemClickListener;
 /**
  * @author Eddie Tai <eddie@ualberta.ca>
  * 
- * ReadStoryManager is the manager that allows interaction between the user
- * and the view. It dictates what content is to be displayed by the view. It
- * keeps track of the history stack as well when read navigates to various
- * other story fragments.
+ *         ReadStoryManager is the manager that allows interaction between the
+ *         user and the view. It dictates what content is to be displayed by the
+ *         view. It keeps track of the history stack as well when read navigates
+ *         to various other story fragments.
  * 
  */
 public class ReadStoryManager implements OnItemClickListener {
 
 	// declaration of variables
-	ReadFragmentView view ;
+	ReadFragmentView view;
 	StoryFragment fragment;
 	Integer fragmentId;
 	Context context;
 	Story story;
 	Integer storyId;
 	ArrayList<Choice> choices;
-	History history;
-	
 
 	public ReadStoryManager(final Integer storyId, final Integer fragmentId,
 			final ReadFragmentView view, final ReadFragmentActivity context) {
-		
+
 		// setting of variables
 		this.view = view;
 		this.context = context;
@@ -102,11 +100,9 @@ public class ReadStoryManager implements OnItemClickListener {
 			// if(media_type == Video.class.getClass())
 		}
 
-		// from story level with fragment id, get the choice map
-		ChoiceMap choiceMap = story.getChoiceMap();
-
-		// from choice map, use fragment id to get arraylist of choice object
-		choices = choiceMap.getChoices(fragmentId);
+		// from story level with fragment id, get the array list of choice
+		// objects
+		ArrayList<Choice> choices = story.getChoices(fragmentId);
 
 		// if there are choices, cycle through them and extract the flavour
 		// texts
@@ -125,9 +121,8 @@ public class ReadStoryManager implements OnItemClickListener {
 	}
 
 	/**
-	 * Go to the beginning (first page) of a story
-	 * Apprehend the current page to the history stack
-	 * History is cleared.
+	 * Go to the beginning (first page) of a story Apprehend the current page to
+	 * the history stack History is cleared.
 	 */
 	public void toBeginning() {
 
@@ -140,22 +135,65 @@ public class ReadStoryManager implements OnItemClickListener {
 	}
 
 	/**
-	 * Go back to the previous page dictated by the history stack
-	 * Remove the current page from the history stack
+	 * Go back to the previous page dictated by the history stack Remove the
+	 * current page from the history stack
 	 */
 	public void toPrevious() {
 
 		// go back to previous, adjusting history stack properly
 		Integer destinationId = story.getMostRecent();
 
-		// read the next story fragment
-		readNextFragment(storyId, destinationId);
+		if (destinationId != null) {
+			// read the next story fragment if there is a previous fragment in
+			// the history stack
+			readNextFragment(storyId, destinationId);
+		} else {
+			// go back to the previous level
+			((Activity) context).finish();
+		}
+
 	}
 
 	/**
-	 * Used by the global manager to inform the ReadStoryManager of what
-	 * story is to be read
-	 * @param story the story that is to be read
+	 * Returns a StoryFragmentInfo object for the given ID. Used to display
+	 * StoryFragmentInfo in lists.
+	 * 
+	 * @param id
+	 *            the ID of the fragment to get the info of
+	 * @return a StoryFragmentInfo object for that ID
+	 */
+	public StoryFragmentInfo getFragmentInfo(Integer id) {
+		return this.story.getFragmentInfo(fragmentId);
+	}
+
+	/**
+	 * Returns an ArrayList of all Choices for a given StoryFragment ID Entries
+	 * are sorted by destination StoryFragment ID
+	 * 
+	 * @param fragmentId
+	 *            ID of StoryFragment to get the choices for
+	 * @return ArrayList of Choice objects for the given StoryFragment ID
+	 */
+	public ArrayList<Choice> getChoices(int fragmentId) {
+		return this.story.getChoices(fragmentId);
+	}
+
+	/**
+	 * Returns an ArrayList of StoryFragmentInfo objects for all StoryFragment
+	 * objects.
+	 * 
+	 * @return an ArrayList of all StoryFragmentInfo
+	 */
+	public ArrayList<StoryFragmentInfo> getFragmentInfoList() {
+		return this.story.getFragmentInfoList();
+	}
+
+	/**
+	 * Used by the global manager to inform the ReadStoryManager of what story
+	 * is to be read
+	 * 
+	 * @param story
+	 *            the story that is to be read
 	 */
 	public void setStory(Story story) {
 		this.story = story;
@@ -168,14 +206,14 @@ public class ReadStoryManager implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		
+
 		// use position to refer to the choice item from choice map
 		Choice choice = choices.get(position);
-		
+
 		Integer destinationId = choice.getDestinationId();
 
 		// add to the history stack
-		history.pushToStack(destinationId);
+		story.pushToStack(destinationId);
 
 		// read the next story fragment
 		readNextFragment(storyId, destinationId);
@@ -183,7 +221,8 @@ public class ReadStoryManager implements OnItemClickListener {
 	}
 
 	/**
-	 * A function that starts a new activity 
+	 * A function that starts a new activity
+	 * 
 	 * @param storyId
 	 *            the Id of the story object that the user is reading at the
 	 *            moment
