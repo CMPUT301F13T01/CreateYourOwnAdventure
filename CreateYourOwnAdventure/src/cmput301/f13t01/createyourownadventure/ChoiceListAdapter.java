@@ -1,5 +1,7 @@
 package cmput301.f13t01.createyourownadventure;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;

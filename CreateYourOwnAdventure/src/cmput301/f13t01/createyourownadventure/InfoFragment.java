@@ -22,7 +22,7 @@ public class InfoFragment extends android.support.v4.app.Fragment {
 		View infoView = inflater.inflate(R.layout.fragment_info, container, false);
 		
 		// Get the StoryFragment from the arguments
-		Fragment fragment = (Fragment) getArguments().getSerializable(getResources().getString(R.string.story_fragment));
+		StoryFragment fragment = (StoryFragment) getArguments().getSerializable(getResources().getString(R.string.story_fragment));
 		
 		// Find the proper EditText views
 		EditText title = (EditText) infoView.findViewById(R.id.fragment_title);

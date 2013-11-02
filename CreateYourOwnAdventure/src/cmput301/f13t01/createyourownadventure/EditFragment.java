@@ -12,9 +12,9 @@ public class EditFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for fragment editing
-		Fragment fragment = (Fragment) getArguments().getSerializable(getResources().getString(R.string.story_fragment));
+		StoryFragment fragment = (StoryFragment) getArguments().getSerializable(getResources().getString(R.string.story_fragment));
 		// Display the fragment
-		for (Media temp: fragment.content_list) {
+		for (Media temp: fragment.getContentList()) {
 			
 		}
 	}

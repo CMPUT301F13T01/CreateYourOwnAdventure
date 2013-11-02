@@ -5,6 +5,7 @@ import java.util.Locale;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -18,7 +19,7 @@ import android.widget.TextView;
 public class EditFragmentActivity extends FragmentActivity implements
 		ActionBar.TabListener {
 	
-	private Fragment fragment;
+	private Fragment storyFragment;
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -117,21 +118,21 @@ public class EditFragmentActivity extends FragmentActivity implements
 			if(position == 0) {
 				Fragment fragment = new InfoFragment();
 				Bundle args = new Bundle();
-				args.putSerializable(getResources().getString(R.string.story_fragment), fragment);
+				args.putSerializable(getResources().getString(R.string.story_fragment), storyFragment);
 				fragment.setArguments(args);
 				return fragment;							
 			}
 			else if(position == 1) {
 				Fragment fragment = new EditFragment();
 				Bundle args = new Bundle();
-				args.putSerializable(getResources().getString(R.string.story_fragment), fragment);
+				args.putSerializable(getResources().getString(R.string.story_fragment), storyFragment);
 				fragment.setArguments(args);
 				return fragment;
 			}
 			else if(position == 2) {
 				Fragment fragment = new PreviewFragment();
 				Bundle args = new Bundle();
-				args.putSerializable(getResources().getString(R.string.story_fragment), fragment);
+				args.putSerializable(getResources().getString(R.string.story_fragment), storyFragment);
 				fragment.setArguments(args);
 				return fragment;
 			}
