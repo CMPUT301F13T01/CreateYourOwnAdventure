@@ -26,9 +26,12 @@ public class ChoiceListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		int fragmentId = savedInstanceState.getInt(getResources().getString(R.string.story_id));
+
 
 		GlobalManager app = (GlobalManager) getActivity().getApplication();
-		ArrayList<Choice> choices = app.getEditManager().getChoiceList();
+		ArrayList<Choice> choices = app.getEditManager().getChoiceList(fragmentId);
 
 		ChoiceListAdapter adapter = new ChoiceListAdapter(getActivity(),
 				choices);
