@@ -13,5 +13,13 @@
     <!--  edit story on long click contextual menu -->
     <string name="action_edit_story">Edit Story</string>
     <string name="action_delete_story">Delete Story</string>
+    <string name="story_id">Story ID</string>
+    <string name="title_activity_edit_fragment">Edit Fragment</string>
+    <string name="edit_section1">Info</string>
+    <string name="edit_section2">Edit</string>
+    <string name="edit_section3">Preview</string>
+    <string name="info_title_hint">Fragment Title</string>
+    <string name="info_description_hint">Fragment Description</string>
+    <string name="story_fragment">Story Fragment</string>
     
 </resources>
