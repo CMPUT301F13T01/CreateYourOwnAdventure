@@ -48,7 +48,7 @@ public class Library implements Serializable {
 	}
 	
 	/**
-	 * Creates a new story and adds it to the list
+	 * Takes a story and adds it to the list
 	 */
 	public void createNewStory(Story newStory) {
 		storyList.addStory(newStory);
@@ -56,8 +56,7 @@ public class Library implements Serializable {
 	}
 	
 	/**
-	 * Gets the story to the list and passes it to whoever
-	 * requests it. Returns null if pos is out of range.
+	 * Gets the story with a given ID.
 	 * 
 	 * @param storyId   ID of the story
 	 * @return   Returns the story with that ID
@@ -67,7 +66,7 @@ public class Library implements Serializable {
 	}
 	
 	/**
-	 * Deletes the story at a given position in the list
+	 * Deletes the story according to its ID.
 	 * 
 	 * @param storyId   ID of story to remove
 	 */
