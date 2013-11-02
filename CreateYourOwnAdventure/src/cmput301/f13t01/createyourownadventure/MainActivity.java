@@ -1,4 +1,4 @@
-/**
+/*
  * CreateYourOwnAdventure
  * Gerald Manweiler
  * Copyright 2013 Gerald Manweiler Eddie Tai Jesse Chu Jesse Huard Reggie Miller
@@ -17,9 +17,7 @@
  *
  */ 
 
-
 package cmput301.f13t01.createyourownadventure;
-
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -30,21 +28,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 /**
- * sets up and handles main screen ui
- * from the ma
+ *  @author Gerald Manweiler
+ *  sets up and handles main screen ui that allows user to 
+ *  display stories, select a story to read from beginning, select a story and read 
+ *  from last history, select a store to edit a story, select a story to delete,
+ *  browse for online stories, and create a new story
  */
 public class MainActivity extends Activity{
 	//declare and null init story listview, its adapter and listeners
 	private ListView lsvStories = null;
 	private ArrayAdapter<String> objStoryAdapter = null;
-	private OnItemClickListener objListListen = null;
-	private OnItemLongClickListener objLongListListen = null;
 	
 	//interim array for testing	
 	private String[] storyList = {"Author 1 Story 1", "Author 1 Story 2", "Author 2 Story 1", "Author 2 Story 2"};
@@ -62,14 +59,7 @@ public class MainActivity extends Activity{
 		objStoryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, storyList);
 		lsvStories.setAdapter(objStoryAdapter);
 		//register view for the on long click context menu
-		registerForContextMenu(lsvStories);
-		//TODO register on click contextual menu for read story options		
-		
-		
-		//set on click listener and long click listener
-		lsvStories.setOnItemClickListener(objListListen);
-		lsvStories.setOnItemLongClickListener(objLongListListen);
-		
+		registerForContextMenu(lsvStories);		
 	}
 	
 	/**
@@ -80,8 +70,9 @@ public class MainActivity extends Activity{
 		//TODO need contract from Library class
 	}
 	
+	
 	/**
-	 * places menu in action bar as specified
+	 * places browse online and create new story icons in action bar
 	 */	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
@@ -114,33 +105,41 @@ public class MainActivity extends Activity{
 	}
 	
 	/**
-	 * create context menu for on long click of story item in story listview
+	 * create contextual menu on long click of story item in story listview
 	 */
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo){
 		super.onCreateContextMenu(menu, v, menuInfo);
+		//inflate menu specified in xml resource
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main_editstory_menu, menu);
+		inflater.inflate(R.menu.main_story_menu, menu);
 	}
 	
 	/**
 	 * handle user selection of an on long click contextual menu item
 	 */
+	@SuppressWarnings("unused")
 	@Override
 	public boolean onContextItemSelected (MenuItem item) {
 		//get the menu item info
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 	    switch (item.getItemId()) {
+        //user wants start reading at beginning of story
+        case R.id.action_beginning:
+        	startBeginingStory();
+        	return true;
+        //user wants continue reading from last page of history
+        case R.id.action_continue:
+        	startContinueStory();
+        	return true;
         //user wants to edit the story
         case R.id.action_edit_story:
-        	//
             startEditStory();
             return true;
         //user wants to delete story
         case R.id.action_delete_story:
-        	//
             startDeleteStory();
-            return true;	        	
+            return true;        	
         default:
             return super.onOptionsItemSelected(item);
 	    }		
