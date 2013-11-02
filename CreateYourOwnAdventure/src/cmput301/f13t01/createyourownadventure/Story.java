@@ -1,6 +1,7 @@
 /*
 Story Class for CreateYourOwnAdventure App.
 Aggregates functionality and data for a single story.
+
 License GPLv3: GNU GPL Version 3
 <http://gnu.org/licenses/gpl.html>.
 This program is free software: you can redistribute it and/or modify
@@ -21,6 +22,7 @@ package cmput301.f13t01.createyourownadventure;
 import java.io.IOException;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
 * @author Jesse Chu <jhchu@ualberta.ca>
@@ -46,6 +48,7 @@ public class Story implements Serializable {
         private StoryFragmentList fragmentList;
         private ChoiceMap choiceMap;
 
+        
         /**
          * Constructor. Creates a new instance of a Story.
          * Created with default values assigned to attributes.
@@ -59,7 +62,9 @@ public class Story implements Serializable {
                 this.fragmentList = new StoryFragmentList();
                 this.choiceMap = new ChoiceMap();
         }
+
         
+        /* Functions that deal with Story attributes */
         /**
          * Getter for story title.
          *
@@ -94,55 +99,6 @@ public class Story implements Serializable {
          */
         public Integer getFirstPage() {
                 return this.firstPage;
-        }
-        
-        /**
-         * Getter for the FragmentList object of a Story
-         *
-         * @return the FragmentList of the Story
-         */
-        public StoryFragmentList getFragmentList() {
-                return this.fragmentList;
-        }
-        
-        /**
-         * Fetches a requested StoryFragment by ID from FragmentList
-         *
-         * @param id the id of the StoryFragment to return
-         * @return the requested StoryFragment, null if it doesn't exist
-         */
-        public StoryFragment getFragment(Integer id) {
-                return this.fragmentList.getFragment(id);
-        }
-        
-        /**
-         * Returns the ID of a given StoryFragment.
-         *
-         * @param fragment the StoryFragment to get the ID of
-         * @return the ID of the StoryFragment, null if not found
-         */
-        public Integer getFragmentId(StoryFragment fragment) {
-                return this.fragmentList.getFragmentId(fragment);
-        }
-        
-        /**
-         * Returns a StoryFragmentInfo object for the given ID.
-         * Used to display StoryFragmentInfo in lists.
-         *
-         * @param id the ID of the fragment to get the info of
-         * @return a StoryFragmentInfo object for that ID
-         */
-        public StoryFragmentInfo getFragmentInfo(Integer id) {
-                return this.fragmentList.getFragmentInfo(id);
-        }
-        
-        /**
-         * Getter for the ChoiceMap object of a Story
-         *
-         * @return the ChoiceMap of the Story
-         */
-        public ChoiceMap getChoiceMap() {
-                return this.choiceMap;
         }
         
         /**
@@ -193,7 +149,96 @@ public class Story implements Serializable {
                         return false;
                 }
         }
+
         
+        /* Functions that deal with the StoryFragmentList */
+        /**
+         * Fetches a requested StoryFragment by ID from FragmentList
+         *
+         * @param id the id of the StoryFragment to return
+         * @return the requested StoryFragment, null if it doesn't exist
+         */
+        public StoryFragment getFragment(Integer id) {
+                return this.fragmentList.getFragment(id);
+        }
+        
+        /**
+         * Returns the ID of a given StoryFragment.
+         *
+         * @param fragment the StoryFragment to get the ID of
+         * @return the ID of the StoryFragment, null if not found
+         */
+        public Integer getFragmentId(StoryFragment fragment) {
+                return this.fragmentList.getFragmentId(fragment);
+        }
+        
+        /**
+         * Returns a StoryFragmentInfo object for the given ID.
+         * Used to display StoryFragmentInfo in lists.
+         *
+         * @param id the ID of the fragment to get the info of
+         * @return a StoryFragmentInfo object for that ID
+         */
+        public StoryFragmentInfo getFragmentInfo(Integer id) {
+                return this.fragmentList.getFragmentInfo(id);
+        }
+        
+    	/**
+    	 * Returns an ArrayList of StoryFragmentInfo objects for
+    	 * all StoryFragment objects.
+    	 * 
+    	 * @return an ArrayList of all StoryFragmentInfo
+    	 */
+        public ArrayList<StoryFragmentInfo> getFragmentInfoList() {
+        	return this.fragmentList.getFragmentInfoList();
+        }
+
+    	/**
+    	 * Places a new fragment into the FragmentList.
+    	 * A new ID is automatically generated for each fragment.
+    	 * 
+    	 * @param newFragment The StoryFragment to add to StoryFragmentList
+    	 * @return the ID given to the added StoryFragment
+    	 */
+        public Integer addFragment(StoryFragment newFragment) {
+        	return this.fragmentList.addFragment(newFragment);
+        }
+
+    	/**
+    	 * Removes a requested Fragment from the FragmentList.
+    	 * Returns boolean based on success/failure.
+    	 * 
+    	 * @param id ID of the Fragment to remove
+    	 * @return true if successful, false otherwise
+    	 */
+        public boolean removeFragment(Integer id) {
+        	return this.fragmentList.removeFragment(id);
+        }
+        
+    	/**
+    	 * Updates the Fragment associated with a given ID.
+    	 * Fragment ID must have been in use to be valid
+    	 * 
+    	 * @param id ID of the Fragment in to updated
+    	 * @param fragment Fragment to update to
+    	 * @returns true is successful, false otherwise
+    	 */
+    	public boolean updateFragment(Integer id, StoryFragment fragment) {
+    		return this.fragmentList.updateFragment(id, fragment);
+    	}
+
+
+        /* Functions that deal with the ChoiceMap */
+        /**
+         * Getter for the ChoiceMap object of a Story
+         *
+         * @return the ChoiceMap of the Story
+         */
+        public ChoiceMap getChoiceMap() {
+                return this.choiceMap;
+        }
+        
+        /* Functions that deal with the History */
         public Integer newSession() {
                 this.historyStack.clearHistory();
                 return this.firstPage;
@@ -204,10 +249,7 @@ public class Story implements Serializable {
                 return fragment_id;
         }
         
-        public void saveStory() {
-                
-        }
-        
+        /* Methods required for Serializable Interface */
         private void writeObject(java.io.ObjectOutputStream out)
                  throws IOException {
                 out.writeObject(this.title);
@@ -218,6 +260,7 @@ public class Story implements Serializable {
                 out.writeObject(this.fragmentList);
                 out.writeObject(this.choiceMap);
         }
+        
         private void readObject(java.io.ObjectInputStream in)
          throws IOException, ClassNotFoundException {
                 this.title = (String) in.readObject();
@@ -228,9 +271,9 @@ public class Story implements Serializable {
                 this.fragmentList = (StoryFragmentList) in.readObject();
                 this.choiceMap = (ChoiceMap) in.readObject();
         }
+        
         private void readObjectNoData()
          throws ObjectStreamException{
-                
         }
 
 }
