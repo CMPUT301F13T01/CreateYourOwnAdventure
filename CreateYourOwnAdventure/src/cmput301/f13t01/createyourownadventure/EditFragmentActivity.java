@@ -14,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -85,8 +86,34 @@ public class EditFragmentActivity extends FragmentActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.edit, menu);
+		getMenuInflater().inflate(R.menu.activity_edit_actionbar, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle presses on the action bar items
+	    switch (item.getItemId()) {
+	        case R.id.action_edit_cancel:
+	            return true;
+	        case R.id.action_edit_delete:
+	            return true;
+	        case R.id.action_edit_add_choice:
+	        	showChoiceSelection();
+	        	return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+
+	private void showChoiceSelection() {
+/*        // Create a new Fragment to be placed in the activity layout
+        ChoiceListFragment fragment = new ChoiceListFragment();
+        
+        // Add the fragment to the 'fragment_container' FrameLayout
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, fragment).commit();*/
+
 	}
 
 	@Override
