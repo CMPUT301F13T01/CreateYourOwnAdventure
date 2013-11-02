@@ -4,6 +4,10 @@
     <item
         android:id="@+id/action_edit_add_choice"
         android:title="@string/action_edit_add_choice"/>
+    
+        <item
+        android:id="@+id/action_edit_edit_choice"
+        android:title="@string/action_edit_add_choice"/>
 
     <item
         android:id="@+id/action_edit_delete"

@@ -25,5 +25,6 @@
     <string name="action_edit_delete">Delete</string>
     <string name="action_edit_cancel">Cancel</string>
     <string name="pick_choice">Choose Choice</string>
+    <string name="choice_list">Choice List</string>
     
 </resources>

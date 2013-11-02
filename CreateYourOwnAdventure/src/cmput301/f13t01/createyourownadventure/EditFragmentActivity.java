@@ -6,6 +6,7 @@ import java.util.Locale;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -98,7 +99,7 @@ public class EditFragmentActivity extends FragmentActivity implements
 	            return true;
 	        case R.id.action_edit_delete:
 	            return true;
-	        case R.id.action_edit_add_choice:
+	        case R.id.action_edit_edit_choice:
 	        	showChoiceSelection();
 	        	return true;
 	        default:
@@ -107,13 +108,13 @@ public class EditFragmentActivity extends FragmentActivity implements
 	}
 
 	private void showChoiceSelection() {
-/*        // Create a new Fragment to be placed in the activity layout
-        ChoiceListFragment fragment = new ChoiceListFragment();
-        
-        // Add the fragment to the 'fragment_container' FrameLayout
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragment).commit();*/
-
+	    DialogFragment newFragment = new ChoiceListFragment();
+	    newFragment.show(getSupportFragmentManager(), getResources().getString(R.string.choice_list));
+	}
+	
+	public void onChoiceSelected(Choice choice) {
+		// TODO: Start the edit choice activity
+		return;
 	}
 
 	@Override
