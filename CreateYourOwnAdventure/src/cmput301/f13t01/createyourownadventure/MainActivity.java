@@ -19,6 +19,8 @@
 
 package cmput301.f13t01.createyourownadventure;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -28,7 +30,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 /**
@@ -41,10 +42,12 @@ import android.widget.ListView;
 public class MainActivity extends Activity{
 	//declare and null init story listview, its adapter and listeners
 	private ListView lsvStories = null;
-	private ArrayAdapter<String> objStoryAdapter = null;
+	//story info object  and list adapter for it
+	private ArrayList<StoryInfo> storyInfoList = new ArrayList<StoryInfo>();
+	private StoryInfoListAdapter objStoryAdapter;
 	
-	//interim array for testing	
-	private String[] storyList = {"Author 1 Story 1", "Author 1 Story 2", "Author 2 Story 1", "Author 2 Story 2"};
+	//TODO JUNIT for this to put these datums into the storyInfo object	
+	//private String[] storyList = {"Author 1 Story 1", "Author 1 Story 2", "Author 2 Story 1", "Author 2 Story 2"};
 	
 	/**
 	 * create screen
@@ -54,11 +57,8 @@ public class MainActivity extends Activity{
 		//get last instance state and set view to main screen
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity);
-		//set list view and array adapter
+		//set list view and register view for on long click contextual menu
 		lsvStories = (ListView) findViewById(R.id.main_activity_listview);
-		objStoryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, storyList);
-		lsvStories.setAdapter(objStoryAdapter);
-		//register view for the on long click context menu
 		registerForContextMenu(lsvStories);		
 	}
 	
@@ -67,7 +67,10 @@ public class MainActivity extends Activity{
 	 */
 	protected void onResume() {
 		super.onResume();
-		//TODO need contract from Library class
+		//initialize adapter and update the view
+		objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, storyInfoList);
+		lsvStories.setAdapter(objStoryAdapter);
+		objStoryAdapter.notifyDataSetChanged();
 	}
 	
 	
