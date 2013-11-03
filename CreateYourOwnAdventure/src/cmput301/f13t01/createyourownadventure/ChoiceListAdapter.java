@@ -55,10 +55,12 @@ public class ChoiceListAdapter extends ArrayAdapter<Choice> {
 		TextView flavour = (TextView) rowView
 				.findViewById(R.id.choice_list_flavour);
 
-		String sourceTitle = manager.getFragmentInfo(
+/*		String sourceTitle = manager.getFragmentInfo(
 				choices.get(position).getSourceId()).getTitle();
 		String destTitle = manager.getFragmentInfo(
-				choices.get(position).getDestinationId()).getTitle();
+				choices.get(position).getDestinationId()).getTitle();*/
+		String sourceTitle = "source";
+		String destTitle = "destination";
 
 		// Copy the story fragment's information into the view
 		direction.setText(sourceTitle + " to " + destTitle);

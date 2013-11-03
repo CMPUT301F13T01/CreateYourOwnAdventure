@@ -13,16 +13,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 
 public class EditFragmentActivity extends FragmentActivity implements
-		ActionBar.TabListener {
-	
+		ActionBar.TabListener, ChoiceListListener {
+
 	private StoryFragment storyFragment = new StoryFragment();
 
 	/**
@@ -43,8 +45,11 @@ public class EditFragmentActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		SpannableString string = new SpannableString("blah");
+		SpannableString string2 = new SpannableString(
+				"Your mother was a scallywag! Have at thee!");
 		this.storyFragment.addContent(new Text(string));
-		
+		this.storyFragment.addContent(new Text(string2));
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_fragment);
 
@@ -90,28 +95,31 @@ public class EditFragmentActivity extends FragmentActivity implements
 		getMenuInflater().inflate(R.menu.activity_edit_actionbar, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle presses on the action bar items
-	    switch (item.getItemId()) {
-	        case R.id.action_edit_cancel:
-	            return true;
-	        case R.id.action_edit_delete:
-	            return true;
-	        case R.id.action_edit_edit_choice:
-	        	showChoiceSelection();
-	        	return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.action_edit_cancel:
+			return true;
+		case R.id.action_edit_delete:
+			return true;
+		case R.id.action_edit_edit_choice:
+			showChoiceSelection();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	private void showChoiceSelection() {
-	    DialogFragment newFragment = new ChoiceListFragment();
-	    newFragment.show(getSupportFragmentManager(), getResources().getString(R.string.choice_list));
+		DialogFragment newFragment = new ChoiceListFragment();
+
+	    //window.setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		newFragment.show(getSupportFragmentManager(),
+				getResources().getString(R.string.choice_list));
 	}
-	
+
 	public void onChoiceSelected(Choice choice) {
 		// TODO: Start the edit choice activity
 		return;
@@ -148,27 +156,34 @@ public class EditFragmentActivity extends FragmentActivity implements
 		@Override
 		public Fragment getItem(int position) {
 			// getItem is called to instantiate the fragment for the given page.
-			if(position == 0) {
+			if (position == 0) {
 				Fragment fragment = new InfoFragment();
 				Bundle args = new Bundle();
-				args.putSerializable(getResources().getString(R.string.story_fragment), (Serializable) storyFragment);
+				args.putSerializable(
+						getResources().getString(R.string.story_fragment),
+						(Serializable) storyFragment);
 				fragment.setArguments(args);
-				return fragment;							
-			}
-			else if(position == 1) {
+				return fragment;
+			} else if (position == 1) {
 				Fragment fragment = new EditFragment();
 				Bundle args = new Bundle();
-				args.putSerializable(getResources().getString(R.string.story_fragment), (Serializable) storyFragment);
+				args.putSerializable(
+						getResources().getString(R.string.story_fragment),
+						(Serializable) storyFragment);
 				fragment.setArguments(args);
 				return fragment;
 			}
-			else if(position == 2) {
+
+			else if (position == 2) {
 				Fragment fragment = new PreviewFragment();
 				Bundle args = new Bundle();
-				args.putSerializable(getResources().getString(R.string.story_fragment), (Serializable) storyFragment);
+				args.putSerializable(
+						getResources().getString(R.string.story_fragment),
+						(Serializable) storyFragment);
 				fragment.setArguments(args);
 				return fragment;
 			}
+
 			Fragment fragment = new DummySectionFragment();
 			Bundle args = new Bundle();
 			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
