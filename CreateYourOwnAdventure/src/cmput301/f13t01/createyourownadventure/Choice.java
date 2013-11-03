@@ -4,7 +4,7 @@ This is a simple object that contains a source ID of a
 fragment, a destination ID of a fragment, and the flavour
 text of the particular choice.
 
-     Copyright  ©2013 Reginald Miller
+     Copyright  ï¿½2013 Reginald Miller
     <Contact: rmiller3@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
@@ -50,6 +50,12 @@ public class Choice implements Serializable {
 	 */
 	public Choice() {
 		
+	}
+	
+	public Choice(String flavourText) {
+		this.sourceId = 0;
+		this.destinationId = 0;
+		this.flavourText = flavourText;
 	}
 	
 	/**
