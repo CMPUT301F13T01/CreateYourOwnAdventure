@@ -1,6 +1,6 @@
 /*
 StoryList Class for CreateYourOwnAdventure App.
-Maps ID numbers to Story objects.
+Maps ID numbers to StoryInfo objects.
     
     License GPLv3: GNU GPL Version 3
     <http://gnu.org/licenses/gpl.html>.
@@ -32,10 +32,11 @@ import java.util.Set;
 /**
  * @author Jesse Chu <jhchu@ualberta.ca>
  *
- * StoryList, holds all Story objects and gives each a unique ID.
+ * StoryList, holds all StoryInfo objects and gives each a unique ID.
  * Used by Library object.
  */
 
+@Deprecated
 public class StoryList implements Serializable {
 	
 	// HashMap of Story ID's to Story Objects
@@ -48,6 +49,7 @@ public class StoryList implements Serializable {
 		this.storyList = new HashMap<Integer, Story>();
 	}
 	
+	@Deprecated
 	/**
 	 * Returns requested Story from StoryList.
 	 * Bad request returns null.
@@ -65,6 +67,7 @@ public class StoryList implements Serializable {
 		}
 	}
 	
+	@Deprecated
 	/**
 	 * Returns the ID of a given StoryFragment.
 	 * 
@@ -86,6 +89,7 @@ public class StoryList implements Serializable {
 		return id;
 	}
 	
+	@Deprecated
 	/**
 	 * Returns a StoryInfo object for the given ID.
 	 * Used to display StoryInfo in lists.
@@ -105,6 +109,7 @@ public class StoryList implements Serializable {
 		}
 	}
 	
+	@Deprecated
 	/**
 	 * Returns an ArrayList of StoryInfo objects for
 	 * all Story objects.
@@ -121,6 +126,7 @@ public class StoryList implements Serializable {
 		return storyInfoList;
 	}
 	
+	@Deprecated
 	/**
 	 * Places a new story into the StoryList.
 	 * A new ID is automatically generated for each story.
@@ -139,6 +145,7 @@ public class StoryList implements Serializable {
 		this.storyList.put(id, newStory);
 	}
 	
+	@Deprecated
 	/**
 	 * Removes a requested Story from the StoryList.
 	 * Returns boolean based on success/failure.

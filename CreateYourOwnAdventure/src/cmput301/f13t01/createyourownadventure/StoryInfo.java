@@ -20,6 +20,10 @@ Used to get basic information about a Story
  */
 package cmput301.f13t01.createyourownadventure;
 
+import java.io.IOException;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+
 /**
  * @author Jesse Chu <jhchu@ualberta.ca>
  *
@@ -27,7 +31,7 @@ package cmput301.f13t01.createyourownadventure;
  * For use of views that list Story objects.
  */
 
-public class StoryInfo {
+public class StoryInfo implements Serializable {
 	
 	/* Instance Variables for StoryInfo */
 	private Integer id;
@@ -95,4 +99,26 @@ public class StoryInfo {
 		return description;
 	}
 	
+	
+    /* Methods required for Serializable Interface */
+    private void writeObject(java.io.ObjectOutputStream out)
+             throws IOException {
+    		out.writeObject(this.id);
+            out.writeObject(this.title);
+            out.writeObject(this.author);
+            out.writeObject(this.description);
+    }
+    
+    private void readObject(java.io.ObjectInputStream in)
+     throws IOException, ClassNotFoundException {
+    		this.id = (Integer) in.readObject();
+            this.title = (String) in.readObject();
+            this.author = (String) in.readObject();
+            this.description = (String) in.readObject();
+    }
+    
+    private void readObjectNoData()
+     throws ObjectStreamException{
+    }
+    
 }
