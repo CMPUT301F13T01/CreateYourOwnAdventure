@@ -1,5 +1,7 @@
 package cmput301.f13t01.createyourownadventure;
 
+import java.util.UUID;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -26,10 +28,12 @@ public class EditStoryActivity extends FragmentActivity implements
 		TextView firstPage = (TextView) findViewById(R.id.edit_first_page);
 
 		Intent intent = getIntent();
-		int storyId = intent.getIntExtra(
-				getResources().getString(R.string.story_id), -1);
-		if (storyId != -1) {
 
+		boolean isNew = (boolean) intent.getBooleanExtra(getResources()
+				.getString(R.string.story_is_new), false);
+		if (isNew == false) {
+			UUID storyId = (UUID) intent.getSerializableExtra(getResources()
+					.getString(R.string.story_id));
 			app.setStoryManager(storyId);
 			firstPage.setText(getResources().getString(R.string.first_page)
 					+ manager.getFirstPage().getTitle());
