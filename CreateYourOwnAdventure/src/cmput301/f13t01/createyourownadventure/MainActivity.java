@@ -40,14 +40,13 @@ import android.widget.ListView;
  *  browse for online stories, and create a new story
  */
 public class MainActivity extends Activity{
-	//declare and null init story listview, its adapter and listeners
+	//library manager to handle stories
+	private Library objLibrary;
+	//declare and null init story list view
 	private ListView lsvStories = null;
-	//story info object  and list adapter for it
-	private ArrayList<StoryInfo> storyInfoList = new ArrayList<StoryInfo>();
-	private StoryInfoListAdapter objStoryAdapter;
-	
-	//TODO JUNIT for this to put these datums into the storyInfo object	
-	//private String[] storyList = {"Author 1 Story 1", "Author 1 Story 2", "Author 2 Story 1", "Author 2 Story 2"};
+	//story info object and list adapter for it
+	private ArrayList<StoryInfo> storyInfoList;
+	private StoryInfoListAdapter objStoryAdapter;	
 	
 	/**
 	 * create screen
@@ -60,6 +59,25 @@ public class MainActivity extends Activity{
 		//set list view and register view for on long click contextual menu
 		lsvStories = (ListView) findViewById(R.id.main_activity_listview);
 		registerForContextMenu(lsvStories);		
+		
+		
+		//instantiate the library manager
+		objLibrary = new Library(this.getApplicationContext());
+		//TODO JUNIT for this
+		//create and add fake stories to library
+		for (int i = 1; i < 5; i++) {
+			//create fake story 
+			Story objStory = new Story();
+			String strCount = String.valueOf(i);
+			//give fake story an author, title and description
+			objStory.setAuthor("Author " + strCount);
+			objStory.setTitle("Fake Story" + strCount);
+			objStory.setDescription("fake story");
+			//add the story
+			objLibrary.addStory(objStory);
+		}
+		
+		
 	}
 	
 	/**
@@ -67,6 +85,13 @@ public class MainActivity extends Activity{
 	 */
 	protected void onResume() {
 		super.onResume();
+
+		//empty story info list for interim trial
+		//storyInfoList = new ArrayList<StoryInfo>();
+		
+		//get the story info list from Library manager for the story list adapter
+		storyInfoList = objLibrary.getStoryInfoList();
+		
 		//initialize adapter and update the view
 		objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, storyInfoList);
 		lsvStories.setAdapter(objStoryAdapter);
