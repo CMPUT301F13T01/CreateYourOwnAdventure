@@ -76,13 +76,15 @@ public class ReadStoryManager implements OnItemClickListener {
 
 		// cycle through the media list
 		for (int i = 0; i < media_list.size(); i++) {
+			@SuppressWarnings("rawtypes")
+			Media media = media_list.get(i);
 
 			// get media file's type and do class comparisons
-			Class media_type =  media_list.get(i).getClass();
-			if (media_type.equals(SpannableString.class.getClass())) {
-
+			if (media.getClass().equals(Text.class)) {
+				Text text = (Text) media;
+				
 				// get media content's SpannableString as s
-				SpannableString s = Text.getContent();
+				SpannableString s = text.getContent();
 				view.setTextView(s);
 			}
 
@@ -125,7 +127,7 @@ public class ReadStoryManager implements OnItemClickListener {
 	public void toBeginning() {
 
 		// get the fragment id of the story's first page
-		Integer destinationId = getFirstPage();
+		Integer destinationId = getFirstPageId();
 		clearHistory();
 
 		// read the next story fragment
@@ -234,8 +236,12 @@ public class ReadStoryManager implements OnItemClickListener {
      *
      * @return the ID of the first fragment of the story
      */
-    public Integer getFirstPage() {
+    public Integer getFirstPageId() {
             return this.story.getFirstPage();
+    }
+    
+    public StoryFragment getFirstPage() {
+    	return story.getFragment(getFirstPageId());
     }
     
     /**
