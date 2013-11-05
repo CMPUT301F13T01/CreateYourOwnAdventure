@@ -33,23 +33,36 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 
 /**
- *  @author Gerald Manweiler
  *  sets up and handles main screen ui that allows user to 
- *  display stories, select a story to read from beginning, select a story and read 
- *  from last history, select a store to edit a story, select a story to delete,
+ *  display stories saved on device, select a story to read from beginning, select a story to read 
+ *  from last history, select a story to edit a story, select a story to delete,
  *  browse for online stories, and create a new story
+ *  
+ *  @author Gerald Manweiler
+ *  @version 1.3 Nov 6 2013
  */
 public class MainActivity extends Activity{
-	//library manager to handle stories
+	/**
+	 * library manager object to handle stories
+	 */
 	private Library objLibrary;
-	//declare and null init story list view
+	/**
+	 * story list view object
+	 */
 	private ListView lsvStories = null;
-	//story info object and list adapter for it
+	/**
+	 * story info array list object
+	 */
 	private ArrayList<StoryInfo> storyInfoList;
+	/**
+	 * adapter for story info array list
+	 */
 	private StoryInfoListAdapter objStoryAdapter;	
 	
 	/**
-	 * create screen
+	 * create main screen
+	 * 
+	 * @param savedInstanceState the state of activity at last kill time
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +94,7 @@ public class MainActivity extends Activity{
 	}
 	
 	/**
-	 * resume activity
+	 * resume activity updates the story list view
 	 */
 	protected void onResume() {
 		super.onResume();
@@ -101,6 +114,9 @@ public class MainActivity extends Activity{
 	
 	/**
 	 * places browse online and create new story icons in action bar
+	 * 
+	 * @param menu the action bar menu xml resource to inflate into action bar
+	 * @return boolean true for display menu, false for no display
 	 */	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
@@ -113,6 +129,9 @@ public class MainActivity extends Activity{
 	
 	/**
 	 * deals with user action bar selection
+	 * 
+	 * @param item the menu item resource selected by user
+	 * @return boolean true for successful handling of menu item selection, false otherwise (from superclass)
 	 */		
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -133,7 +152,11 @@ public class MainActivity extends Activity{
 	}
 	
 	/**
-	 * create contextual menu on long click of story item in story listview
+	 * create contextual menu on long click of story item in story list view
+	 * 
+	 * @param menu the menu xml resource to inflate into contextual menu
+	 * @param v the view in which create the contextual menu
+	 * @param menuInfo the additional info about item selected
 	 */
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo){
@@ -145,7 +168,10 @@ public class MainActivity extends Activity{
 	
 	/**
 	 * handle user selection of an on long click contextual menu item
-	 */
+	 * 
+     * @param item the menu item resource selected by user
+	 * @return boolean true for successful handling of menu item selection, false otherwise (from superclass)	
+    */
 	@SuppressWarnings("unused")
 	@Override
 	public boolean onContextItemSelected (MenuItem item) {

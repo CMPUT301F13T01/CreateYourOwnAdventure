@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.text.SpannableString;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -76,19 +77,16 @@ public class ReadStoryManager implements OnItemClickListener {
 		// cycle through the media list
 		for (int i = 0; i < media_list.size(); i++) {
 
-			// get media file
-			Media media = media_list.get(i);
+			// get media file's type and do class comparisons
+			Class media_type =  media_list.get(i).getClass();
+			if (media_type.equals(SpannableString.class.getClass())) {
 
-			// get media's type
-			Class media_type = media.getClass();
-			if (media_type == Text.class.getClass()) {
-
-				// get media content's string as s
-				String s = media.toString();
+				// get media content's SpannableString as s
+				SpannableString s = Text.getContent();
 				view.setTextView(s);
 			}
 
-			// the rest are implemented later for iteration 2
+			// the rest are implemented later for iteration 3
 
 			// else if type is image
 			// if(media_type == Image.class.getClass())
@@ -102,7 +100,7 @@ public class ReadStoryManager implements OnItemClickListener {
 
 		// from story level with fragment id, get the array list of choice
 		// objects
-		ArrayList<Choice> choices = story.getChoices(fragmentId);
+		ArrayList<Choice> choices = getChoices(fragmentId);
 
 		// if there are choices, cycle through them and extract the flavour
 		// texts
@@ -127,8 +125,8 @@ public class ReadStoryManager implements OnItemClickListener {
 	public void toBeginning() {
 
 		// get the fragment id of the story's first page
-		Integer destinationId = story.getFirstPage();
-		story.clearHistory();
+		Integer destinationId = getFirstPage();
+		clearHistory();
 
 		// read the next story fragment
 		readNextFragment(storyId, destinationId);
@@ -141,7 +139,7 @@ public class ReadStoryManager implements OnItemClickListener {
 	public void toPrevious() {
 
 		// go back to previous, adjusting history stack properly
-		Integer destinationId = story.getMostRecent();
+		Integer destinationId = getMostRecent();
 
 		if (destinationId != null) {
 			// read the next story fragment if there is a previous fragment in
@@ -155,51 +153,6 @@ public class ReadStoryManager implements OnItemClickListener {
 	}
 
 	/**
-	 * Returns a StoryFragmentInfo object for the given ID. Used to display
-	 * StoryFragmentInfo in lists.
-	 * 
-	 * @param id
-	 *            the ID of the fragment to get the info of
-	 * @return a StoryFragmentInfo object for that ID
-	 */
-	public StoryFragmentInfo getFragmentInfo(Integer id) {
-		return this.story.getFragmentInfo(fragmentId);
-	}
-
-	/**
-	 * Returns an ArrayList of all Choices for a given StoryFragment ID Entries
-	 * are sorted by destination StoryFragment ID
-	 * 
-	 * @param fragmentId
-	 *            ID of StoryFragment to get the choices for
-	 * @return ArrayList of Choice objects for the given StoryFragment ID
-	 */
-	public ArrayList<Choice> getChoices(int fragmentId) {
-		return this.story.getChoices(fragmentId);
-	}
-
-	/**
-	 * Returns an ArrayList of StoryFragmentInfo objects for all StoryFragment
-	 * objects.
-	 * 
-	 * @return an ArrayList of all StoryFragmentInfo
-	 */
-	public ArrayList<StoryFragmentInfo> getFragmentInfoList() {
-		return this.story.getFragmentInfoList();
-	}
-
-	/**
-	 * Used by the global manager to inform the ReadStoryManager of what story
-	 * is to be read
-	 * 
-	 * @param story
-	 *            the story that is to be read
-	 */
-	public void setStory(Story story) {
-		this.story = story;
-	}
-
-	/**
 	 * On selection of a choice in view, direct the user to the next story
 	 * fragment according to the choice map.
 	 */
@@ -210,10 +163,11 @@ public class ReadStoryManager implements OnItemClickListener {
 		// use position to refer to the choice item from choice map
 		Choice choice = choices.get(position);
 
+		// need getter of this?
 		Integer destinationId = choice.getDestinationId();
 
 		// add to the history stack
-		story.pushToStack(destinationId);
+		pushToStack(destinationId);
 
 		// read the next story fragment
 		readNextFragment(storyId, destinationId);
@@ -234,6 +188,270 @@ public class ReadStoryManager implements OnItemClickListener {
 		intent.putExtra("storyId", storyId);
 		intent.putExtra("fragmentId", fragmentId);
 		((Activity) context).startActivity(intent);
+	}
+	
+	/**
+	 * Used by the global manager to inform the ReadStoryManager of what story
+	 * is to be read
+	 * 
+	 * @param story
+	 *            the story that is to be read
+	 */
+	public void setStory(Story story) {
+		this.story = story;
+	}
+	
+	/* Functions that deal with Story attributes */
+    /**
+     * Getter for story title.
+     *
+     * @return the title of the story
+     */
+    public String getTitle() {
+            return story.getTitle();
+    }
+    
+    /**
+     * Getter for story author.
+     *
+     * @return the author of the story
+     */
+    public String getAuthor() {
+            return this.story.getAuthor();
+    }
+    
+    /**
+     * Getter for the description of the story.
+     *
+     * @return the description of the story
+     */
+    public String getDescription() {
+            return this.story.getDescription();
+    }
+    
+    /**
+     * Getter for the first fragment of the story.
+     *
+     * @return the ID of the first fragment of the story
+     */
+    public Integer getFirstPage() {
+            return this.story.getFirstPage();
+    }
+    
+    /**
+     * Setter for the title of the story.
+     *
+     * @param title the string to set the title to
+     * @return true if successful, false otherwise
+     */
+    public boolean setTitle(String title) {
+            return this.story.setTitle(title);
+    }
+    
+    /**
+     * Setter for the author of the story.
+     *
+     * @param author the string to set the author to
+     * @return true if successful, false otherwise
+     */
+    public boolean setAuthor(String author) {
+            return this.story.setAuthor(author);
+    }
+    
+    /**
+     * Setter for the description of the story.
+     *
+     * @param description the string to set the description to
+     * @return true if successful, false otherwise
+     */
+    public boolean setDescription(String description) {
+            return this.story.setDescription(description);
+    }
+    
+    /**
+     * Setter for the first page of the story.
+     *
+     * @param id the id of the fragment to set as first page
+     * @return true if successful, false otherwise
+     */
+    public boolean setFirstPage(Integer id) {
+            return this.story.setFirstPage(id);
+    }
+
+    
+    /* Functions that deal with the StoryFragmentList */
+    /**
+     * Fetches a requested StoryFragment by ID from FragmentList
+     *
+     * @param id the id of the StoryFragment to return
+     * @return the requested StoryFragment, null if it doesn't exist
+     */
+    public StoryFragment getFragment(Integer id) {
+            return this.story.getFragment(id);
+    }
+    
+    /**
+     * Returns the ID of a given StoryFragment.
+     *
+     * @param fragment the StoryFragment to get the ID of
+     * @return the ID of the StoryFragment, null if not found
+     */
+    public Integer getFragmentId(StoryFragment fragment) {
+            return this.story.getFragmentId(fragment);
+    }
+    
+    /**
+     * Returns a StoryFragmentInfo object for the given ID.
+     * Used to display StoryFragmentInfo in lists.
+     *
+     * @param id the ID of the fragment to get the info of
+     * @return a StoryFragmentInfo object for that ID
+     */
+    public StoryFragmentInfo getFragmentInfo(Integer id) {
+            return this.story.getFragmentInfo(id);
+    }
+    
+	/**
+	 * Returns an ArrayList of StoryFragmentInfo objects for
+	 * all StoryFragment objects.
+	 * 
+	 * @return an ArrayList of all StoryFragmentInfo
+	 */
+    public ArrayList<StoryFragmentInfo> getFragmentInfoList() {
+    	return this.story.getFragmentInfoList();
+    }
+
+	/**
+	 * Places a new fragment into the FragmentList.
+	 * A new ID is automatically generated for each fragment.
+	 * 
+	 * @param newFragment The StoryFragment to add to StoryFragmentList
+	 * @return the ID given to the added StoryFragment
+	 */
+    public Integer addFragment(StoryFragment newFragment) {
+    	return this.story.addFragment(newFragment);
+    }
+
+	/**
+	 * Removes a requested Fragment from the FragmentList.
+	 * Returns boolean based on success/failure.
+	 * 
+	 * @param id ID of the Fragment to remove
+	 * @return true if successful, false otherwise
+	 */
+    public boolean removeFragment(Integer id) {
+    	return this.story.removeFragment(id);
+    }
+    
+	/**
+	 * Updates the Fragment associated with a given ID.
+	 * Fragment ID must have been in use to be valid
+	 * 
+	 * @param id ID of the Fragment in to updated
+	 * @param fragment Fragment to update to
+	 * @returns true is successful, false otherwise
+	 */
+	public boolean updateFragment(Integer id, StoryFragment fragment) {
+		return this.story.updateFragment(id, fragment);
+	}
+
+
+    /* Functions that deal with the ChoiceMap */
+	/**
+	 * Adds a new given Choice to a StoryFragment (by ID)
+	 * 
+	 * @param fragmentId ID of StoryFragment to add Choice to
+	 * @param choice Choice object to add to the ChoiceMap
+	 */
+	public void addChoice(int fragmentId, Choice choice) {
+		this.story.addChoice(fragmentId, choice);
+	}
+	
+	/**
+	 * Removes a choice from the ChoiceMap, using a given
+	 * StoryFragment ID and index
+	 * 
+	 * @param fragmentId ID of StoryFragment where choice is located
+	 * @param index Index of the choice to remove
+	 * @return Returns true if choice existed, otherwise returns false
+	 */
+	public boolean deleteChoice(int fragmentId, int index) {
+		return this.story.deleteChoice(fragmentId, index);
+	}
+	
+	/**
+	 * Updates a Choice for a given StoryFragment with a new given
+	 * Choice, using its index
+	 * 
+	 * @param fragmentId ID of StoryFragment where choice is located
+	 * @param index Index of choice to change
+	 * @param choice New choice to put in there
+	 * @return Returns true if choice already existed, false otherwise
+	 */
+	public boolean updateChoice(int fragmentId, int index, Choice choice) {
+		return this.story.updateChoice(fragmentId, index, choice);
+	}
+	
+	/**
+	 * Used to remove all references to a given StoryFragment ID.
+	 * Should be called when a StoryFragment is deleted.
+	 * 
+	 * @param fragmentId   ID of StoryFragment to remove references to
+	 */
+	public void cleanFragmentReferences(int fragmentId) {
+		this.story.cleanFragmentReferences(fragmentId);
+	}
+	
+	/**
+	 * Returns an ArrayList of all Choices for a given StoryFragment ID
+	 * Entries are sorted by destination StoryFragment ID
+	 * 
+	 * @param fragmentId ID of StoryFragment to get the choices for
+	 * @return ArrayList of Choice objects for the given StoryFragment ID
+	 */
+	public ArrayList<Choice> getChoices(int fragmentId) {
+		return this.story.getChoices(fragmentId);
+	}
+    
+	
+    /* Functions that deal with the History */
+	/**
+	 * Returns the ID of the last-viewed Story Fragment.
+	 * If History is empty, returns null.
+	 * 
+	 * @return Integer ID of last-viewed fragment
+	 */
+	public Integer getMostRecent() {
+		return this.story.getMostRecent();
+	}
+	
+	/**
+	 * Removes the most recent StoryFragment ID from the stack,
+	 * and returns the previous StoryFragment ID.
+	 * When there is no previous ID to return, returns null.
+	 * 
+	 * @return StoryFragmentID of previous StoryFragment
+	 */
+	public Integer goBack() {
+		return this.story.goBack();
+	}
+	
+	/**
+	 * Pushes a StoryFragment ID onto the History Stack.
+	 * Should be called for every new StoryFragment viewed.
+	 * 
+	 * @param fragment_id ID of StoryFragment to be pushed to stack
+	 */
+	public void pushToStack(Integer fragmentId) {
+		this.story.pushToStack(fragmentId);
+	}
+    
+	/**
+	 * Clears the History stack.
+	 * Used when a user decides to start a new reading session.
+	 */
+	public void clearHistory() {
+		this.story.clearHistory();
 	}
 
 }
