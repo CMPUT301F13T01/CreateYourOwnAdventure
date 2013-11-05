@@ -40,6 +40,7 @@ import java.util.HashMap;
 
 import android.content.Context;
 
+
 /**
  * This class is designed to maintain all of the
  * stories that are stored locally on the user's
@@ -50,7 +51,7 @@ import android.content.Context;
  *
  */
 
-public class Library implements Serializable {
+public class LocalManager implements Serializable {
 	
 	// TODO: Take a Context
 	// TODO: Handle saving/loading of StoryInfoList (Hard-coded)
@@ -61,7 +62,7 @@ public class Library implements Serializable {
 	private Story loadedStory;
 	private HashMap<Integer, StoryInfo> storyInfoList;
 	
-	public Library(Context context) {
+	public LocalManager(Context context) {
 		this.context = context;
 		this.loadStoryInfoList();
 	}

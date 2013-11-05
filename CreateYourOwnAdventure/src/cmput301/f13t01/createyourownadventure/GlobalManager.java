@@ -25,20 +25,20 @@ public class GlobalManager extends Application {
 	private static ReadStoryManager readManager;
 
 	/**
-	 * The Application's LibraryManager.
+	 * The Application's LocalManager.
 	 * 
-	 * @see #getLibraryManager()
-	 * @see #setLibraryManager()
+	 * @see #getLocalManager()
+	 * @see #setLocalManager()
 	 */
-	private static Library libraryManager;
+	private static LocalManager localManager;
 
 	/**
-	 * Get the Application's LibraryManager.
+	 * Get the Application's LocalManager.
 	 * 
-	 * @return the Application's LibraryManager.
+	 * @return the Application's LocalManager.
 	 */
-	public Library getLibraryManager() {
-		return libraryManager;
+	public LocalManager getLocalManager() {
+		return localManager;
 	}
 
 	/**
@@ -51,14 +51,14 @@ public class GlobalManager extends Application {
 	}
 
 	/**
-	 * Set the ReadStoryManager for the story described in the library by the ID
+	 * Set the ReadStoryManager for the story described in the local library by the ID
 	 * argument.
 	 * 
 	 * @param storyId
 	 *            the ID of the story to be managed.
 	 */
 	public void setStoryManager(int storyId) {
-		Story story = libraryManager.getStory(storyId);
+		Story story = localManager.getStory(storyId);
 		readManager.setStory(story); // Do we want to just construct a new one?
 	}
 }
