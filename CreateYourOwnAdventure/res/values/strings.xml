@@ -36,7 +36,5 @@
     
     <string name="pick_choice">Choose Choice</string>
     <string name="choice_list">Choice List</string>
-    <string name="action_return_to_previous_page">Return to Previous Page</string>
-    <string name="action_return_to_beginning">Return to Beginning</string>
 
 </resources>
