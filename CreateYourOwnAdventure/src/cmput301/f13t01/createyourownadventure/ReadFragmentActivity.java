@@ -54,6 +54,9 @@ public class ReadFragmentActivity extends Activity {
 		// set the view and controller
 		final ReadFragmentView thisView = new ReadFragmentView(this);
 		manager = new ReadStoryManager(storyId, fragmentId, thisView, this);
+		
+		// enable the Up button in action bar
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// display the fragment with the view
 		this.setContentView(thisView);

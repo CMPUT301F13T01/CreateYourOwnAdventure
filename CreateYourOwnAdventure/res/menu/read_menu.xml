@@ -4,12 +4,14 @@
     <!-- return to beginning of story -->
     <item
         android:id="@+id/action_return_to_beginning"
+        android:icon="@drawable/ic_action_go_to_today"
         android:showAsAction="ifRoom"
         android:title="@string/action_return_to_beginning"/>
 
     <!-- return to previous page according to history -->
     <item
         android:id="@+id/action_return_to_previous_page"
+         android:icon="@drawable/ic_action_back"
         android:showAsAction="ifRoom"
         android:title="@string/action_return_to_previous_page"/>
 
