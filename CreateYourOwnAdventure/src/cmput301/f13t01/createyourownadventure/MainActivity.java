@@ -43,9 +43,9 @@ import android.widget.ListView;
  */
 public class MainActivity extends Activity{
 	/**
-	 * library manager object to handle stories
+	 * local manager object to handle stories
 	 */
-	private Library objLibrary;
+	private LocalManager objLibrary;
 	/**
 	 * story list view object
 	 */
@@ -74,10 +74,10 @@ public class MainActivity extends Activity{
 		registerForContextMenu(lsvStories);		
 		
 		
-		//instantiate the library manager
-		objLibrary = new Library(this.getApplicationContext());
+		//instantiate the local manager
+		objLibrary = new LocalManager(this.getApplicationContext());
 		//TODO JUNIT for this
-		//create and add fake stories to library
+		//create and add fake stories to local library
 		for (int i = 1; i < 5; i++) {
 			//create fake story 
 			Story objStory = new Story();
@@ -102,7 +102,7 @@ public class MainActivity extends Activity{
 		//empty story info list for interim trial
 		//storyInfoList = new ArrayList<StoryInfo>();
 		
-		//get the story info list from Library manager for the story list adapter
+		//get the story info list from Local manager for the story list adapter
 		storyInfoList = objLibrary.getStoryInfoList();
 		
 		//initialize adapter and update the view
