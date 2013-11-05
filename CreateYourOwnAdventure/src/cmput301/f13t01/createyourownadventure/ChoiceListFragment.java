@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ListView;
 
 public class ChoiceListFragment extends DialogFragment {
 
@@ -39,8 +38,8 @@ public class ChoiceListFragment extends DialogFragment {
 		// app.getStoryManager().getChoiceList(
 		// fragmentId);
 
-		ChoiceListAdapter adap = new ChoiceListAdapter(getActivity(), choices);
-		this.adapter = adap;
+		ChoiceListAdapter adapt = new ChoiceListAdapter(getActivity(), choices);
+		this.adapter = adapt;
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.pick_choice);
@@ -79,7 +78,7 @@ public class ChoiceListFragment extends DialogFragment {
 		// app.getStoryManager().getChoiceList(
 		// fragmentId);
 
-		ChoiceListAdapter adapter = new ChoiceListAdapter(getActivity(),
+		this.adapter = new ChoiceListAdapter(getActivity(),
 				choices);
 	}
 }

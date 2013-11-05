@@ -13,13 +13,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.TextView;
 
 public class EditFragmentActivity extends FragmentActivity implements
@@ -59,8 +57,7 @@ public class EditFragmentActivity extends FragmentActivity implements
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
-		mSectionsPagerAdapter = new SectionsPagerAdapter(
-				getSupportFragmentManager());
+		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -115,7 +112,7 @@ public class EditFragmentActivity extends FragmentActivity implements
 	private void showChoiceSelection() {
 		DialogFragment newFragment = new ChoiceListFragment();
 
-	    //window.setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		// window.setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		newFragment.show(getSupportFragmentManager(),
 				getResources().getString(R.string.choice_list));
 	}
@@ -149,8 +146,8 @@ public class EditFragmentActivity extends FragmentActivity implements
 	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-		public SectionsPagerAdapter(FragmentManager fm) {
-			super(fm);
+		public SectionsPagerAdapter(FragmentManager fragmentManager) {
+			super(fragmentManager);
 		}
 
 		@Override

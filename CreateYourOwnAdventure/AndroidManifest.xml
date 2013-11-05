@@ -9,7 +9,7 @@
         android:targetSdkVersion="17" />
 
     <application
-        android:name="GlobalManager"
+        android:name="cmput301.f13t01.createyourownadventure.GlobalManager"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -30,6 +30,10 @@
         <activity
             android:name="cmput301.f13t01.createyourownadventure.ReadFragmentActivity"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="cmput301.f13t01.createyourownadventure.EditStoryActivity"
+            android:label="@string/title_activity_edit_story" >
         </activity>
     </application>
 

@@ -3,14 +3,21 @@ package cmput301.f13t01.createyourownadventure;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.ListFragment;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ListView;
+import android.view.ViewGroup;
+import android.view.Window;
 
-public class StoryFragmentListFragment extends ListFragment {
+public class StoryFragmentListFragment extends DialogFragment {
 
 	private StoryFragmentListListener listener;
+	private FragmentListAdapter adapter;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -24,22 +31,46 @@ public class StoryFragmentListFragment extends ListFragment {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		GlobalManager app = (GlobalManager) getActivity().getApplication();
 		ArrayList<StoryFragmentInfo> info = app.getStoryManager()
 				.getFragmentInfoList();
 
-		FragmentListAdapter adapter = new FragmentListAdapter(getActivity(),
-				info);
-		setListAdapter(adapter);
+		FragmentListAdapter adapt = new FragmentListAdapter(getActivity(), info);
+		this.adapter = adapt;
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle(R.string.story_fragments);
+		builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int item) {
+				int fragmentId = adapter.getIdAtPosition(item);
+				listener.onStoryFragmentSelected(fragmentId);
+			}
+		});
+		return builder.create();
 	}
 
+/*	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		Dialog dialog = getDialog();
+		Window window = dialog.getWindow();
+		window.setGravity(Gravity.TOP);
+
+		return super.onCreateView(inflater, container, savedInstanceState);
+	}*/
+
 	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-		FragmentListAdapter adapter = (FragmentListAdapter) getListAdapter();
-		int storyId = adapter.getIdAtPosition(position);
-		listener.onStoryFragmentSelected(storyId);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		GlobalManager app = (GlobalManager) getActivity().getApplication();
+		ArrayList<StoryFragmentInfo> info = new ArrayList<StoryFragmentInfo>();
+		// app.getStoryManager().getStoryInfoList();
+
+		this.adapter = new FragmentListAdapter(getActivity(), info);
+
 	}
 }

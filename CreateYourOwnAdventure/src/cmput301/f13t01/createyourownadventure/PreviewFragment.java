@@ -3,6 +3,7 @@ package cmput301.f13t01.createyourownadventure;
 import java.util.ArrayList;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -11,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class PreviewFragment extends android.support.v4.app.Fragment {
+public class PreviewFragment extends Fragment {
 
 	@SuppressWarnings("rawtypes")
 	@Override

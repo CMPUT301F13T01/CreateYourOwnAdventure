@@ -23,20 +23,30 @@
     <string name="story_fragment">Story Fragment</string>
     <string name="story_title">Story Title</string>
     <string name="story_author">Story Author</string>
-    
+
     <!-- Action bar strings for read fragment activity -->
-    <string name="action_return_to_beginning">Restart Story</string>
-    <string name="action_return_to_previous_page">Previous Page</string>
+    <!--  <string name="action_return_to_beginning">Restart Story</string>
+    <string name="action_return_to_previous_page">Previous Page</string> -->
 
     <!-- Action bar strings for edit fragment activity -->
     <string name="action_edit_edit_choice">Edit Choice</string>
     <string name="action_edit_add_choice">Add Choice</string>
     <string name="action_edit_delete">Delete</string>
     <string name="action_edit_cancel">Cancel</string>
-    
     <string name="pick_choice">Choose Choice</string>
     <string name="choice_list">Choice List</string>
     <string name="action_return_to_previous_page">Return to Previous Page</string>
     <string name="action_return_to_beginning">Return to Beginning</string>
+    <string name="title_activity_edit_story">Edit Story</string>
+    <string name="hello_world">Hello world!</string>
+    
+    <!-- String used in layout of edit story activity -->
+    <string name="story_title_hint">Story Title</string>
+    <string name="story_author_hint">Story Author</string>
+    <string name="story_description_hint">Story Description</string>
+    <string name="first_page">First Page: </string>
+    <string name="first_page_empty">Not Set</string>
+    
+    <string name="story_fragments">Story Fragments</string>
 
 </resources>

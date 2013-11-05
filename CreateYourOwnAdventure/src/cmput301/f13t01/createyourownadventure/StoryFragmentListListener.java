@@ -12,5 +12,5 @@ package cmput301.f13t01.createyourownadventure;
  */
 
 public interface StoryFragmentListListener {
-	void onStoryFragmentSelected(int storyId);
+	void onStoryFragmentSelected(int fragmentId);
 }
