@@ -25,6 +25,7 @@ package cmput301.f13t01.createyourownadventure;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.text.SpannableString;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -32,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.TextView.BufferType;
 
 /**
  * @author Eddie Tai <eddie@ualberta.ca>
@@ -72,13 +74,13 @@ public class ReadFragmentView extends ScrollView {
 	 * Add a TextView with content of string s to the current view
 	 * 
 	 * @param s
-	 *            string to be displayed by the TextView
+	 *            SpannableString to be displayed by the TextView
 	 * @param context
 	 *            the context of the view
 	 */
-	public void setTextView(String s) {
+	public void setTextView(SpannableString s) {
 		TextView tv = new TextView(context);
-		tv.setText("s");
+		tv.setText("s",BufferType.SPANNABLE);
 		ll.addView(tv);
 	}
 
