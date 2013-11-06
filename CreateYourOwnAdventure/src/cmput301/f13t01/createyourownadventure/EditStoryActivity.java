@@ -65,5 +65,14 @@ public class EditStoryActivity extends FragmentActivity implements
 		// TODO Auto-generated method stub
 
 	}
+	
+	@SuppressWarnings("unused")
+	private void showFragmentSelection() {
+		DialogFragment newFragment = new StoryFragmentListFragment();
+
+		// window.setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		newFragment.show(getSupportFragmentManager(),
+				getResources().getString(R.string.fragment_list));
+	}
 
 }

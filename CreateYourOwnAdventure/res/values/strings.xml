@@ -42,9 +42,14 @@
     <string name="first_page">First Page: </string>
     <string name="first_page_empty">Not Set</string>
     <string name="story_fragments">Story Fragments</string>
+    <string name="fragment_list">Story Fragment List</string>
+    <string name="action_edit_add_fragment">Add Fragment</string>
+    <string name="set_first_page">Set</string>
 
     <!-- String used for passing intents -->
     <string name="story_is_new">Story Status</string>
     <string name="story_id">Story ID</string>
+    
+    <string name="action_publish">Publish</string>
 
 </resources>
