@@ -102,6 +102,12 @@ public class StoryInfo implements Serializable {
 	
 	
     /* Methods required for Serializable Interface */
+	/**
+	 * Serializable method to write out a StoryInfo.
+	 * 
+	 * @param out an ObjectOutputSteam
+	 * @throws IOException
+	 */
     private void writeObject(java.io.ObjectOutputStream out)
              throws IOException {
     		out.writeObject(this.id);
@@ -110,6 +116,13 @@ public class StoryInfo implements Serializable {
             out.writeObject(this.description);
     }
     
+    /**
+     * Serializable method to read in a StoryFragmentInfo.
+     * 
+     * @param in an ObjectInputStream
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private void readObject(java.io.ObjectInputStream in)
      throws IOException, ClassNotFoundException {
     		this.id = (UUID) in.readObject();

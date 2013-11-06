@@ -181,11 +181,24 @@ public class StoryFragmentList implements Serializable {
 	
 	
 	/* Methods required for Serializable Interface */
+	/**
+	 * Serializable method to write out a StoryFragmentList.
+	 * 
+	 * @param out an ObjectOutputSteam
+	 * @throws IOException
+	 */
 	private void writeObject(java.io.ObjectOutputStream out)
 		     throws IOException {
 		out.writeObject(this.fragmentList);
 	}
 	
+    /**
+     * Serializable method to read in a StoryFragmentList.
+     * 
+     * @param in an ObjectInputStream
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
 	private void readObject(java.io.ObjectInputStream in)
 	    throws IOException, ClassNotFoundException {
 		this.fragmentList = (HashMap<Integer, StoryFragment>) in.readObject();
