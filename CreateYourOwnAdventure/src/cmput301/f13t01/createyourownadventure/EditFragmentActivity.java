@@ -53,6 +53,8 @@ public class EditFragmentActivity extends FragmentActivity implements
 				"Your mother was a scallywag! Have at thee!");
 		this.storyFragment.addContent(new Text(string));
 		this.storyFragment.addContent(new Text(string2));
+		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Get the story manager
 		GlobalManager app = (GlobalManager) getApplication();
@@ -166,6 +168,7 @@ public class EditFragmentActivity extends FragmentActivity implements
 	@Override
 	public void onTabUnselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
+		// TODO: Take appropriate action.
 	}
 
 	@Override
