@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -18,12 +19,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EditFragmentActivity extends FragmentActivity implements
 		ActionBar.TabListener, ChoiceListListener {
 
 	private StoryFragment storyFragment = new StoryFragment();
+	private boolean isNew;
+	private int fragmentId;
+	private ReadStoryManager manager;
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -48,6 +54,22 @@ public class EditFragmentActivity extends FragmentActivity implements
 		this.storyFragment.addContent(new Text(string));
 		this.storyFragment.addContent(new Text(string2));
 
+		// Get the story manager
+		GlobalManager app = (GlobalManager) getApplication();
+		manager = app.getStoryManager();
+
+		Intent intent = getIntent();
+
+		isNew = (boolean) intent.getBooleanExtra(
+				getResources().getString(R.string.fragment_is_new), false);
+		if (isNew == false) {
+			fragmentId = (int) intent.getIntExtra(
+					getResources().getString(R.string.fragment_id), -1);
+			this.storyFragment = manager.getFragment(fragmentId);
+		} else {
+			this.storyFragment = new StoryFragment();
+		}
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_fragment);
 
@@ -57,7 +79,8 @@ public class EditFragmentActivity extends FragmentActivity implements
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+		mSectionsPagerAdapter = new SectionsPagerAdapter(
+				getSupportFragmentManager());
 
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -84,6 +107,12 @@ public class EditFragmentActivity extends FragmentActivity implements
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
+
+		// Set to show the first tab
+		mViewPager.setCurrentItem(0);
+
+		getWindow().setSoftInputMode(
+				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 	}
 
 	@Override
@@ -98,11 +127,15 @@ public class EditFragmentActivity extends FragmentActivity implements
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
 		case R.id.action_edit_cancel:
+			onSelectCancel();
 			return true;
 		case R.id.action_edit_delete:
+			onSelectDelete();
 			return true;
 		case R.id.action_edit_edit_choice:
 			showChoiceSelection();
+			return true;
+		case R.id.action_edit_add_choice:
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -234,6 +267,23 @@ public class EditFragmentActivity extends FragmentActivity implements
 					ARG_SECTION_NUMBER)));
 			return rootView;
 		}
+	}
+
+	private void onSelectCancel() {
+		Toast toast = Toast.makeText(getApplicationContext(), getResources()
+				.getString(R.string.cancel_toast), Toast.LENGTH_SHORT);
+		toast.show();
+		finish();
+	}
+
+	private void onSelectDelete() {
+		if (!isNew) {
+			manager.removeFragment(fragmentId);
+		}
+		Toast toast = Toast.makeText(getApplicationContext(), getResources()
+				.getString(R.string.story_delete_toast), Toast.LENGTH_SHORT);
+		toast.show();
+		finish();
 	}
 
 }

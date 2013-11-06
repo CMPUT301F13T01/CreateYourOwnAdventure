@@ -22,12 +22,11 @@ public class EditStoryActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_story);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Get the story manager
 		GlobalManager app = (GlobalManager) getApplication();
 		manager = app.getStoryManager();
-
-		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		TextView firstPage = (TextView) findViewById(R.id.edit_first_page);
 
