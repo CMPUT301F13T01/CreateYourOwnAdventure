@@ -13,7 +13,6 @@
     <!-- edit story on long click contextual menu -->
     <string name="action_edit_story">Edit Story</string>
     <string name="action_delete_story">Delete Story</string>
-    <string name="story_id">Story ID</string>
     <string name="title_activity_edit_fragment">Edit Fragment</string>
     <string name="edit_section1">Info</string>
     <string name="edit_section2">Edit</string>
@@ -35,14 +34,17 @@
     <string name="action_return_to_beginning">Return to Beginning</string>
     <string name="title_activity_edit_story">Edit Story</string>
     <string name="hello_world">Hello world!</string>
-    
+
     <!-- String used in layout of edit story activity -->
     <string name="story_title_hint">Story Title</string>
     <string name="story_author_hint">Story Author</string>
     <string name="story_description_hint">Story Description</string>
     <string name="first_page">First Page: </string>
     <string name="first_page_empty">Not Set</string>
-    
     <string name="story_fragments">Story Fragments</string>
+
+    <!-- String used for passing intents -->
+    <string name="story_is_new">Story Status</string>
+    <string name="story_id">Story ID</string>
 
 </resources>

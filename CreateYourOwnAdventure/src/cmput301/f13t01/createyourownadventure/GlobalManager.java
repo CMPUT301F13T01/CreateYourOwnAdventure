@@ -57,7 +57,7 @@ public class GlobalManager extends Application {
 	 * @param storyId
 	 *            the ID of the story to be managed.
 	 */
-	public void setStoryManager(int storyId) {
+	public void setStoryManager(UUID storyId) {
 		Story story = localManager.getStory(storyId);
 		readManager.setStory(story); // Do we want to just construct a new one?
 	}
