@@ -62,8 +62,11 @@ public class EditStoryActivity extends FragmentActivity implements
 
 	@Override
 	public void onStoryFragmentSelected(int fragmentId) {
-		// TODO Auto-generated method stub
-
+		Intent intent = new Intent(this, EditFragmentActivity.class);
+		
+		intent.putExtra(getResources().getString(R.string.fragment_is_new), false);
+		intent.putExtra(getResources().getString(R.string.fragment_id), fragmentId);
+		startActivity(intent);
 	}
 	
 	@SuppressWarnings("unused")

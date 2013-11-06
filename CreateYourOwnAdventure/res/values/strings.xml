@@ -49,6 +49,8 @@
     <!-- String used for passing intents -->
     <string name="story_is_new">Story Status</string>
     <string name="story_id">Story ID</string>
+    <string name="fragment_is_new">Fragment Status</string>
+    <string name="fragment_id">Fragment ID</string>
     
     <string name="action_publish">Publish</string>
 
