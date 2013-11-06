@@ -2,6 +2,9 @@
     android:layout_width="wrap_content" >
 
     <item
+        android:id="@+id/action_edit_add_content"
+        android:title="@string/action_edit_add_content"/>
+    <item
         android:id="@+id/action_edit_add_choice"
         android:title="@string/action_edit_add_choice"/>
     <item
