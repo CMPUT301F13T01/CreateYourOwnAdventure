@@ -42,21 +42,13 @@ import android.widget.ListView;
  *  @version 1.3 Nov 6 2013
  */
 public class MainActivity extends Activity{
-	/**
-	 * local manager object to handle stories
-	 */
+	// local manager object to handle stories
 	private LocalManager objLibrary;
-	/**
-	 * story list view object
-	 */
+	//story list view object
 	private ListView lsvStories = null;
-	/**
-	 * story info array list object
-	 */
+	//story info array list object
 	private ArrayList<StoryInfo> storyInfoList;
-	/**
-	 * adapter for story info array list
-	 */
+	// adapter for story info array list
 	private StoryInfoListAdapter objStoryAdapter;	
 	
 	/**
@@ -73,10 +65,9 @@ public class MainActivity extends Activity{
 		lsvStories = (ListView) findViewById(R.id.main_activity_listview);
 		registerForContextMenu(lsvStories);		
 		
-		
 		//instantiate the local manager
 		objLibrary = new LocalManager(this.getApplicationContext());
-		//TODO JUNIT for this
+		//TODO this gets remove after demo
 		//create and add fake stories to local library
 		for (int i = 1; i < 5; i++) {
 			//create fake story 
@@ -90,7 +81,6 @@ public class MainActivity extends Activity{
 			objLibrary.addStory(objStory);
 		}
 		
-		
 	}
 	
 	/**
@@ -98,13 +88,8 @@ public class MainActivity extends Activity{
 	 */
 	protected void onResume() {
 		super.onResume();
-
-		//empty story info list for interim trial
-		//storyInfoList = new ArrayList<StoryInfo>();
-		
 		//get the story info list from Local manager for the story list adapter
 		storyInfoList = objLibrary.getStoryInfoList();
-		
 		//initialize adapter and update the view
 		objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, storyInfoList);
 		lsvStories.setAdapter(objStoryAdapter);
@@ -188,6 +173,7 @@ public class MainActivity extends Activity{
         	return true;
         //user wants to edit the story
         case R.id.action_edit_story:
+			
             startEditStory();
             return true;
         //user wants to delete story
