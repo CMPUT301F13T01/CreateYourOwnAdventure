@@ -33,7 +33,8 @@
         </activity>
         <activity
             android:name="cmput301.f13t01.createyourownadventure.EditStoryActivity"
-            android:label="@string/title_activity_edit_story" >
+            android:label="@string/title_activity_edit_story"
+            android:parentActivityName="cmput301.f13t01.createyourownadventure.MainActivity" >
         </activity>
     </application>
 

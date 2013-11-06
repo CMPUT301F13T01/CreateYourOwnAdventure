@@ -285,5 +285,18 @@ public class EditFragmentActivity extends FragmentActivity implements
 		toast.show();
 		finish();
 	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		
+		if(isNew)
+			manager.addFragment(storyFragment);
+		else
+			manager.updateFragment(fragmentId, storyFragment);
+		Toast toast = Toast.makeText(getApplicationContext(), getResources()
+				.getString(R.string.fragment_save_toast), Toast.LENGTH_SHORT);
+		toast.show();
+	}
 
 }
