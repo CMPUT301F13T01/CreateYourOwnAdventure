@@ -173,7 +173,6 @@ public class MainActivity extends Activity{
         	return true;
         //user wants to edit the story
         case R.id.action_edit_story:
-			
             startEditStory();
             return true;
         //user wants to delete story
@@ -190,15 +189,19 @@ public class MainActivity extends Activity{
 	 * starts create new story child activity
 	 */
 	private void startCreateNewStory() {
-		//quick and dirty test
+		//TODO quick and dirty test
 		System.out.println("You selected Create New Story");
+		//create the intent to launch create new story activity
+	    //Intent intent = new Intent(this, ????);
+		//intent.putExtra(getResources().getString(R.String.story_is_new), true);
+        //startActivity(intent);
 	}
 
 	/**
 	 * starts browse online story child activity
 	 */
 	private void startBrowseOnlineStories() {
-		//quick and dirty test
+		//TODO quick and dirty test
 		System.out.println("You selected Browse Online Stories");
 	}
 	
@@ -206,16 +209,21 @@ public class MainActivity extends Activity{
 	 * starts edit story child activity
 	 */
 	private void startEditStory() {
-		//quick and dirty test
+		//TODO quick and dirty test
 		System.out.println("You selected Edit Story");
+		//create the intent to launch edit story activity
+	    //Intent intent = new Intent(this, ????);
+		//intent.putSerializableExtra(getResources().getString(R.String.story_id, storyUuid), true);
+        //startActivity(intent);		
 	}
 
 	/**
 	 * starts browse online story child activity
 	 */
 	private void startDeleteStory() {
-		//quick and dirty test
+		//TODO quick and dirty test
 		System.out.println("You selected Delete Story");
+
 	}
 	/**
 	 * starts read from last history child activity
@@ -223,6 +231,10 @@ public class MainActivity extends Activity{
 	private void startContinueStory() {
 		//quick and dirty test
 		System.out.println("You selected Continue Story");
+		//create the intent to launch read story from last history activity
+	    //Intent intent = new Intent(this, ????);
+		//intent.putBooleanExtra(storyUuid, false);
+        //startActivity(intent);
 	}
 
 	/**
@@ -231,6 +243,10 @@ public class MainActivity extends Activity{
 	private void startBeginingStory() {
 		//quick and dirty test
 		System.out.println("You selected Start at Beginning");
+		//create the intent to launch read story from beginning activity
+	    //Intent intent = new Intent(this, ????);
+		//intent.putBooleanExtra(storyUuid, true);
+        //startActivity(intent);		
 	}
 	
 	
