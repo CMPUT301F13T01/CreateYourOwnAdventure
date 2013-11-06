@@ -23,11 +23,18 @@ ReadStoryManager to control the content and interaction.
 
 package cmput301.f13t01.createyourownadventure;
 
+import java.util.UUID;
+
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * @author Eddie <eddie@ualberta.ca>
@@ -36,7 +43,7 @@ import android.view.MenuItem;
  *         fragment. Relies on ReadFragmentView for the display and
  *         ReadStoryManager to control the content and interaction.
  */
-public class ReadFragmentActivity extends Activity {
+public class ReadFragmentActivity extends FragmentActivity implements OnItemClickListener {
 
 	ReadStoryManager manager;
 
@@ -44,22 +51,22 @@ public class ReadFragmentActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_view_fragment);
 
 		// intent has the story ID, and story fragment ID to display
 		Intent intent = getIntent();
 		// receive id of story fragment to show
-		Integer storyId = intent.getIntExtra("storyId", 0);
-		Integer fragmentId = intent.getIntExtra("fragmentId", 0);
+		UUID storyId = (UUID) intent.getSerializableExtra("storyId");
+		Boolean fromBeginning = (Boolean) intent
+				.getSerializableExtra("fromBeginning");
 
-		// set the view and controller
-		final ReadFragmentView thisView = new ReadFragmentView(this);
-		manager = new ReadStoryManager(storyId, fragmentId, thisView, this);
-		
+		// set the controller
+		manager = new ReadStoryManager(storyId, fromBeginning, viewFragment, this);
+
 		// enable the Up button in action bar
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-
-		// display the fragment with the view
-		this.setContentView(thisView);
+		
+		setContentView(R.layout.view_fragment);
 
 	}
 
@@ -77,8 +84,7 @@ public class ReadFragmentActivity extends Activity {
 	 * Determines the resulting action of choosing a particular action in the
 	 * action bar.
 	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSeqlected(MenuItem item) {
 
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {

@@ -25,6 +25,7 @@ other story fragments.
 package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.content.Context;
@@ -43,81 +44,22 @@ import android.widget.AdapterView.OnItemClickListener;
  *         to various other story fragments.
  * 
  */
-public class ReadStoryManager implements OnItemClickListener {
+public class ReadStoryManager {
 
 	// declaration of variables
-	ReadFragmentView view;
-	StoryFragment fragment;
-	Integer fragmentId;
-	Context context;
 	Story story;
-	Integer storyId;
-	ArrayList<Choice> choices;
+	UUID storyId;
+	Context context;
 
-	public ReadStoryManager(final Integer storyId, final Integer fragmentId,
-			final ReadFragmentView view, final ReadFragmentActivity context) {
-
-		// setting of variables
-		this.view = view;
-		this.context = context;
+	public ReadStoryManager(final UUID storyId, Context context) {
+		
 		this.storyId = storyId;
-		this.fragmentId = fragmentId;
+		this.context = context;
 
 		// set the story using storyId through global manager
 		GlobalManager globalmanager = (GlobalManager) ((Activity) context)
 				.getApplication();
 		globalmanager.setStoryManager(storyId);
-
-		// fetch the fragment from the story level
-		fragment = story.getFragment(fragmentId);
-
-		// get media_list
-		ArrayList<Media> media_list = fragment.getContentList();
-
-		// cycle through the media list
-		for (int i = 0; i < media_list.size(); i++) {
-			@SuppressWarnings("rawtypes")
-			Media media = media_list.get(i);
-
-			// get media file's type and do class comparisons
-			if (media.getClass().equals(Text.class)) {
-				Text text = (Text) media;
-				
-				// get media content's SpannableString as s
-				SpannableString s = text.getContent();
-				view.setTextView(s);
-			}
-
-			// the rest are implemented later for iteration 3
-
-			// else if type is image
-			// if(media_type == Image.class.getClass())
-
-			// else if type is sound
-			// if(media_type == Audio.class.getClass())
-
-			// else if type is video
-			// if(media_type == Video.class.getClass())
-		}
-
-		// from story level with fragment id, get the array list of choice
-		// objects
-		ArrayList<Choice> choices = getChoices(fragmentId);
-
-		// if there are choices, cycle through them and extract the flavour
-		// texts
-		if (choices != null) {
-			ArrayList<String> flavourText = new ArrayList<String>();
-
-			for (int i = 0; i < choices.size(); i++) {
-				String s = choices.get(i).getFlavourText();
-				flavourText.add(s);
-			}
-
-			// set the view of choices with flavour text
-			view.setChoiceView(flavourText, this);
-		}
-
 	}
 
 	/**
@@ -155,39 +97,17 @@ public class ReadStoryManager implements OnItemClickListener {
 	}
 
 	/**
-	 * On selection of a choice in view, direct the user to the next story
-	 * fragment according to the choice map.
-	 */
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-
-		// use position to refer to the choice item from choice map
-		Choice choice = choices.get(position);
-
-		// need getter of this?
-		Integer destinationId = choice.getDestinationId();
-
-		// add to the history stack
-		pushToStack(destinationId);
-
-		// read the next story fragment
-		readNextFragment(storyId, destinationId);
-
-	}
-
-	/**
 	 * A function that starts a new activity
 	 * 
-	 * @param storyId
+	 * @param storyId2
 	 *            the Id of the story object that the user is reading at the
 	 *            moment
 	 * @param fragmentId
 	 *            the Id of the story fragment that the user is to read next
 	 */
-	public void readNextFragment(Integer storyId, Integer fragmentId) {
+	public void readNextFragment(UUID storyId2, Integer fragmentId) {
 		Intent intent = new Intent(context, ReadFragmentActivity.class);
-		intent.putExtra("storyId", storyId);
+		intent.putExtra("storyId", storyId2);
 		intent.putExtra("fragmentId", fragmentId);
 		((Activity) context).startActivity(intent);
 	}
@@ -458,6 +378,16 @@ public class ReadStoryManager implements OnItemClickListener {
 	 */
 	public void clearHistory() {
 		this.story.clearHistory();
+	}
+	
+	/**
+	 * Given a fragment Id for a story, fetch the Media List for a fragment
+	 * 
+	 * @return an ArrayList of Media content for the fragment
+	 */
+	public ArrayList<Media> getMediaList(Integer fragmentId) {
+		StoryFragment fragment = this.getFragment(fragmentId);
+		return fragment.getContentList();
 	}
 
 }

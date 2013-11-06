@@ -24,9 +24,15 @@ package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
 
+import android.app.Fragment;
 import android.content.Context;
+import android.os.Bundle;
 import android.text.SpannableString;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,32 +48,73 @@ import android.widget.TextView.BufferType;
  *         to display the media of the story fragment properly.
  * 
  */
-public class ReadFragmentView extends ScrollView {
+public class ReadFragmentView extends Fragment {
 
-	// declaration of variables
-	LinearLayout ll;
-	Context context;
+	@Override	
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+		Bundle savedInstanceState) {
+		
+		ScrollView sv = new ScrollView(getActivity());
+		
+		manager = new ReadStoryManager(this, context);
+		
+		// depending if we are reading from beginning, 
+		// fetch the appropriate fragment ID accordingly
+		if (fromBeginning) {
+			thi.fragmentId = manager.getFirstPageId();
+		}
+		else {
+			this.fragmentId = manager.getMostRecent();
+		}
 
-	/**
-	 * Constructor for the view. A LinearLayout is added to the ScrollView since
-	 * ScrollView only accepts 1 possible view, and we need to populate the view
-	 * with multiple views, depending on the story fragment and its content
-	 * media files.
-	 * 
-	 * @param context
-	 *            the activity that the view belongs to
-	 */
-	public ReadFragmentView(Context c) {
-		super(c);
+		// fetch the fragment
+		fragment = manager.getFragment(fragmentId);
+		
+		// cycle through the media list
+		for (int i = 0; i < media_list.size(); i++) {
+			@SuppressWarnings("rawtypes")
+			Media media = media_list.get(i);
 
-		// add LinearLayout to ScrollView since ScrollView only accepts 1 view
-		ll = new LinearLayout(context);
-		ll.setOrientation(LinearLayout.VERTICAL);
-		this.addView(ll);
+			// get media file's type and do class comparisons
+			if (media.getClass().equals(Text.class)) {
+				Text text = (Text) media;
+				
+				// get media content's SpannableString as s
+				SpannableString s = text.getContent();
+				view.setTextView(s);
+			}
 
-		// all views within the ScrollView obviously shares the same context
-		context = c;
+			// the rest are implemented later for iteration 3
 
+			// else if type is image
+			// if(media_type == Image.class.getClass())
+
+			// else if type is sound
+			// if(media_type == Audio.class.getClass())
+
+			// else if type is video
+			// if(media_type == Video.class.getClass())
+		}
+
+		// from story level with fragment id, get the array list of choice
+		// objects
+		ArrayList<Choice> choices = getChoices(fragmentId);
+
+		// if there are choices, cycle through them and extract the flavour
+		// texts
+		if (choices != null) {
+			ArrayList<String> flavourText = new ArrayList<String>();
+
+			for (int i = 0; i < choices.size(); i++) {
+				String s = choices.get(i).getFlavourText();
+				flavourText.add(s);
+			}
+
+			// set the view of choices with flavour text
+			view.setChoiceView(flavourText, this);
+		}
+		
+		return sv;
 	}
 
 	/**
@@ -79,16 +126,16 @@ public class ReadFragmentView extends ScrollView {
 	 *            the context of the view
 	 */
 	public void setTextView(SpannableString s) {
-		TextView tv = new TextView(context);
+		TextView tv = new TextView(getActivity() );
 		tv.setText("s",BufferType.SPANNABLE);
-		ll.addView(tv);
+		this.addView(tv);
 	}
 
 	/**
 	 * Incomplete ImageView handler
 	 */
 	public void setImageView() {
-		ImageView iv = new ImageView(context);
+		ImageView iv = new ImageView(getActivity());
 		ll.addView(iv);
 	}
 
@@ -105,13 +152,37 @@ public class ReadFragmentView extends ScrollView {
 			OnItemClickListener onItemClickListener) {
 
 		// populate the list with choices' flavour text
-		ListView lv = new ListView(context);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+		ListView lv = new ListView(getActivity());
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
 				R.layout.list_choices, choice_text);
 		lv.setAdapter(adapter);
 
 		// set the controller for these list items
 		lv.setOnItemClickListener(onItemClickListener);
 	}
+	
+	/**
+	 * On selection of a choice in view, direct the user to the next story
+	 * fragment according to the choice map.
+	 */
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+
+		// use position to refer to the choice item from choice map
+		Choice choice = choices.get(position);
+
+		// need getter of this?
+		Integer destinationId = choice.getDestinationId();
+
+		// add to the history stack
+		pushToStack(destinationId);
+
+		// read the next story fragment
+		readNextFragment(storyId, destinationId);
+
+	}
 
 }
+
+
