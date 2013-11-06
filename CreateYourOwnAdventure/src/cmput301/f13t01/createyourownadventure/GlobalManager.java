@@ -1,5 +1,7 @@
 package cmput301.f13t01.createyourownadventure;
 
+import java.util.UUID;
+
 import android.app.Application;
 
 /**
