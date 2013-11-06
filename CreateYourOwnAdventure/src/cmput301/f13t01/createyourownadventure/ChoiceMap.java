@@ -54,7 +54,7 @@ public class ChoiceMap implements Serializable {
 	 * @param fragmentId   ID of fragment where choice is located
 	 * @param choice   Choice object to add to the ChoiceMap
 	 */
-	public void addChoice(int fragmentId, Choice choice) {
+	public void addChoice(Integer fragmentId, Choice choice) {
 		
 		ArrayList<Choice> destinations = choiceMapping.get(fragmentId);
 		
@@ -78,7 +78,7 @@ public class ChoiceMap implements Serializable {
 	 * @param index   Index of the choice to remove
 	 * @return   Returns true if choice existed, otherwise returns false
 	 */
-	public boolean deleteChoice(int fragmentId, int index) {
+	public boolean deleteChoice(Integer fragmentId, int index) {
 		
 		ArrayList<Choice> destinations = choiceMapping.get(fragmentId);
 		
@@ -104,7 +104,7 @@ public class ChoiceMap implements Serializable {
 	 * @param choice   New choice to put in there
 	 * @return   Returns true if choice already existed, false otherwise
 	 */
-	public boolean updateChoice(int fragmentId, int index, Choice choice) {
+	public boolean updateChoice(Integer fragmentId, int index, Choice choice) {
 		
 		ArrayList<Choice> destinations = choiceMapping.get(fragmentId);
 		
@@ -126,7 +126,7 @@ public class ChoiceMap implements Serializable {
 	 * 
 	 * @param fragmentId   ID of fragment to remove from all choices
 	 */
-	public void cleanFragmentReferences(int fragmentId) {
+	public void cleanFragmentReferences(Integer fragmentId) {
 		
 		//Removes all choices the fragment is linked to
 		if (choiceMapping.containsKey(fragmentId)) {
@@ -135,7 +135,7 @@ public class ChoiceMap implements Serializable {
 		
 		//Checks for all instances where the fragment was a 
 		//destination and removes them.
-		for (int id : choiceMapping.keySet()) {
+		for (Integer id : choiceMapping.keySet()) {
 			ArrayList<Choice> choiceList = choiceMapping.get(id);
 			int choiceIndex;
 				
@@ -169,9 +169,9 @@ public class ChoiceMap implements Serializable {
 	 * Entries are sorted by fragment ID.
 	 * 
 	 * @param fragmentId   ID of fragment to fetch the choices for
-	 * @return   Assorted ArrayList of int, String pairs associated with fragment ID and choice text
+	 * @return   Assorted ArrayList of Integer, String pairs associated with fragment ID and choice text
 	 */
-	public ArrayList<Choice> getChoices(int fragmentId) {
+	public ArrayList<Choice> getChoices(Integer fragmentId) {
 		
 		ArrayList<Choice> destinations = choiceMapping.get(fragmentId);
 		

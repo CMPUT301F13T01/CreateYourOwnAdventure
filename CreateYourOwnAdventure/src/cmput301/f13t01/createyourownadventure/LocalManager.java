@@ -104,7 +104,7 @@ public class LocalManager implements Serializable, LibraryManager {
 	 * @return an ArrayList of all StoryInfo
 	 */
 	public ArrayList<StoryInfo> getStoryInfoList() {
-		ArrayList <StoryInfo> fetchList = new ArrayList<StoryInfo>(this.storyInfoList.values());
+		ArrayList<StoryInfo> fetchList = new ArrayList<StoryInfo>(this.storyInfoList.values());
 		// TODO: Sort the list consistently before return
 		Collections.sort(fetchList, new Comparator<StoryInfo>() {
 			@Override 

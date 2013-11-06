@@ -41,8 +41,8 @@ import java.io.Serializable;
 
 public class Choice implements Serializable {
 
-	private int sourceId;
-	private int destinationId;
+	private Integer sourceId;
+	private Integer destinationId;
 	private String flavourText;
 	
 	/**
@@ -65,7 +65,7 @@ public class Choice implements Serializable {
 	 * @param destinationId   ID of choice's destination story fragment.
 	 * @param flavourText   Flavour text of choice
 	 */
-	public Choice(int sourceId, int destinationId, String flavourText) {
+	public Choice(Integer sourceId, Integer destinationId, String flavourText) {
 		this.sourceId = sourceId;
 		this.destinationId = destinationId;
 		this.flavourText = flavourText;
@@ -76,7 +76,7 @@ public class Choice implements Serializable {
 	 * 
 	 * @return the fragment's source ID
 	 */
-	public int getSourceId() {
+	public Integer getSourceId() {
 		return sourceId;
 	}
 
@@ -85,7 +85,7 @@ public class Choice implements Serializable {
 	 * 
 	 * @param sourceId the fragment's source ID to set
 	 */
-	public void setSourceId(int sourceId) {
+	public void setSourceId(Integer sourceId) {
 		this.sourceId = sourceId;
 	}
 
@@ -94,7 +94,7 @@ public class Choice implements Serializable {
 	 * 
 	 * @return the fragment's destination ID
 	 */
-	public int getDestinationId() {
+	public Integer getDestinationId() {
 		return destinationId;
 	}
 
@@ -103,7 +103,7 @@ public class Choice implements Serializable {
 	 * 
 	 * @param destinationId the fragment's destination ID to set
 	 */
-	public void setDestinationId(int destinationId) {
+	public void setDestinationId(Integer destinationId) {
 		this.destinationId = destinationId;
 	}
 
