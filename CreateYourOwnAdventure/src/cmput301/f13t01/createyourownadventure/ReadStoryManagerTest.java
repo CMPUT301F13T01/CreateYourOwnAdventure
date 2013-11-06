@@ -21,8 +21,8 @@ public class ReadStoryManagerTest extends TestCase {
 	Boolean sfirstPage = story.setFirstPage(1);
 	
 	// Fake media 1
-	SpannableString spanstring = new SpannableString("test spannable string");
-	spanstring.setSpan(null, 0, 4, 0);
+	SpannableString spanstring = new SpannableString("test spannable string").setSpan(what, start, end, flags)
+	Stylespan colorSpan = new ForegroundColorSpan(Color.RED);
 	Text text1 = new Text(spanstring);
 	
 	
