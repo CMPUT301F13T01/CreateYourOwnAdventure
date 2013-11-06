@@ -20,7 +20,7 @@
 package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
-
+import java.util.UUID;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -69,6 +69,7 @@ public class MainActivity extends Activity{
 		//instantiate the local manager
 		objLibrary = new LocalManager(this.getApplicationContext());
 		//TODO this gets remove after demo
+	
 		//create and add fake stories to local library
 		for (int i = 1; i < 5; i++) {
 			//create fake story 
@@ -150,6 +151,11 @@ public class MainActivity extends Activity{
 		//inflate menu specified in xml resource
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main_story_menu, menu);
+		
+		//get the info on which item was selected
+		//AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
+		//now get the adapter thats populating the list view
+		//StoryInfo item = objStoryAdapter.getItem(info.position);
 	}
 	
 	/**
@@ -163,22 +169,27 @@ public class MainActivity extends Activity{
 	public boolean onContextItemSelected (MenuItem item) {
 		//get the menu item info
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		//now get the story info for the the selected story in list view
+		StoryInfo storyPicked = objStoryAdapter.getItem(info.position);
 	    switch (item.getItemId()) {
         //user wants start reading at beginning of story
         case R.id.action_beginning:
-        	startBeginingStory();
+        	//get the story uuid and pass it to start reading at begininng
+        	startAtBeginning(storyPicked.getId());
         	return true;
         //user wants continue reading from last page of history
         case R.id.action_continue:
-        	startContinueStory();
+        	//get the story uuid and pass it to startContinueStory
+        	startContinueStory(storyPicked.getId());
         	return true;
         //user wants to edit the story
         case R.id.action_edit_story:
-            startEditStory();
+        	//get the story uuid and pass it to startEditStory
+            startEditStory(storyPicked.getId());
             return true;
         //user wants to delete story
         case R.id.action_delete_story:
-            startDeleteStory();
+            startDeleteStory(storyPicked.getId());
             return true;        	
         default:
             return super.onOptionsItemSelected(item);
@@ -209,20 +220,20 @@ public class MainActivity extends Activity{
 	/**
 	 * starts edit story child activity
 	 */
-	private void startEditStory() {
+	private void startEditStory(UUID storyId) {
 		//TODO quick and dirty test replace with a toast
 		System.out.println("You selected Edit Story");
 		//create the intent to launch edit story activity
 	    Intent intent = new Intent(this, EditStoryActivity.class);
-	    intent.putExtra(getResources().getString(R.string.story_id), true);
-		//intent.putSerializableExtra(getResources().getString(R.String.story_id, storyUuid), true);
+	    intent.putExtra(getResources().getString(R.string.story_is_new), true);
+		intent.putExtra(getResources().getString(R.string.story_id), storyId);
         startActivity(intent);		
 	}
 
 	/**
 	 * starts browse online story child activity
 	 */
-	private void startDeleteStory() {
+	private void startDeleteStory(UUID storyId) {
 		//TODO quick and dirty test
 		System.out.println("You selected Delete Story");
 
@@ -230,25 +241,27 @@ public class MainActivity extends Activity{
 	/**
 	 * starts read from last history child activity
 	 */
-	private void startContinueStory() {
+	private void startContinueStory(UUID storyId) {
 		//quick and dirty test
 		System.out.println("You selected Continue Story");
-		//create the intent to launch read story from last history activity
-	    //Intent intent = new Intent(this, ????);
-		//intent.putBooleanExtra(storyUuid, false);
-        //startActivity(intent);
+		//create the intent and bundle to launch read story from beginning activity		
+	    Intent intent = new Intent(this, ReadFragmentActivity.class);
+	    intent.putExtra(getResources().getString(R.string.story_continue), false);
+		intent.putExtra(getResources().getString(R.string.story_id), storyId);
+        startActivity(intent);
 	}
 
 	/**
 	 * starts reading story at beginning child activity
 	 */
-	private void startBeginingStory() {
+	private void startAtBeginning(UUID storyId) {
 		//quick and dirty test
 		System.out.println("You selected Start at Beginning");
-		//create the intent to launch read story from beginning activity
-	    //Intent intent = new Intent(this, ????);
-		//intent.putBooleanExtra(storyUuid, true);
-        //startActivity(intent);		
+		//create the intent and bundle to launch read story from beginning activity
+	    Intent intent = new Intent(this, ReadFragmentActivity.class);
+	    intent.putExtra(getResources().getString(R.string.story_continue), true);
+		intent.putExtra(getResources().getString(R.string.story_id), storyId);
+        startActivity(intent);		
 	}
 	
 	
