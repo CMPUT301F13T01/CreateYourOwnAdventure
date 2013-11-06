@@ -1,3 +1,21 @@
+/*
+Adapter to display StoryInfo objects from MainActivity.
+
+License GPLv3: GNU GPL Version 3
+<http://gnu.org/licenses/gpl.html>.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
@@ -50,8 +68,10 @@ public class StoryInfoListAdapter extends ArrayAdapter<StoryInfo> {
 		View row = convertView;
 		StoryInfoHolder holder = null;
 		if (row==null) {
+			// Inflate views
 			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
+            // Store display Views
             holder = new StoryInfoHolder();
             holder.title = (TextView) row.findViewById(R.id.item_title);
             holder.author = (TextView) row.findViewById(R.id.item_author);
@@ -67,7 +87,7 @@ public class StoryInfoListAdapter extends ArrayAdapter<StoryInfo> {
         }
         return row;
 	}
-	
+	// Temporary holder to set Views
     static class StoryInfoHolder {
         TextView title;
         TextView author;

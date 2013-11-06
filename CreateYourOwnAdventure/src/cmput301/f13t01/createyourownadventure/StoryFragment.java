@@ -163,6 +163,12 @@ public class StoryFragment implements Serializable {
 	}
 	
 	/* Methods required for Serializable Interface */
+	/**
+	 * Serializable method to write out a StoryFragment.
+	 * 
+	 * @param out an ObjectOutputSteam
+	 * @throws IOException
+	 */
 	private void writeObject(java.io.ObjectOutputStream out)
 		     throws IOException {
 		out.writeObject(this.title);
@@ -171,6 +177,13 @@ public class StoryFragment implements Serializable {
 		out.writeObject(this.annotationList);
 	}
 	
+    /**
+     * Serializable method to read in a StoryFragment.
+     * 
+     * @param in an ObjectInputStream
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
 	private void readObject(java.io.ObjectInputStream in)
 	    throws IOException, ClassNotFoundException {
 		this.title = (String) in.readObject();
