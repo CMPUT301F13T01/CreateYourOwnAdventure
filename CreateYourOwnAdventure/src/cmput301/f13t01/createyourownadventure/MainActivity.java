@@ -22,6 +22,7 @@ package cmput301.f13t01.createyourownadventure;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -189,12 +190,12 @@ public class MainActivity extends Activity{
 	 * starts create new story child activity
 	 */
 	private void startCreateNewStory() {
-		//TODO quick and dirty test
+		//TODO quick and dirty test, replace with a toast
 		System.out.println("You selected Create New Story");
 		//create the intent to launch create new story activity
-	    //Intent intent = new Intent(this, ????);
-		//intent.putExtra(getResources().getString(R.String.story_is_new), true);
-        //startActivity(intent);
+	    Intent intent = new Intent(this, EditStoryActivity.class);
+		intent.putExtra(getResources().getString(R.string.story_is_new), true);
+        startActivity(intent);
 	}
 
 	/**
@@ -209,12 +210,13 @@ public class MainActivity extends Activity{
 	 * starts edit story child activity
 	 */
 	private void startEditStory() {
-		//TODO quick and dirty test
+		//TODO quick and dirty test replace with a toast
 		System.out.println("You selected Edit Story");
 		//create the intent to launch edit story activity
-	    //Intent intent = new Intent(this, ????);
+	    Intent intent = new Intent(this, EditStoryActivity.class);
+	    intent.putExtra(getResources().getString(R.string.story_id), true);
 		//intent.putSerializableExtra(getResources().getString(R.String.story_id, storyUuid), true);
-        //startActivity(intent);		
+        startActivity(intent);		
 	}
 
 	/**
