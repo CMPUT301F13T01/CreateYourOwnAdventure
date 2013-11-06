@@ -1,5 +1,5 @@
 /*
-Library class for CreateYourOwnAdventure.
+LocalManager class for CreateYourOwnAdventure.
 This deals with the management of stories on disk.
 All saving & loading is handled here, along with deletion.
 
@@ -36,10 +36,11 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.UUID;
 
 import android.content.Context;
-
 
 /**
  * This class is designed to maintain all of the
@@ -51,17 +52,17 @@ import android.content.Context;
  *
  */
 
-public class LocalManager implements Serializable {
+public class LocalManager implements Serializable, LibraryManager {
 	
-	// TODO: Take a Context
-	// TODO: Handle saving/loading of StoryInfoList (Hard-coded)
 	/* Instance Variables for Library */
-	// DO NOT DO ANYTHING WITH loadedId AND loadedStory!!!
 	private Context context;
-	private Integer loadedId;
-	private Story loadedStory;
-	private HashMap<Integer, StoryInfo> storyInfoList;
+	private HashMap<UUID, StoryInfo> storyInfoList;
 	
+	/**
+	 * Constructor. Takes a context, loads all StoryInfo objects
+	 * 
+	 * @param context Context to allow for saving/loading
+	 */
 	public LocalManager(Context context) {
 		this.context = context;
 		this.loadStoryInfoList();
@@ -73,10 +74,9 @@ public class LocalManager implements Serializable {
 	 * @param storyId   ID of the story
 	 * @return   Returns the story with that ID
 	 */
-	public Story getStory(Integer storyId) {
+	public Story getStory(UUID storyId) {
 		if (this.storyInfoList.keySet().contains(storyId)) {
-			this.loadStory(storyId);
-			return this.loadedStory;
+			return loadStory(storyId);
 		} else {
 			return null;
 		}
@@ -89,7 +89,7 @@ public class LocalManager implements Serializable {
 	 * @param id the ID of the Story to get the info of
 	 * @return a StoryInfo object for that ID
 	 */
-	public StoryInfo getStoryInfo(Integer storyId) {
+	public StoryInfo getStoryInfo(UUID storyId) {
 		if (this.storyInfoList.keySet().contains(storyId)) {
 			return this.storyInfoList.get(storyId);
 		} else {
@@ -104,8 +104,15 @@ public class LocalManager implements Serializable {
 	 * @return an ArrayList of all StoryInfo
 	 */
 	public ArrayList<StoryInfo> getStoryInfoList() {
+		ArrayList <StoryInfo> fetchList = new ArrayList<StoryInfo>(this.storyInfoList.values());
 		// TODO: Sort the list consistently before return
-		return new ArrayList<StoryInfo>(this.storyInfoList.values());
+		Collections.sort(fetchList, new Comparator<StoryInfo>() {
+			@Override 
+			public int compare(final StoryInfo s1, final StoryInfo s2) {
+				return s1.getTitle().compareTo(s2.getTitle());
+			}
+		});
+		return fetchList;
 	}
 
 	/**
@@ -113,26 +120,16 @@ public class LocalManager implements Serializable {
 	 * 
 	 * @param story The Story object to add to the Library
 	 */
-	public void addStory(Story story) {
-		// Empty StoryList, first ID is 0
-		Integer id = 0;
-		// Non-empty StoryList, make new id
-		if (!this.storyInfoList.isEmpty()) {
-			// New ID is 1 greater than the current largest ID, for uniqueness
-			id = Collections.max(this.storyInfoList.keySet()) + 1;
-		}
-		
+	public UUID addStory(Story story) {
+		// ID assigned is a randomUUID... Shouldn't collide
+		UUID id = UUID.randomUUID();
 		// Places new StoryInfo into StoryInfoList
 		StoryInfo newStoryInfo = new StoryInfo(id, story); 
 		this.storyInfoList.put(id, newStoryInfo);
 		this.saveStoryInfoList();
-		
-		// Save currently loaded Story
-		this.saveStory();
 		// Save newly added Story
-		loadedId = id;
-		loadedStory = story;
-		this.saveStory();
+		this.saveStory(id, story);
+		return id;
 	}
 	
 	/**
@@ -140,7 +137,7 @@ public class LocalManager implements Serializable {
 	 * 
 	 * @param storyId   ID of story to remove
 	 */
-	public boolean removeStory(Integer storyId) {
+	public boolean removeStory(UUID storyId) {
 		// Story exists, removed
 		if (this.storyInfoList.containsKey(storyId)) {
 			// Remove from storyInfoList
@@ -149,11 +146,6 @@ public class LocalManager implements Serializable {
 			// Delete file for Story
 			File storyFile = new File(storyId.toString()+".story");
 			storyFile.delete();
-			// Clear story from local memory if loaded
-			if (this.loadedId == storyId) {
-				this.loadedId = null;
-				this.loadedStory = null;
-			}
 			return true;
 		} else {
 			// Story does not exist, failure
@@ -166,12 +158,13 @@ public class LocalManager implements Serializable {
 	 * 
 	 * @param ArrayList of story IDs to be removed
 	 */
-	public void removeMultipleStories(ArrayList<Integer> stories) {
-		for (Integer storyId : stories) {
+	public void removeMultipleStories(ArrayList<UUID> stories) {
+		for (UUID storyId : stories) {
 			this.removeStory(storyId);
 		}
 	}
 	
+	@Deprecated
 	/**
 	 * Puts a new or updated story into the list of stories
 	 * with the ID
@@ -179,44 +172,43 @@ public class LocalManager implements Serializable {
 	 * @param storyId   ID of story to update
 	 * @param story   Story that has been updated
 	 */
-	public void updateStory(Integer storyId, Story story) {
-		// Save currently loaded story
-		this.saveStory();
-		// Update storyInfoList
-		StoryInfo newStoryInfo = new StoryInfo(storyId, story); 
-		this.storyInfoList.put(storyId, newStoryInfo);
-		this.saveStoryInfoList();
+	public void updateStory(UUID id, Story story) {
 		// Save given story
-		this.loadedId = storyId;
-		this.loadedStory = story;
-		this.saveStory();
+		this.saveStory(id, story);
 	}
 	
 	/**
 	 * Save a Story into a file.
 	 * 
 	 * @param id The ID of the Story to save
+	 * @param story The story to save to file
+	 * 
+	 * @return true if save is successful, false otherwise
 	 */
-	public void saveStory() {
-		// Save only if there is a Story to save
-		if (this.loadedId != null) {
-			// Attempts to save a Story to a file
-			try{
-			    // Generate the save file name
-			    String saveFile = this.loadedId.toString()+".story";
-				// Output streams to save Story object
-				FileOutputStream fos = context.openFileOutput(saveFile, Context.MODE_PRIVATE);
-				ObjectOutputStream oos = new ObjectOutputStream(fos);
-				// Save the Story
-	            oos.writeObject(this.loadedStory);
-				fos.close();
-			} catch (FileNotFoundException e) {
-				// Write access error
-				e.printStackTrace();
-			} catch (IOException e) {
-				// Something went wrong
-				e.printStackTrace();
-			}
+	public boolean saveStory(UUID id, Story story) {
+		// Update storyInfoList
+		StoryInfo newStoryInfo = new StoryInfo(id, story); 
+		this.storyInfoList.put(id, newStoryInfo);
+		this.saveStoryInfoList();
+		// Attempts to save a Story to a file
+		try{
+		    // Generate the save file name
+		    String saveFile = id.toString()+".story";
+			// Output streams to save Story object
+			FileOutputStream fos = context.openFileOutput(saveFile, Context.MODE_PRIVATE);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			// Save the Story
+            oos.writeObject(story);
+			fos.close();
+			return true;
+		} catch (FileNotFoundException e) {
+			// Write access error
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			// Something went wrong
+			e.printStackTrace();
+			return false;
 		}
 	}
 	
@@ -225,7 +217,7 @@ public class LocalManager implements Serializable {
 	 * 
  	 * @param id The ID of the Story to save
 	 */
-	public void loadStory(Integer id) {
+	public Story loadStory(UUID id) {
 	    // Generate the save file name
 	    String saveFile = id.toString()+".story";
 		// Attempts to Story from file
@@ -234,19 +226,18 @@ public class LocalManager implements Serializable {
 			FileInputStream fis = context.openFileInput(saveFile);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			// Loads the Story from file
-			this.loadedId = id;
-			this.loadedStory = (Story) ois.readObject();
+			Story loadedStory = (Story) ois.readObject();
 			fis.close();
+			return loadedStory;
 		} catch (FileNotFoundException e) {
-			// Save what is loaded
-			this.saveStory();
-			// Load a null
-			this.loadedId = null;
-			this.loadedStory = null;
+			// ID doesn't exist
+			return null;
 		} catch (IOException e) {
 			// Something messed up
 			e.printStackTrace();
+			return null;
 		} catch (ClassNotFoundException e) {
+			return null;
 		}
 	}
 	
@@ -289,11 +280,11 @@ public class LocalManager implements Serializable {
 			FileInputStream fis = context.openFileInput(saveFile);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			// Loads the storyInfoList
-			this.storyInfoList = (HashMap<Integer, StoryInfo>) ois.readObject();
+			this.storyInfoList = (HashMap<UUID, StoryInfo>) ois.readObject();
 			fis.close();
 		} catch (FileNotFoundException e) {
 			// No existing file
-			this.storyInfoList = new HashMap<Integer, StoryInfo>();
+			this.storyInfoList = new HashMap<UUID, StoryInfo>();
 			this.saveStoryInfoList();
 		} catch (IOException e) {
 			// Something messed up
@@ -324,7 +315,7 @@ public class LocalManager implements Serializable {
 	 */
 	private void readObject(java.io.ObjectInputStream in)
 		     throws IOException, ClassNotFoundException {
-		this.storyInfoList = (HashMap<Integer, StoryInfo>) in.readObject();
+		this.storyInfoList = (HashMap<UUID, StoryInfo>) in.readObject();
 		return;
 	}
 		 

@@ -23,6 +23,7 @@ package cmput301.f13t01.createyourownadventure;
 import java.io.IOException;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * @author Jesse Chu <jhchu@ualberta.ca>
@@ -34,7 +35,7 @@ import java.io.Serializable;
 public class StoryInfo implements Serializable {
 	
 	/* Instance Variables for StoryInfo */
-	private Integer id;
+	private UUID id;
 	private String title;
 	private String author;
 	private String description;
@@ -44,7 +45,7 @@ public class StoryInfo implements Serializable {
 	 * 
 	 * @param story the Story to get the info of
 	 */
-	public StoryInfo(Integer id, Story story) {
+	public StoryInfo(UUID id, Story story) {
 		this.id = id;
 		this.title = story.getTitle();
 		this.author = story.getAuthor();
@@ -68,7 +69,7 @@ public class StoryInfo implements Serializable {
 	 * 
 	 * @return the id
 	 */
-	public Integer getId() {
+	public UUID getId() {
 		return id;
 	}
 
@@ -111,7 +112,7 @@ public class StoryInfo implements Serializable {
     
     private void readObject(java.io.ObjectInputStream in)
      throws IOException, ClassNotFoundException {
-    		this.id = (Integer) in.readObject();
+    		this.id = (UUID) in.readObject();
             this.title = (String) in.readObject();
             this.author = (String) in.readObject();
             this.description = (String) in.readObject();
