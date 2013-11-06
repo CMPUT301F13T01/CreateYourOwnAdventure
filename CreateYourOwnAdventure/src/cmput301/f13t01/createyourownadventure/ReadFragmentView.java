@@ -56,16 +56,9 @@ public class ReadFragmentView extends Fragment {
 		
 		ScrollView sv = new ScrollView(getActivity());
 		
-		manager = new ReadStoryManager(this, context);
+		ReadStoryManager manager = new ReadStoryManager(UUID, getActivity());
 		
-		// depending if we are reading from beginning, 
-		// fetch the appropriate fragment ID accordingly
-		if (fromBeginning) {
-			thi.fragmentId = manager.getFirstPageId();
-		}
-		else {
-			this.fragmentId = manager.getMostRecent();
-		}
+
 
 		// fetch the fragment
 		fragment = manager.getFragment(fragmentId);
@@ -159,28 +152,6 @@ public class ReadFragmentView extends Fragment {
 
 		// set the controller for these list items
 		lv.setOnItemClickListener(onItemClickListener);
-	}
-	
-	/**
-	 * On selection of a choice in view, direct the user to the next story
-	 * fragment according to the choice map.
-	 */
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-
-		// use position to refer to the choice item from choice map
-		Choice choice = choices.get(position);
-
-		// need getter of this?
-		Integer destinationId = choice.getDestinationId();
-
-		// add to the history stack
-		pushToStack(destinationId);
-
-		// read the next story fragment
-		readNextFragment(storyId, destinationId);
-
 	}
 
 }

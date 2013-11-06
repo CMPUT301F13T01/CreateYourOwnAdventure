@@ -25,15 +25,14 @@ package cmput301.f13t01.createyourownadventure;
 
 import java.util.UUID;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.Fragment;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
@@ -41,11 +40,13 @@ import android.widget.AdapterView.OnItemClickListener;
  * 
  *         ReadFragmentActivity, the activity called for reading any story
  *         fragment. Relies on ReadFragmentView for the display and
- *         ReadStoryManager to control the content and interaction.
+ *         ReadStoryManager for story access.
  */
 public class ReadFragmentActivity extends FragmentActivity implements OnItemClickListener {
 
-	ReadStoryManager manager;
+	private boolean isNew;
+	private ReadStoryManager manager;
+	private int fragmentId;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -57,16 +58,25 @@ public class ReadFragmentActivity extends FragmentActivity implements OnItemClic
 		Intent intent = getIntent();
 		// receive id of story fragment to show
 		UUID storyId = (UUID) intent.getSerializableExtra("storyId");
-		Boolean fromBeginning = (Boolean) intent
-				.getSerializableExtra("fromBeginning");
-
-		// set the controller
-		manager = new ReadStoryManager(storyId, fromBeginning, viewFragment, this);
+		
+		// Get the story manager and set the story
+		GlobalManager app = (GlobalManager) getApplication();
+		manager = app.getStoryManager();
+		app.setStoryManager(storyId);
+		
+		// depending if we are reading from beginning, 
+		// fetch the appropriate fragment ID accordingly
+		isNew = (boolean) intent.getBooleanExtra(
+				getResources().getString(R.string.fragment_is_new), false);
+		if (isNew) {
+			this.fragmentId = manager.getFirstPageId();
+		}
+		else {
+			this.fragmentId = manager.getMostRecent();
+		}
 
 		// enable the Up button in action bar
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		
-		setContentView(R.layout.view_fragment);
 
 	}
 
@@ -90,15 +100,71 @@ public class ReadFragmentActivity extends FragmentActivity implements OnItemClic
 		switch (item.getItemId()) {
 		case R.id.action_return_to_beginning:
 			// Go back to the start of the story, clearing history stack
-			manager.toBeginning();
+			toBeginning();
 			return true;
 		case R.id.action_return_to_previous_page:
 			// Go back to the previous story fragment according to history stack
-			manager.toPrevious();
+			toPrevious();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}	
+
+	/**
+	 * Go to the beginning (first page) of a story Apprehend the current page to
+	 * the history stack History is cleared.
+	 */
+	public void toBeginning() {
+
+		// get the fragment id of the story's first page
+		Integer destinationId = manager.getFirstPageId();
+		manager.clearHistory();
+
+		// read the next story fragment
+		// TO-DO
+	}
+
+	/**
+	 * Go back to the previous page dictated by the history stack Remove the
+	 * current page from the history stack
+	 */
+	public void toPrevious() {
+
+		// go back to previous, adjusting history stack properly
+		Integer destinationId = manager.getMostRecent();
+
+		if (destinationId != null) {
+			// read the next story fragment if there is a previous fragment in
+			// the history stack
+			// TO-DO
+		} else {
+			// go back to the previous level
+			finish();
+		}
+
+	}
+	
+	/**
+	 * On selection of a choice in view, direct the user to the next story
+	 * fragment according to the choice map.
+	 */
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+
+		// use position to refer to the choice item from choice map
+		Choice choice = manager.getChoices(fragmentId).get(position);
+
+		// 
+		Integer destinationId = choice.getDestinationId();
+
+		// add to the history stack
+		manager.pushToStack(destinationId);
+
+		// read the next story fragment
+		// TO-DO
+
 	}
 
 }

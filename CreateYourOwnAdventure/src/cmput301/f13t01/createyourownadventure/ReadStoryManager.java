@@ -25,93 +25,21 @@ other story fragments.
 package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
-import java.util.UUID;
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.text.SpannableString;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * @author Eddie Tai <eddie@ualberta.ca>
  * 
- *         ReadStoryManager is the manager that allows interaction between the
- *         user and the view. It dictates what content is to be displayed by the
- *         view. It keeps track of the history stack as well when read navigates
- *         to various other story fragments.
+ *         ReadStoryManager is the connection between various activities and 
+ *         a story. The GlobalManager sets the story for the manager,
+ *         and the manager enables various interactions with the story model,
+ *         such as getting and setting attributes of a story and its fragments.
  * 
  */
 public class ReadStoryManager {
 
 	// declaration of variables
 	Story story;
-	UUID storyId;
-	Context context;
 
-	public ReadStoryManager(final UUID storyId, Context context) {
-		
-		this.storyId = storyId;
-		this.context = context;
-
-		// set the story using storyId through global manager
-		GlobalManager globalmanager = (GlobalManager) ((Activity) context)
-				.getApplication();
-		globalmanager.setStoryManager(storyId);
-	}
-
-	/**
-	 * Go to the beginning (first page) of a story Apprehend the current page to
-	 * the history stack History is cleared.
-	 */
-	public void toBeginning() {
-
-		// get the fragment id of the story's first page
-		Integer destinationId = getFirstPageId();
-		clearHistory();
-
-		// read the next story fragment
-		readNextFragment(storyId, destinationId);
-	}
-
-	/**
-	 * Go back to the previous page dictated by the history stack Remove the
-	 * current page from the history stack
-	 */
-	public void toPrevious() {
-
-		// go back to previous, adjusting history stack properly
-		Integer destinationId = getMostRecent();
-
-		if (destinationId != null) {
-			// read the next story fragment if there is a previous fragment in
-			// the history stack
-			readNextFragment(storyId, destinationId);
-		} else {
-			// go back to the previous level
-			((Activity) context).finish();
-		}
-
-	}
-
-	/**
-	 * A function that starts a new activity
-	 * 
-	 * @param storyId2
-	 *            the Id of the story object that the user is reading at the
-	 *            moment
-	 * @param fragmentId
-	 *            the Id of the story fragment that the user is to read next
-	 */
-	public void readNextFragment(UUID storyId2, Integer fragmentId) {
-		Intent intent = new Intent(context, ReadFragmentActivity.class);
-		intent.putExtra("storyId", storyId2);
-		intent.putExtra("fragmentId", fragmentId);
-		((Activity) context).startActivity(intent);
-	}
-	
 	/**
 	 * Used by the global manager to inform the ReadStoryManager of what story
 	 * is to be read
@@ -282,7 +210,7 @@ public class ReadStoryManager {
 	}
 
 
-    /* Functions that deal with the ChoiceMap */
+    /* Functions that deal with the ChoiceMap and Choices */
 	/**
 	 * Adds a new given Choice to a StoryFragment (by ID)
 	 * 
