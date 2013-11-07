@@ -13,7 +13,7 @@
     <!-- edit story on long click contextual menu -->
     <string name="action_edit_story">Edit Story</string>
     <string name="action_delete_story">Delete Story</string>
-    
+
     <!-- Edit Fragment -->
     <string name="title_activity_edit_fragment">Edit Fragment</string>
     <string name="edit_section1">Info</string>
@@ -21,7 +21,6 @@
     <string name="edit_section3">Preview</string>
     <string name="info_title_hint">Fragment Title</string>
     <string name="info_description_hint">Fragment Description</string>
-    
     <string name="story_fragment">Story Fragment</string>
     <string name="story_title">Story Title</string>
     <string name="story_author">Story Author</string>
@@ -38,6 +37,7 @@
     <string name="action_return_to_beginning">Return to Beginning</string>
     <string name="title_activity_edit_story">Edit Story</string>
     <string name="hello_world">Hello world!</string>
+    <string name="action_edit_edit_content">Edit Content</string>
 
     <!-- String used in layout of edit story activity -->
     <string name="story_title_hint">Story Title</string>
@@ -55,12 +55,13 @@
     <string name="story_id">Story ID</string>
     <string name="fragment_is_new">Fragment Status</string>
     <string name="fragment_id">Fragment ID</string>
-	<string name="story_continue">Continue Story</string>
-    
+    <string name="story_continue">Continue Story</string>
     <string name="action_publish">Publish</string>
     <string name="story_delete_toast">Story Deleted</string>
     <string name="cancel_toast">Cancelled</string>
     <string name="fragment_save_toast">Fragment Saved</string>
     <string name="story_save_toast">Story Saved</string>
+    <string name="tab1">Tab 1</string>
+    <string name="title_activity_edit_fragment_info">EditFragmentInfoActivity</string>
 
 </resources>
