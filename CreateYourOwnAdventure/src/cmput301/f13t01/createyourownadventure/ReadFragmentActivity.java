@@ -23,6 +23,7 @@ ReadStoryManager to control the content and interaction.
 
 package cmput301.f13t01.createyourownadventure;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import android.app.Fragment;
@@ -148,11 +149,18 @@ public class ReadFragmentActivity extends FragmentActivity {
 		}
 	}
 
-	public void onFragmentListClick() {
+	public void onFragmentListClick(View v, Integer fragmentId) {
 		// TODO Auto-generated method stub
 		
+		// fetch the destinationId of the next fragment to show
+		int selectedChoice = v.getId() -1;
+		
+		ArrayList<Choice> choiceList = storyManager.getChoices(fragmentId);
+		Choice choice = choiceList.get(selectedChoice);
+		Integer destinationId = choice.getDestinationId();
+		
 		// generate new fragment to replace the old one
-		// commitFragment(destinationId);
+		commitFragment(destinationId);
 	}
 
 	/**

@@ -141,7 +141,7 @@ public class ReadFragmentView extends Fragment {
 				choiceButton.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						((ReadFragmentActivity)getActivity()).onFragmentListClick();
+						((ReadFragmentActivity)getActivity()).onFragmentListClick(v, fragmentId);
 					}
 				});
 			}
