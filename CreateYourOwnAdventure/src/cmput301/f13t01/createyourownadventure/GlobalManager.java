@@ -3,6 +3,7 @@ package cmput301.f13t01.createyourownadventure;
 import java.util.UUID;
 
 import android.app.Application;
+import android.content.Context;
 
 /**
  * The GlobalManager class is a class used to hold global story access managers.
@@ -33,6 +34,19 @@ public class GlobalManager extends Application {
 	 * @see #setLocalManager()
 	 */
 	private static LocalManager localManager;
+	
+    private static Context context;
+
+    public void onCreate(){
+        super.onCreate();
+        context = getApplicationContext();
+        readManager = new ReadStoryManager();
+        localManager = new LocalManager(context);
+    }
+
+    public static Context getAppContext() {
+        return context;
+    }
 
 	/**
 	 * Get the Application's LocalManager.
@@ -62,5 +76,9 @@ public class GlobalManager extends Application {
 	public void setStoryManager(UUID storyId) {
 		Story story = localManager.getStory(storyId);
 		readManager.setStory(story); // Do we want to just construct a new one?
+	}
+
+	public void setNewStoryManager() {
+		readManager.setStory(new Story());
 	}
 }
