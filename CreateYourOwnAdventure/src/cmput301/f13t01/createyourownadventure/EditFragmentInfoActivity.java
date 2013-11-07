@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -45,6 +46,7 @@ public class EditFragmentInfoActivity extends Activity implements
 			} else {
 				storyFragment = new StoryFragment();
 			}
+			Log.d("oops", "GOT A NEW FRAGMENT");
 		}
 
 		// Find the proper EditText views
@@ -121,7 +123,7 @@ public class EditFragmentInfoActivity extends Activity implements
 			manager.removeFragment(fragmentId);
 		}
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
-				.getString(R.string.story_delete_toast), Toast.LENGTH_SHORT);
+				.getString(R.string.fragment_delete_toast), Toast.LENGTH_SHORT);
 		toast.show();
 		finish();
 	}
@@ -137,7 +139,27 @@ public class EditFragmentInfoActivity extends Activity implements
 		Intent intent = new Intent(this, EditFragmentContentActivity.class);
 		intent.putExtra(getResources().getString(R.string.story_fragment),
 				storyFragment);
+		intent.putExtra(getResources().getString(R.string.fragment_id),
+				fragmentId);
 		startActivityForResult(intent, EDIT_FRAGMENT);
+	}
+
+	public void onBackpressed() {
+
+		EditText title = (EditText) findViewById(R.id.edit_story_title);
+		EditText author = (EditText) findViewById(R.id.edit_story_author);
+		EditText desc = (EditText) findViewById(R.id.edit_story_description);
+
+		manager.setTitle(title.getText().toString());
+		manager.setAuthor(author.getText().toString());
+		manager.setDescription(desc.getText().toString());
+
+		// manager.saveStory();
+
+		Toast toast = Toast.makeText(getApplicationContext(), getResources()
+				.getString(R.string.fragment_save_toast), Toast.LENGTH_SHORT);
+		toast.show();
+		finish();
 	}
 
 	@Override
@@ -148,10 +170,15 @@ public class EditFragmentInfoActivity extends Activity implements
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == RESULT_OK) {
-			// TODO Update our fragment
-			// UpdateView();
+			Intent intent = getIntent();
+
+			if (intent != null) {
+				storyFragment = (StoryFragment) intent
+						.getSerializableExtra(getResources().getString(
+								R.string.story_fragment));
+			}
 		} else if (requestCode == RESULT_CANCELED) {
-			// TODO Do Nothing
+			// Do Nothing
 		}
 	}
 

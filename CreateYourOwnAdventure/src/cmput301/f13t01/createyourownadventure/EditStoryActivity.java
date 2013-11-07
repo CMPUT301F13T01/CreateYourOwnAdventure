@@ -128,10 +128,14 @@ public class EditStoryActivity extends FragmentActivity implements
 	protected void onStop() {
 		super.onStop();
 		
+	}
+	
+	public void onBackPressed() {
 		//manager.saveStory();
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.story_save_toast), Toast.LENGTH_SHORT);
 		toast.show();
+		finish();
 	}
 
 }
