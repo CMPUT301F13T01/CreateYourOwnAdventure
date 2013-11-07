@@ -15,6 +15,8 @@ import android.widget.Toast;
 public class EditFragmentInfoActivity extends Activity implements
 		ChoiceListListener {
 
+	static final int EDIT_FRAGMENT = 0;
+
 	private StoryFragment storyFragment;
 	private boolean isNew;
 	private int fragmentId;
@@ -132,14 +134,25 @@ public class EditFragmentInfoActivity extends Activity implements
 	}
 
 	private void onSelectEditContent() {
-		// TODO Auto-generated method stub
-
+		Intent intent = new Intent(this, EditFragmentContentActivity.class);
+		intent.putExtra(getResources().getString(R.string.story_fragment),
+				storyFragment);
+		startActivityForResult(intent, EDIT_FRAGMENT);
 	}
 
 	@Override
 	public void onChoiceSelected(Choice choice) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == RESULT_OK) {
+			// TODO Update our fragment
+			// UpdateView();
+		} else if (requestCode == RESULT_CANCELED) {
+			// TODO Do Nothing
+		}
 	}
 
 }

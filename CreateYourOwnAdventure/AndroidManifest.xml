@@ -44,6 +44,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cmput301.f13t01.createyourownadventure.MainActivity" />
         </activity>
+        <activity
+            android:name="cmput301.f13t01.createyourownadventure.EditFragmentContentActivity"
+            android:label="@string/title_activity_edit_fragment_content" >
+        </activity>
     </application>
 
 </manifest>

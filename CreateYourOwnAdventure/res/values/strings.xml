@@ -63,5 +63,6 @@
     <string name="story_save_toast">Story Saved</string>
     <string name="tab1">Tab 1</string>
     <string name="title_activity_edit_fragment_info">EditFragmentInfoActivity</string>
+    <string name="title_activity_edit_fragment_content">EditFragmentContentActivity</string>
 
 </resources>
