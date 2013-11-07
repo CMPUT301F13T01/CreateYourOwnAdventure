@@ -54,13 +54,13 @@ public class Story implements Serializable {
          * Created with default values assigned to attributes.
          */
         public Story() {
-                this.title = "New Story";
-                this.author = "";
-                this.description = "A new Story";
-                this.firstPage = null;
-                this.historyStack = new History();
-                this.fragmentList = new StoryFragmentList();
-                this.choiceMap = new ChoiceMap();
+            this.title = "New Story";
+            this.author = "";
+            this.description = "A new Story";
+            this.firstPage = null;
+            this.historyStack = new History();
+            this.fragmentList = new StoryFragmentList();
+            this.choiceMap = new ChoiceMap();
         }
 
         
@@ -71,7 +71,7 @@ public class Story implements Serializable {
          * @return the title of the story
          */
         public String getTitle() {
-                return this.title;
+            return this.title;
         }
         
         /**
@@ -80,7 +80,7 @@ public class Story implements Serializable {
          * @return the author of the story
          */
         public String getAuthor() {
-                return this.author;
+            return this.author;
         }
         
         /**
@@ -89,7 +89,7 @@ public class Story implements Serializable {
          * @return the description of the story
          */
         public String getDescription() {
-                return this.description;
+            return this.description;
         }
         
         /**
@@ -98,7 +98,7 @@ public class Story implements Serializable {
          * @return the ID of the first fragment of the story
          */
         public Integer getFirstPage() {
-                return this.firstPage;
+            return this.firstPage;
         }
         
         /**
@@ -108,8 +108,8 @@ public class Story implements Serializable {
          * @return true if successful, false otherwise
          */
         public boolean setTitle(String title) {
-                this.title = title;
-                return true;
+            this.title = title;
+            return true;
         }
         
         /**
@@ -119,8 +119,8 @@ public class Story implements Serializable {
          * @return true if successful, false otherwise
          */
         public boolean setAuthor(String author) {
-                this.author = author;
-                return true;
+            this.author = author;
+            return true;
         }
         
         /**
@@ -130,8 +130,8 @@ public class Story implements Serializable {
          * @return true if successful, false otherwise
          */
         public boolean setDescription(String description) {
-                this.description = description;
-                return true;
+            this.description = description;
+            return true;
         }
         
         /**
@@ -141,13 +141,13 @@ public class Story implements Serializable {
          * @return true if successful, false otherwise
          */
         public boolean setFirstPage(Integer id) {
-                StoryFragment checkFragment = fragmentList.getFragment(id);
-                if (checkFragment != null) {
-                        this.firstPage = id;
-                        return true;
-                } else {
-                        return false;
-                }
+	        StoryFragment checkFragment = fragmentList.getFragment(id);
+	        if (checkFragment != null) {
+                this.firstPage = id;
+                return true;
+	        } else {
+                return false;
+	        }
         }
 
         
@@ -159,7 +159,7 @@ public class Story implements Serializable {
          * @return the requested StoryFragment, null if it doesn't exist
          */
         public StoryFragment getFragment(Integer id) {
-                return this.fragmentList.getFragment(id);
+            return this.fragmentList.getFragment(id);
         }
         
         /**
@@ -169,7 +169,7 @@ public class Story implements Serializable {
          * @return the ID of the StoryFragment, null if not found
          */
         public Integer getFragmentId(StoryFragment fragment) {
-                return this.fragmentList.getFragmentId(fragment);
+        	return this.fragmentList.getFragmentId(fragment);
         }
         
         /**
@@ -180,7 +180,7 @@ public class Story implements Serializable {
          * @return a StoryFragmentInfo object for that ID
          */
         public StoryFragmentInfo getFragmentInfo(Integer id) {
-                return this.fragmentList.getFragmentInfo(id);
+        	return this.fragmentList.getFragmentInfo(id);
         }
         
     	/**

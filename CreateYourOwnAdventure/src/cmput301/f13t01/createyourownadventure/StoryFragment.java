@@ -85,6 +85,15 @@ public class StoryFragment implements Serializable {
 	}
 	
 	/**
+	 * Getter for the annotationList for a Fragment
+	 * 
+	 * @return the annotationList of the Fragment
+	 */
+	public ArrayList<Media> getAnnotationList() {
+		return this.annotationList;
+	}
+	
+	/**
 	 * Setter for the title of the Fragment.
 	 * 
 	 * @param title the string to set the title to
