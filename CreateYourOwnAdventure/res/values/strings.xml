@@ -58,6 +58,7 @@
     <string name="story_continue">Continue Story</string>
     <string name="action_publish">Publish</string>
     <string name="story_delete_toast">Story Deleted</string>
+    <string name="fragment_delete_toast">Fragment Deleted</string>
     <string name="cancel_toast">Cancelled</string>
     <string name="fragment_save_toast">Fragment Saved</string>
     <string name="story_save_toast">Story Saved</string>
