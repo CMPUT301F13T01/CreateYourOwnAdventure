@@ -59,7 +59,7 @@ public class EditStoryActivity extends FragmentActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.edit_story, menu);
+		getMenuInflater().inflate(R.menu.activity_edit_story_actionbar, menu);
 		return true;
 	}
 
@@ -127,7 +127,7 @@ public class EditStoryActivity extends FragmentActivity implements
 	protected void onStop() {
 		super.onStop();
 		
-		manager.saveStory();
+		//manager.saveStory();
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.story_save_toast), Toast.LENGTH_SHORT);
 		toast.show();

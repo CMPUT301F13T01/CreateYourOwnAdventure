@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +55,7 @@ public class EditFragmentActivity extends FragmentActivity implements
 				"Your mother was a scallywag! Have at thee!");
 		this.storyFragment.addContent(new Text(string));
 		this.storyFragment.addContent(new Text(string2));
-		
+
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Get the story manager
@@ -168,7 +170,30 @@ public class EditFragmentActivity extends FragmentActivity implements
 	@Override
 	public void onTabUnselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
-		// TODO: Take appropriate action.
+		int position = tab.getPosition();
+
+		if(position == 0) {
+			InfoFragment fragment = (InfoFragment) mSectionsPagerAdapter.getFragment(position);
+			View view = fragment.getView();
+			EditText title = (EditText) view.findViewById(R.id.fragment_title);
+			EditText description = (EditText) view.findViewById(R.id.fragment_description);
+			storyFragment.setTitle(title.getText().toString());
+			storyFragment.setDescription(description.getText().toString());
+		}
+		else if(position == 1) {
+			EditFragment fragment = (EditFragment) mSectionsPagerAdapter.getFragment(position);
+			View view = fragment.getView();
+			LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
+			
+			for(int i = 0; i < layout.getChildCount(); i++) {
+				View v = layout.getChildAt(i);
+				if(v.getClass().equals(EditText.class)) {
+					EditText text = (EditText) v;
+					SpannableString string = new SpannableString(text.getText());
+					storyFragment.addContent(new Text(string));
+				}
+			}
+		}
 	}
 
 	@Override
@@ -182,46 +207,43 @@ public class EditFragmentActivity extends FragmentActivity implements
 	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+		private Fragment[] activeFragments;
+
 		public SectionsPagerAdapter(FragmentManager fragmentManager) {
 			super(fragmentManager);
+			activeFragments = new Fragment[getCount()];
 		}
 
 		@Override
 		public Fragment getItem(int position) {
+			Fragment fragment = null;
 			// getItem is called to instantiate the fragment for the given page.
 			if (position == 0) {
-				Fragment fragment = new InfoFragment();
-				Bundle args = new Bundle();
-				args.putSerializable(
-						getResources().getString(R.string.story_fragment),
-						(Serializable) storyFragment);
-				fragment.setArguments(args);
+				fragment = new InfoFragment();
 				return fragment;
 			} else if (position == 1) {
-				Fragment fragment = new EditFragment();
-				Bundle args = new Bundle();
-				args.putSerializable(
-						getResources().getString(R.string.story_fragment),
-						(Serializable) storyFragment);
-				fragment.setArguments(args);
-				return fragment;
+				fragment = new EditFragment();
 			}
 
 			else if (position == 2) {
-				Fragment fragment = new PreviewFragment();
-				Bundle args = new Bundle();
-				args.putSerializable(
-						getResources().getString(R.string.story_fragment),
-						(Serializable) storyFragment);
-				fragment.setArguments(args);
-				return fragment;
+				fragment = new PreviewFragment();
 			}
-
-			Fragment fragment = new DummySectionFragment();
 			Bundle args = new Bundle();
-			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+			args.putSerializable(
+					getResources().getString(R.string.story_fragment),
+					(Serializable) storyFragment);
 			fragment.setArguments(args);
+			activeFragments[position] = fragment;
 			return fragment;
+		}
+		
+		public void destroyItem(ViewGroup container, int position, Fragment fragment) {
+			super.destroyItem(container, position, fragment);
+			activeFragments[position] = null;
+		}
+		
+		public Fragment getFragment(int position) {
+			return activeFragments[position];
 		}
 
 		@Override
@@ -245,33 +267,6 @@ public class EditFragmentActivity extends FragmentActivity implements
 		}
 	}
 
-	/**
-	 * A dummy fragment representing a section of the app, but that simply
-	 * displays dummy text.
-	 */
-	public static class DummySectionFragment extends Fragment {
-		/**
-		 * The fragment argument representing the section number for this
-		 * fragment.
-		 */
-		public static final String ARG_SECTION_NUMBER = "section_number";
-
-		public DummySectionFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_edit_dummy,
-					container, false);
-			TextView dummyTextView = (TextView) rootView
-					.findViewById(R.id.section_label);
-			dummyTextView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
-			return rootView;
-		}
-	}
-
 	private void onSelectCancel() {
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.cancel_toast), Toast.LENGTH_SHORT);
@@ -288,12 +283,12 @@ public class EditFragmentActivity extends FragmentActivity implements
 		toast.show();
 		finish();
 	}
-	
+
 	@Override
 	protected void onStop() {
 		super.onStop();
-		
-		if(isNew)
+
+		if (isNew)
 			manager.addFragment(storyFragment);
 		else
 			manager.updateFragment(fragmentId, storyFragment);
