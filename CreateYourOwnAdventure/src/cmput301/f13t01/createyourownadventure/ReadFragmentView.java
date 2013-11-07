@@ -47,6 +47,7 @@ import android.widget.TextView.BufferType;
 public class ReadFragmentView extends Fragment {
 
 	ReadStoryManager storyManager;
+	Integer fragmentId;
 
 	// get the storyManager on attachment to the activity
 	@Override
@@ -73,7 +74,7 @@ public class ReadFragmentView extends Fragment {
 		
 		// fetch story fragment Id
 		String resourceString = getResources().getString(R.string.destination_id);
-		Integer fragmentId = getArguments().getInt(resourceString);
+		fragmentId = getArguments().getInt(resourceString);
 		
 		ArrayList<Media> mediaList = storyManager.getMediaList(fragmentId);
 
