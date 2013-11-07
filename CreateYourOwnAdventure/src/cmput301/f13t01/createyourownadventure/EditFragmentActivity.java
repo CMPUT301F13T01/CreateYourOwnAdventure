@@ -17,11 +17,8 @@ import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class EditFragmentActivity extends FragmentActivity implements
@@ -106,9 +103,10 @@ public class EditFragmentActivity extends FragmentActivity implements
 			// the adapter. Also specify this Activity object, which implements
 			// the TabListener interface, as the callback (listener) for when
 			// this tab is selected.
-			actionBar.addTab(actionBar.newTab()
-					.setText(mSectionsPagerAdapter.getPageTitle(i))
-					.setTabListener(this));
+			ActionBar.Tab tab = actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(this);
+			tab.setTag(getResources().getString(R.string.tab1));
+			actionBar.addTab(tab);
+			
 		}
 
 		// Set to show the first tab
@@ -129,6 +127,9 @@ public class EditFragmentActivity extends FragmentActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
+		case R.id.action_edit_add_content:
+			onAddContent();
+			return true;
 		case R.id.action_edit_cancel:
 			onSelectCancel();
 			return true;
@@ -145,12 +146,32 @@ public class EditFragmentActivity extends FragmentActivity implements
 		}
 	}
 
+	private void onAddContent() {
+		// LinearLayout layout = (LinearLayout)
+		// findViewById(R.id.edit_fragment_linear);
+		// LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+		// LinearLayout.LayoutParams.MATCH_PARENT,
+		// LinearLayout.LayoutParams.WRAP_CONTENT);
+		// layout.addView(new EditText(getApplicationContext()), params);
+		storyFragment.addContent(new Text());
+		android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager()
+				.beginTransaction();
+		EditFragment editFragment = new EditFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(getResources().getString(R.string.story_fragment),
+				(Serializable) storyFragment);
+		editFragment.setArguments(args);
+		//getSupportFragmentManager().g
+		//ft.replace(, editFragment);
+		ft.commit();
+	}
+
 	private void showChoiceSelection() {
-		DialogFragment newFragment = new ChoiceListFragment();
+		//DialogFragment newFragment = new ChoiceListFragment();
 
 		// window.setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		newFragment.show(getSupportFragmentManager(),
-				getResources().getString(R.string.choice_list));
+		//newFragment.show(getSupportFragmentManager(),
+		//		getResources().getString(R.string.choice_list));
 	}
 
 	public void onChoiceSelected(Choice choice) {
@@ -169,41 +190,47 @@ public class EditFragmentActivity extends FragmentActivity implements
 	@Override
 	public void onTabUnselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
-		int position = tab.getPosition();
-
-		if (position == 0) {
-			InfoFragment fragment = (InfoFragment) mSectionsPagerAdapter
-					.getFragment(position);
-			View view = fragment.getView();
-			EditText title = (EditText) view.findViewById(R.id.fragment_title);
-			EditText description = (EditText) view
-					.findViewById(R.id.fragment_description);
-			storyFragment.setTitle(title.getText().toString());
-			storyFragment.setDescription(description.getText().toString());
-		} else if (position == 1) {
-			EditFragment fragment = (EditFragment) mSectionsPagerAdapter
-					.getFragment(position);
-			View view = fragment.getView();
-			LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
-
-			for (int i = 0; i < layout.getChildCount(); i++) {
-				View v = layout.getChildAt(i);
-				if (v.getClass().equals(EditText.class)) {
-					EditText text = (EditText) v;
-					SpannableString string = new SpannableString(text.getText());
-					storyFragment.addContent(new Text(string));
-				}
-			}
-
-			PreviewFragment previewFragment = new PreviewFragment();
-			Bundle args = new Bundle();
-			args.putSerializable(
-					getResources().getString(R.string.story_fragment),
-					(Serializable) storyFragment);
-			previewFragment.setArguments(args);
-			PreviewFragment oldPreview = (PreviewFragment) mSectionsPagerAdapter.getFragment(2);
-			oldPreview = previewFragment;
-		}
+		// int position = tab.getPosition();
+		//
+		// if (position == 0) {
+		// InfoFragment fragment = (InfoFragment) mSectionsPagerAdapter
+		// .getFragment(position);
+		// if(fragment == null) {
+		// Log.d("oops", "Fragment is null");
+		// return;
+		// }
+		// View view = fragment.getView();
+		// EditText title = (EditText) view.findViewById(R.id.fragment_title);
+		// EditText description = (EditText) view
+		// .findViewById(R.id.fragment_description);
+		// storyFragment.setTitle(title.getText().toString());
+		// storyFragment.setDescription(description.getText().toString());
+		// } else if (position == 1) {
+		// EditFragment fragment = (EditFragment) mSectionsPagerAdapter
+		// .getFragment(position);
+		// View view = fragment.getView();
+		// LinearLayout layout = (LinearLayout)
+		// view.findViewById(R.id.edit_fragment_linear);
+		//
+		// for (int i = 0; i < layout.getChildCount(); i++) {
+		// View v = layout.getChildAt(i);
+		// if (v.getClass().equals(EditText.class)) {
+		// EditText text = (EditText) v;
+		// SpannableString string = new SpannableString(text.getText());
+		// storyFragment.addContent(new Text(string));
+		// }
+		// }
+		//
+		// PreviewFragment previewFragment = new PreviewFragment();
+		// Bundle args = new Bundle();
+		// args.putSerializable(
+		// getResources().getString(R.string.story_fragment),
+		// (Serializable) storyFragment);
+		// previewFragment.setArguments(args);
+		// PreviewFragment oldPreview = (PreviewFragment) mSectionsPagerAdapter
+		// .getFragment(2);
+		// oldPreview = previewFragment;
+		// }
 	}
 
 	@Override
@@ -217,11 +244,8 @@ public class EditFragmentActivity extends FragmentActivity implements
 	 */
 	public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-		private Fragment[] activeFragments;
-
 		public SectionsPagerAdapter(FragmentManager fragmentManager) {
 			super(fragmentManager);
-			activeFragments = new Fragment[getCount()];
 		}
 
 		@Override
@@ -230,7 +254,6 @@ public class EditFragmentActivity extends FragmentActivity implements
 			// getItem is called to instantiate the fragment for the given page.
 			if (position == 0) {
 				fragment = new InfoFragment();
-				return fragment;
 			} else if (position == 1) {
 				fragment = new EditFragment();
 			}
@@ -243,19 +266,30 @@ public class EditFragmentActivity extends FragmentActivity implements
 					getResources().getString(R.string.story_fragment),
 					(Serializable) storyFragment);
 			fragment.setArguments(args);
-			activeFragments[position] = fragment;
 			return fragment;
 		}
 
 		public void destroyItem(ViewGroup container, int position,
 				Fragment fragment) {
 			super.destroyItem(container, position, fragment);
-			activeFragments[position] = null;
 		}
 
-		public Fragment getFragment(int position) {
-			return activeFragments[position];
-		}
+		// public Fragment getFragment(int position) {
+		// //return activeFragments[position];
+		// FragmentManager fm = getSupportFragmentManager();
+		// if(position == 0) {
+		// Fragment fragment = fm.findFragmentById(R.id.info_fragment);
+		// return fragment;
+		// }
+		// else if(position == 1) {
+		// Fragment fragment = fm.findFragmentById(R.id.edit_fragment);
+		// return fragment;
+		// }
+		// else {
+		// Fragment fragment = fm.findFragmentById(R.id.preview_fragment);
+		// return fragment;
+		// }
+		// }
 
 		@Override
 		public int getCount() {
