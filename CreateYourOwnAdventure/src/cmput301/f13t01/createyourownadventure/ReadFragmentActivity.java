@@ -26,6 +26,8 @@ package cmput301.f13t01.createyourownadventure;
 import java.util.UUID;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -42,11 +44,13 @@ import android.widget.AdapterView.OnItemClickListener;
  *         fragment. Relies on ReadFragmentView for the display and
  *         ReadStoryManager for story access.
  */
-public class ReadFragmentActivity extends FragmentActivity implements OnItemClickListener {
+public class ReadFragmentActivity extends FragmentActivity {
 
-	private boolean isNew;
-	private ReadStoryManager manager;
-	private int fragmentId;
+	// declaration of variables
+	GlobalManager app = (GlobalManager) getApplication();
+	ReadStoryManager storyManager = app.getStoryManager();
+	FragmentManager fragmentManager;
+	UUID storyId;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -54,30 +58,30 @@ public class ReadFragmentActivity extends FragmentActivity implements OnItemClic
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_fragment);
 
-		// intent has the story ID, and story fragment ID to display
-		Intent intent = getIntent();
-		// receive id of story fragment to show
-		UUID storyId = (UUID) intent.getSerializableExtra("storyId");
-		
-		// Get the story manager and set the story
-		GlobalManager app = (GlobalManager) getApplication();
-		manager = app.getStoryManager();
-		app.setStoryManager(storyId);
-		
-		// depending if we are reading from beginning, 
-		// fetch the appropriate fragment ID accordingly
-		isNew = (boolean) intent.getBooleanExtra(
-				getResources().getString(R.string.fragment_is_new), false);
-		if (isNew) {
-			this.fragmentId = manager.getFirstPageId();
-		}
-		else {
-			this.fragmentId = manager.getMostRecent();
-		}
-
 		// enable the Up button in action bar
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
+		// intent has the story ID, and story fragment ID to display
+		Intent intent = getIntent();
+		// receive id of story fragment to show
+		storyId = (UUID) intent.getSerializableExtra(
+				getResources().getString(R.string.story_id));
+
+		// set the story in the story manager
+		app.setStoryManager(storyId);
+
+		// depending if we are reading from beginning,
+		// fetch the appropriate fragment ID accordingly
+		int fragmentId;
+		Boolean Continue = (boolean) intent.getBooleanExtra(
+				getResources().getString(R.string.story_continue), false);
+		if (Continue) {
+			fragmentId = storyManager.getMostRecent();
+		} else {
+			fragmentId = storyManager.getFirstPageId();
+		}
+
+		commitFragment(storyId, fragmentId);
 	}
 
 	/**
@@ -109,7 +113,7 @@ public class ReadFragmentActivity extends FragmentActivity implements OnItemClic
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}	
+	}
 
 	/**
 	 * Go to the beginning (first page) of a story Apprehend the current page to
@@ -118,8 +122,8 @@ public class ReadFragmentActivity extends FragmentActivity implements OnItemClic
 	public void toBeginning() {
 
 		// get the fragment id of the story's first page
-		Integer destinationId = manager.getFirstPageId();
-		manager.clearHistory();
+		Integer destinationId = storyManager.getFirstPageId();
+		storyManager.clearHistory();
 
 		// read the next story fragment
 		// TO-DO
@@ -132,7 +136,7 @@ public class ReadFragmentActivity extends FragmentActivity implements OnItemClic
 	public void toPrevious() {
 
 		// go back to previous, adjusting history stack properly
-		Integer destinationId = manager.getMostRecent();
+		Integer destinationId = storyManager.getMostRecent();
 
 		if (destinationId != null) {
 			// read the next story fragment if there is a previous fragment in
@@ -142,29 +146,35 @@ public class ReadFragmentActivity extends FragmentActivity implements OnItemClic
 			// go back to the previous level
 			finish();
 		}
-
 	}
-	
+
+	public void onFragmentListClick() {
+		// TODO Auto-generated method stub
+		
+		// generate new fragment to replace the old one
+		// commitFragment(storyId, destinationId);
+	}
+
 	/**
-	 * On selection of a choice in view, direct the user to the next story
-	 * fragment according to the choice map.
+	 * Using a fragment manager, this function creates and commits a new
+	 * ReadFragmentView fragment to be displayed for this view.
+	 * @param storyId the UUID of the story
+	 * @param fragmentId the story fragment to be displayed
 	 */
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
+	public void commitFragment(UUID storyId, Integer fragmentId) {
+		// prepare for the fragment
+		fragmentManager = getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager
+				.beginTransaction();
 
-		// use position to refer to the choice item from choice map
-		Choice choice = manager.getChoices(fragmentId).get(position);
+		// prepare bundle to pass arguments
+		Bundle bundle = new Bundle();
+		bundle.putInt(getResources().getString(R.string.destination_id), fragmentId);
 
-		// 
-		Integer destinationId = choice.getDestinationId();
-
-		// add to the history stack
-		manager.pushToStack(destinationId);
-
-		// read the next story fragment
-		// TO-DO
-
+		// create the fragment and pass the bundle to the fragment
+		ReadFragmentView newFragment = new ReadFragmentView();
+		newFragment.setArguments(bundle);
+		fragmentTransaction.replace(R.id.read_fragment_activity, newFragment);
+		fragmentTransaction.commit();
 	}
-
 }

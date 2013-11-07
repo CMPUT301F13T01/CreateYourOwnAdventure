@@ -44,25 +44,32 @@ import android.widget.TextView.BufferType;
 /**
  * @author Eddie Tai <eddie@ualberta.ca>
  * 
- *         The view for the ReadFragmentActivity. Constructs the required view
- *         to display the media of the story fragment properly.
+ *         The view for the ReadFragmentActivity. Constructs the required
+ *         fragment to display the media of the story fragment properly. Uses
+ *         the story manager to access parts of the story for display.
  * 
  */
 public class ReadFragmentView extends Fragment {
 
-	@Override	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-		Bundle savedInstanceState) {
-		
-		ScrollView sv = new ScrollView(getActivity());
-		
-		ReadStoryManager manager = new ReadStoryManager(UUID, getActivity());
-		
+			Bundle savedInstanceState) {
 
+		// Inflate the view
+		View scrollable = inflater.inflate(R.layout.view_fragment, container,
+				false);
 
-		// fetch the fragment
-		fragment = manager.getFragment(fragmentId);
+		// Setup fragment's outer container-layout
+		LinearLayout layout = (LinearLayout) scrollable
+				.findViewById(R.id.view_fragment_linear);
+		// LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+		// LinearLayout.LayoutParams.MATCH_PARENT,
+		// LinearLayout.LayoutParams.WRAP_CONTENT);
 		
+		// fetch story fragment Id
+		String resourceString = getResources().getString(R.string.destination_id);
+		Integer fragmentId = getArguments().getInt(resourceString);
+
 		// cycle through the media list
 		for (int i = 0; i < media_list.size(); i++) {
 			@SuppressWarnings("rawtypes")
@@ -71,7 +78,7 @@ public class ReadFragmentView extends Fragment {
 			// get media file's type and do class comparisons
 			if (media.getClass().equals(Text.class)) {
 				Text text = (Text) media;
-				
+
 				// get media content's SpannableString as s
 				SpannableString s = text.getContent();
 				view.setTextView(s);
@@ -106,7 +113,7 @@ public class ReadFragmentView extends Fragment {
 			// set the view of choices with flavour text
 			view.setChoiceView(flavourText, this);
 		}
-		
+
 		return sv;
 	}
 
@@ -119,8 +126,8 @@ public class ReadFragmentView extends Fragment {
 	 *            the context of the view
 	 */
 	public void setTextView(SpannableString s) {
-		TextView tv = new TextView(getActivity() );
-		tv.setText("s",BufferType.SPANNABLE);
+		TextView tv = new TextView(getActivity());
+		tv.setText("s", BufferType.SPANNABLE);
 		this.addView(tv);
 	}
 
@@ -155,5 +162,3 @@ public class ReadFragmentView extends Fragment {
 	}
 
 }
-
-

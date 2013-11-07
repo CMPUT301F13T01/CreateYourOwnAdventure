@@ -65,4 +65,6 @@
     <string name="title_activity_edit_fragment_info">EditFragmentInfoActivity</string>
     <string name="title_activity_edit_fragment_content">EditFragmentContentActivity</string>
 
+    <string name="destination_id">Bundle FragmentId</string>
+
 </resources>
