@@ -12,9 +12,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class EditFragmentActivity extends FragmentActivity implements
@@ -172,27 +171,38 @@ public class EditFragmentActivity extends FragmentActivity implements
 			FragmentTransaction fragmentTransaction) {
 		int position = tab.getPosition();
 
-		if(position == 0) {
-			InfoFragment fragment = (InfoFragment) mSectionsPagerAdapter.getFragment(position);
+		if (position == 0) {
+			InfoFragment fragment = (InfoFragment) mSectionsPagerAdapter
+					.getFragment(position);
 			View view = fragment.getView();
 			EditText title = (EditText) view.findViewById(R.id.fragment_title);
-			EditText description = (EditText) view.findViewById(R.id.fragment_description);
+			EditText description = (EditText) view
+					.findViewById(R.id.fragment_description);
 			storyFragment.setTitle(title.getText().toString());
 			storyFragment.setDescription(description.getText().toString());
-		}
-		else if(position == 1) {
-			EditFragment fragment = (EditFragment) mSectionsPagerAdapter.getFragment(position);
+		} else if (position == 1) {
+			EditFragment fragment = (EditFragment) mSectionsPagerAdapter
+					.getFragment(position);
 			View view = fragment.getView();
 			LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
-			
-			for(int i = 0; i < layout.getChildCount(); i++) {
+
+			for (int i = 0; i < layout.getChildCount(); i++) {
 				View v = layout.getChildAt(i);
-				if(v.getClass().equals(EditText.class)) {
+				if (v.getClass().equals(EditText.class)) {
 					EditText text = (EditText) v;
 					SpannableString string = new SpannableString(text.getText());
 					storyFragment.addContent(new Text(string));
 				}
 			}
+
+			PreviewFragment previewFragment = new PreviewFragment();
+			Bundle args = new Bundle();
+			args.putSerializable(
+					getResources().getString(R.string.story_fragment),
+					(Serializable) storyFragment);
+			previewFragment.setArguments(args);
+			PreviewFragment oldPreview = (PreviewFragment) mSectionsPagerAdapter.getFragment(2);
+			oldPreview = previewFragment;
 		}
 	}
 
@@ -205,7 +215,7 @@ public class EditFragmentActivity extends FragmentActivity implements
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
 	 * one of the sections/tabs/pages.
 	 */
-	public class SectionsPagerAdapter extends FragmentPagerAdapter {
+	public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
 		private Fragment[] activeFragments;
 
@@ -236,12 +246,13 @@ public class EditFragmentActivity extends FragmentActivity implements
 			activeFragments[position] = fragment;
 			return fragment;
 		}
-		
-		public void destroyItem(ViewGroup container, int position, Fragment fragment) {
+
+		public void destroyItem(ViewGroup container, int position,
+				Fragment fragment) {
 			super.destroyItem(container, position, fragment);
 			activeFragments[position] = null;
 		}
-		
+
 		public Fragment getFragment(int position) {
 			return activeFragments[position];
 		}
