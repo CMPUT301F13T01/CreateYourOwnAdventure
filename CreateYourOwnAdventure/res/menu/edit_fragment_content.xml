@@ -1,9 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:id="@+id/action_edit_add_content"
+        android:title="@string/action_edit_add_content"/>
+    <item
+        android:id="@+id/action_edit_add_choice"
+        android:title="@string/action_edit_add_choice"/>
+    <item
+        android:id="@+id/action_edit_edit_choice"
+        android:title="@string/action_edit_edit_choice"/>
+    <item
+        android:id="@+id/action_edit_cancel"
+        android:title="@string/action_edit_cancel"/>
 
 </menu>
