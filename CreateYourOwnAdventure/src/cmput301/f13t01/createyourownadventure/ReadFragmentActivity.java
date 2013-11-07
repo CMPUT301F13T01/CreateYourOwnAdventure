@@ -26,7 +26,6 @@ package cmput301.f13t01.createyourownadventure;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -35,8 +34,6 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * @author Eddie <eddie@ualberta.ca>
