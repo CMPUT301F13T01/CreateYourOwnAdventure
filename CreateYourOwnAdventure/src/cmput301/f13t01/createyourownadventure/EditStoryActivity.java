@@ -47,6 +47,7 @@ public class EditStoryActivity extends FragmentActivity implements
 							+ " "
 							+ getResources().getString(
 									R.string.first_page_empty));
+			app.setNewStoryManager();
 		}
 
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -65,7 +66,7 @@ public class EditStoryActivity extends FragmentActivity implements
 
 	@Override
 	public void onStoryFragmentSelected(int fragmentId) {
-		Intent intent = new Intent(this, EditFragmentActivity.class);
+		Intent intent = new Intent(this, EditFragmentInfoActivity.class);
 
 		intent.putExtra(getResources().getString(R.string.fragment_is_new),
 				false);
@@ -94,7 +95,7 @@ public class EditStoryActivity extends FragmentActivity implements
 			onSelectDelete();
 			return true;
 		case R.id.action_edit_add_fragment:
-			Intent intent = new Intent(this, EditFragmentActivity.class);
+			Intent intent = new Intent(this, EditFragmentInfoActivity.class);
 			intent.putExtra(getResources().getString(R.string.fragment_is_new),
 					true);
 			startActivity(intent);
