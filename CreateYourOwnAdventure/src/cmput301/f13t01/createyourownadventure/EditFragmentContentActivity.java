@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class EditFragmentContentActivity extends Activity {
+public class EditFragmentContentActivity extends Activity implements ChoiceListListener {
 
 	private StoryFragment storyFragment;
 	private int fragmentId;
@@ -144,6 +144,16 @@ public class EditFragmentContentActivity extends Activity {
 		Intent intent = new Intent();
 		setResult(RESULT_CANCELED, intent);
 		finish();
+	}
+	
+	public void onBackPressed() {
+		finish();
+	}
+
+	@Override
+	public void onChoiceSelected(Choice choice) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
