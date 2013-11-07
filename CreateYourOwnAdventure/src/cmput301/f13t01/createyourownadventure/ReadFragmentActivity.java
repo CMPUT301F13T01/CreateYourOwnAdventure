@@ -36,7 +36,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 /**
- * @author Eddie <eddie@ualberta.ca>
+ * @author Eddie Tai <eddie@ualberta.ca>
  * 
  *         ReadFragmentActivity, the activity called for reading any story
  *         fragment. Relies on ReadFragmentView for the display and
@@ -50,7 +50,10 @@ public class ReadFragmentActivity extends FragmentActivity {
 	FragmentManager fragmentManager;
 	UUID storyId;
 
-	/** Called when the activity is first created. */
+	/**
+	 * Called when the activity is first created. Receives intent from main
+	 * activity to create the first fragment.
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,8 +65,8 @@ public class ReadFragmentActivity extends FragmentActivity {
 		// intent has the story ID, and story fragment ID to display
 		Intent intent = getIntent();
 		// receive id of story fragment to show
-		storyId = (UUID) intent.getSerializableExtra(
-				getResources().getString(R.string.story_id));
+		storyId = (UUID) intent.getSerializableExtra(getResources().getString(
+				R.string.story_id));
 
 		// set the story in the story manager
 		app.setStoryManager(storyId);
@@ -71,8 +74,8 @@ public class ReadFragmentActivity extends FragmentActivity {
 		// depending if we are reading from beginning,
 		// fetch the appropriate fragment ID accordingly
 		int fragmentId;
-		Boolean Continue = (boolean) intent.getBooleanExtra(
-				getResources().getString(R.string.story_continue), false);
+		Boolean Continue = (boolean) intent.getBooleanExtra(getResources()
+				.getString(R.string.story_continue), false);
 		if (Continue) {
 			fragmentId = storyManager.getMostRecent();
 		} else {
@@ -114,8 +117,8 @@ public class ReadFragmentActivity extends FragmentActivity {
 	}
 
 	/**
-	 * Go to the beginning (first page) of a story Apprehend the current page to
-	 * the history stack History is cleared.
+	 * Go to the beginning (first page) of a story. Apprehend the current page
+	 * to the history stack History is cleared.
 	 */
 	public void toBeginning() {
 
@@ -128,7 +131,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 	}
 
 	/**
-	 * Go back to the previous page dictated by the history stack Remove the
+	 * Go back to the previous page dictated by the history stack. Remove the
 	 * current page from the history stack
 	 */
 	public void toPrevious() {
@@ -146,27 +149,37 @@ public class ReadFragmentActivity extends FragmentActivity {
 		}
 	}
 
+	/**
+	 * Sets the functionality of the clicklistener for the choice buttons.
+	 * This function fetches the destination ID for a chosen choice, and
+	 * generates a new fragment accordingly.
+	 * @param v the button that is pressed
+	 * @param fragmentId the id of the fragment to be displayed next
+	 */
 	public void onFragmentListClick(View v, Integer fragmentId) {
 		// TODO Auto-generated method stub
-		
+
 		// fetch the destinationId of the next fragment to show
-		int selectedChoice = v.getId() -1;
-		
+		int selectedChoice = v.getId() - 1;
+
 		ArrayList<Choice> choiceList = storyManager.getChoices(fragmentId);
 		Choice choice = choiceList.get(selectedChoice);
 		Integer destinationId = choice.getDestinationId();
-		
+
 		// generate new fragment to replace the old one
 		commitFragment(destinationId);
 	}
 
 	/**
 	 * Using a fragment manager, this function creates and commits a new
-	 * ReadFragmentView fragment to be displayed for this view. This
-	 * replaces whatever the old fragment is, thus giving the readers a 
-	 * new view on the new content.
-	 * @param storyId the UUID of the story
-	 * @param fragmentId the story fragment to be displayed
+	 * ReadFragmentView fragment to be displayed for this view. This replaces
+	 * whatever the old fragment is, thus giving the readers a new view on the
+	 * new content.
+	 * 
+	 * @param storyId
+	 *            the UUID of the story
+	 * @param fragmentId
+	 *            the story fragment to be displayed
 	 */
 	public void commitFragment(Integer fragmentId) {
 		// prepare for the fragment
@@ -176,7 +189,8 @@ public class ReadFragmentActivity extends FragmentActivity {
 
 		// prepare bundle to pass arguments
 		Bundle bundle = new Bundle();
-		bundle.putInt(getResources().getString(R.string.destination_id), fragmentId);
+		bundle.putInt(getResources().getString(R.string.destination_id),
+				fragmentId);
 
 		// create the fragment and pass the bundle to the fragment
 		ReadFragmentView newFragment = new ReadFragmentView();
