@@ -17,6 +17,10 @@ public class Text implements Media<SpannableString>, Serializable {
 		this.content = content;
 	}
 
+	public Text() {
+		this.content = new SpannableString("");
+	}
+
 	@Override
 	public SpannableString getContent() {
 		return this.content;
