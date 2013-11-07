@@ -63,5 +63,8 @@
     <string name="story_save_toast">Story Saved</string>
     <string name="tab1">Tab 1</string>
     <string name="title_activity_edit_fragment_info">EditFragmentInfoActivity</string>
+    
+    <!-- String used for bundle in passing read mode -->
+    <string name="destination_id">Bundle FragmentId</string>
 
 </resources>
