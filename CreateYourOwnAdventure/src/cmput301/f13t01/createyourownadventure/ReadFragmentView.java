@@ -24,20 +24,15 @@ package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
@@ -50,6 +45,16 @@ import android.widget.TextView.BufferType;
  * 
  */
 public class ReadFragmentView extends Fragment {
+
+	ReadStoryManager storyManager;
+
+	// get the storyManager on attachment to the activity
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		GlobalManager app = (GlobalManager) activity.getApplication();
+		ReadStoryManager storyManager = app.getStoryManager();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,36 +74,48 @@ public class ReadFragmentView extends Fragment {
 		// fetch story fragment Id
 		String resourceString = getResources().getString(R.string.destination_id);
 		Integer fragmentId = getArguments().getInt(resourceString);
+		
+		ArrayList<Media> mediaList = storyManager.getMediaList(fragmentId);
 
 		// cycle through the media list
-		for (int i = 0; i < media_list.size(); i++) {
+		for (int i = 0; i < mediaList.size(); i++) {
 			@SuppressWarnings("rawtypes")
-			Media media = media_list.get(i);
+			Media media = mediaList.get(i);
 
 			// get media file's type and do class comparisons
+			
+			// for Text type of media
 			if (media.getClass().equals(Text.class)) {
 				Text text = (Text) media;
 
 				// get media content's SpannableString as s
 				SpannableString s = text.getContent();
-				view.setTextView(s);
+				TextView tv = new TextView(getActivity());
+				tv.setText("s", BufferType.SPANNABLE);
+				layout.addView(tv);
 			}
 
-			// the rest are implemented later for iteration 3
+			// the rest are implemented later for iteration 3/4
 
-			// else if type is image
-			// if(media_type == Image.class.getClass())
+			// for Image type of media
+			if (media.getClass().equals(Image.class)) {
+				// TO-DO
+			}
 
-			// else if type is sound
-			// if(media_type == Audio.class.getClass())
+			// for Sound type of media
+			if (media.getClass().equals(Sound.class)) {
+				// TO-DO
+			}
 
-			// else if type is video
-			// if(media_type == Video.class.getClass())
+			// for Video type of media
+			if (media.getClass().equals(Video.class)) {
+				// TO-DO
+			}
 		}
 
 		// from story level with fragment id, get the array list of choice
 		// objects
-		ArrayList<Choice> choices = getChoices(fragmentId);
+		ArrayList<Choice> choices = storyManager.getChoices(fragmentId);
 
 		// if there are choices, cycle through them and extract the flavour
 		// texts
@@ -109,56 +126,27 @@ public class ReadFragmentView extends Fragment {
 				String s = choices.get(i).getFlavourText();
 				flavourText.add(s);
 			}
+			
+			// use for loop to make series of buttons consisting of the
+			// flavour texts
 
-			// set the view of choices with flavour text
-			view.setChoiceView(flavourText, this);
+			for (Integer i = 0; i < flavourText.size(); i++) {
+				Button choiceButton = new Button(getActivity());
+				choiceButton.setText(flavourText.get(i));
+				choiceButton.setId(i+1);
+				choiceButton.setTextSize(12);
+				layout.addView(choiceButton);
+				
+				// set each button's controller to use Activity's function
+				choiceButton.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						((ReadFragmentActivity)getActivity()).onFragmentListClick();
+					}
+				});
+			}
 		}
 
-		return sv;
+		return scrollable;
 	}
-
-	/**
-	 * Add a TextView with content of string s to the current view
-	 * 
-	 * @param s
-	 *            SpannableString to be displayed by the TextView
-	 * @param context
-	 *            the context of the view
-	 */
-	public void setTextView(SpannableString s) {
-		TextView tv = new TextView(getActivity());
-		tv.setText("s", BufferType.SPANNABLE);
-		this.addView(tv);
-	}
-
-	/**
-	 * Incomplete ImageView handler
-	 */
-	public void setImageView() {
-		ImageView iv = new ImageView(getActivity());
-		ll.addView(iv);
-	}
-
-	/**
-	 * Shows the list of choices using their given flavour text and sets the
-	 * manager for these choice options.
-	 * 
-	 * @param choice_text
-	 *            Arraylist of strings indicating the flavour text
-	 * @param onItemClickListener
-	 *            controller for the views
-	 */
-	public void setChoiceView(ArrayList<String> choice_text,
-			OnItemClickListener onItemClickListener) {
-
-		// populate the list with choices' flavour text
-		ListView lv = new ListView(getActivity());
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-				R.layout.list_choices, choice_text);
-		lv.setAdapter(adapter);
-
-		// set the controller for these list items
-		lv.setOnItemClickListener(onItemClickListener);
-	}
-
 }

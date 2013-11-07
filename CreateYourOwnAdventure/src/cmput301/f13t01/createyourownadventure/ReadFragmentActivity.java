@@ -81,7 +81,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 			fragmentId = storyManager.getFirstPageId();
 		}
 
-		commitFragment(storyId, fragmentId);
+		commitFragment(fragmentId);
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 		storyManager.clearHistory();
 
 		// read the next story fragment
-		// TO-DO
+		commitFragment(destinationId);
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 		if (destinationId != null) {
 			// read the next story fragment if there is a previous fragment in
 			// the history stack
-			// TO-DO
+			commitFragment(destinationId);
 		} else {
 			// go back to the previous level
 			finish();
@@ -152,16 +152,18 @@ public class ReadFragmentActivity extends FragmentActivity {
 		// TODO Auto-generated method stub
 		
 		// generate new fragment to replace the old one
-		// commitFragment(storyId, destinationId);
+		// commitFragment(destinationId);
 	}
 
 	/**
 	 * Using a fragment manager, this function creates and commits a new
-	 * ReadFragmentView fragment to be displayed for this view.
+	 * ReadFragmentView fragment to be displayed for this view. This
+	 * replaces whatever the old fragment is, thus giving the readers a 
+	 * new view on the new content.
 	 * @param storyId the UUID of the story
 	 * @param fragmentId the story fragment to be displayed
 	 */
-	public void commitFragment(UUID storyId, Integer fragmentId) {
+	public void commitFragment(Integer fragmentId) {
 		// prepare for the fragment
 		fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager
