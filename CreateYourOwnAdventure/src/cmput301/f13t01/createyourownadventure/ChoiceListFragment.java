@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +18,18 @@ public class ChoiceListFragment extends DialogFragment {
 
 	private ChoiceListListener listener;
 	private ChoiceListAdapter adapter;
+	private static final String idString = "id";
+
+	static ChoiceListFragment newInstance(int fragmentId) {
+		ChoiceListFragment f = new ChoiceListFragment();
+
+		// Supply id input as an argument.
+		Bundle args = new Bundle();
+		args.putInt(idString, fragmentId);
+		f.setArguments(args);
+
+		return f;
+	}
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -33,10 +45,7 @@ public class ChoiceListFragment extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		ArrayList<Choice> choices = new ArrayList<Choice>();
-		choices.add(new Choice("I'm a drunken sailor!"));
-		choices.add(new Choice("Let's go to space!"));
-		// app.getStoryManager().getChoiceList(
-		// fragmentId);
+		// app.getStoryManager().getChoiceList(fragmentId);
 
 		ChoiceListAdapter adapt = new ChoiceListAdapter(getActivity(), choices);
 		this.adapter = adapt;
@@ -58,7 +67,7 @@ public class ChoiceListFragment extends DialogFragment {
 		Dialog dialog = getDialog();
 		Window window = dialog.getWindow();
 		window.setGravity(Gravity.TOP);
-		
+
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 
@@ -66,19 +75,12 @@ public class ChoiceListFragment extends DialogFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		/*
-		 * int fragmentId = savedInstanceState.getInt(getResources().getString(
-		 * R.string.story_id));
-		 */
+		int fragmentId = getArguments().getInt(idString);
 
 		GlobalManager app = (GlobalManager) getActivity().getApplication();
-		ArrayList<Choice> choices = new ArrayList<Choice>();
-		choices.add(new Choice("I'm a drunken sailor!"));
-		choices.add(new Choice("Let's go to space!"));
-		// app.getStoryManager().getChoiceList(
-		// fragmentId);
+		ArrayList<Choice> choices = app.getStoryManager()
+				.getChoices(fragmentId);
 
-		this.adapter = new ChoiceListAdapter(getActivity(),
-				choices);
+		this.adapter = new ChoiceListAdapter(getActivity(), choices);
 	}
 }
