@@ -19,7 +19,6 @@ public class testChoiceMap extends TestCase {
                 
                 super.setUp();
                 this.choicemap = new ChoiceMap();
-                
         }
 
         @Test

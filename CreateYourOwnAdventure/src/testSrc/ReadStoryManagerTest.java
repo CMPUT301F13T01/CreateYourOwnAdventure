@@ -1,7 +1,12 @@
-package cmput301.f13t01.createyourownadventure;
+package testSrc;
 
 import junit.framework.TestCase;
 import org.junit.Before;
+
+import cmput301.f13t01.createyourownadventure.ReadStoryManager;
+import cmput301.f13t01.createyourownadventure.Story;
+import cmput301.f13t01.createyourownadventure.StoryFragment;
+import cmput301.f13t01.createyourownadventure.Text;
 
 import android.content.Context;
 import android.text.SpannableString;
