@@ -22,6 +22,8 @@ public class testHistory extends TestCase {
 		history.pushToStack(2);
 		history.pushToStack(3);
 		assertTrue(history.getMostRecent() == 3);
+		assertTrue(history.goBack() == 2);
+		assertTrue(history.goBack() == 1);
 	}
 	
 	@Test

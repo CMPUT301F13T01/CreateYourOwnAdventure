@@ -109,7 +109,7 @@ public class ChoiceMap implements Serializable {
 		ArrayList<Choice> destinations = choiceMapping.get(fragmentId);
 		
 		//Insures that the choice already exists, deletes old choice from ChoiceMap
-		if(destinations != null && index > 0 && index < destinations.size()) {
+		if(destinations != null && index >= 0 && index < destinations.size()) {
 			destinations.set(index, choice);
 			choiceMapping.put(fragmentId, destinations);
 			return true;

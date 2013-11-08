@@ -50,6 +50,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 	//FragmentManager fragmentManager;
 	ReadStoryManager storyManager;
 	UUID storyId;
+	Integer fragmentId;
 
 	/**
 	 * Called when the activity is first created. Receives intent from main
@@ -78,7 +79,6 @@ public class ReadFragmentActivity extends FragmentActivity {
 
 			// depending if we are reading from beginning,
 			// fetch the appropriate fragment ID accordingly
-			Integer fragmentId;
 			Boolean fromBeginning = (boolean) intent.getBooleanExtra(
 					getResources().getString(R.string.story_continue), false);
 			if (fromBeginning) {
@@ -140,8 +140,13 @@ public class ReadFragmentActivity extends FragmentActivity {
 	 * Saves the history.
 	 */
 	@Override
-	public void onPause() {
-		super.onPause();
+	public void onStop() {
+		super.onStop();
+		// Save the history
+		storyManager.pushToStack(fragmentId);
+		GlobalManager glob = (GlobalManager) getApplication();
+		LocalManager save = glob.getLocalManager();
+		save.saveStory(this.storyId, this.storyManager.getStory());
 	}
 	
 	/**
@@ -165,7 +170,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 	public void toPrevious() {
 
 		// go back to previous, adjusting history stack properly
-		Integer destinationId = storyManager.getMostRecent();
+		Integer destinationId = storyManager.goBack();
 
 		if (destinationId != null) {
 			// read the next story fragment if there is a previous fragment in
@@ -220,6 +225,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 		if (fragmentId == null) {
 			return;
 		}
+		this.fragmentId = fragmentId;
 		// prepare for the fragment
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager
