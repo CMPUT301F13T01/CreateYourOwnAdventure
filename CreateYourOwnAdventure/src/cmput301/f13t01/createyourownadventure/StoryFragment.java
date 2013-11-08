@@ -131,7 +131,7 @@ public class StoryFragment implements Serializable {
 	}
 
 	/**
-	 * Removes a given Media object from the contentList
+	 * Removes a given Media object from the contentList.
 	 * 
 	 * @param content the Media to remove from the Fragment
 	 * @return true if successful, false otherwise
@@ -146,7 +146,14 @@ public class StoryFragment implements Serializable {
 	}
 	
 	/**
-	 * Adds a given Media object to the annotationList
+	 * Clears the contentList.
+	 */
+	public void removeAllContent() {
+		this.contentList = new ArrayList<Media>();
+	}
+	
+	/**
+	 * Adds a given Media object to the annotationList.
 	 * 
 	 * @param annotation the Media to add to the Fragment
 	 * @return true if successful, false otherwise
@@ -157,7 +164,7 @@ public class StoryFragment implements Serializable {
 	}
 	
 	/**
-	 * Removes a given Media object from the annotationList
+	 * Removes a given Media object from the annotationList.
 	 * 
 	 * @param annotation the Media to remove from the Fragment
 	 * @return true if successful, false otherwise
@@ -169,6 +176,13 @@ public class StoryFragment implements Serializable {
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * Clears the annotationList.
+	 */
+	public void removeAllAnnotation() {
+		this.annotationList = new ArrayList<Media>();
 	}
 	
 	/* Methods required for Serializable Interface */
