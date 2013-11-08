@@ -82,18 +82,19 @@ public class ReadFragmentActivity extends FragmentActivity {
 			Boolean fromBeginning = (boolean) intent.getBooleanExtra(
 					getResources().getString(R.string.story_continue), false);
 			if (fromBeginning) {
+				storyManager.clearHistory();
 				fragmentId = storyManager.getFirstPageId();
 				// fragmentId = 0;
 			} else {
 				// show first page if the story has never been read
 				fragmentId = storyManager.getMostRecent();
-				if (fragmentId.equals(null)) {
+				if (fragmentId==null) {
 					fragmentId = storyManager.getFirstPageId();
 				}
 			}
 
 			// if there is no first page set, exit readmode
-			if (fragmentId.equals(null)) {
+			if (fragmentId == null) {
 				Toast.makeText(getBaseContext(),
 						"First page has not been set for this story!",
 						Toast.LENGTH_LONG).show();
@@ -135,7 +136,15 @@ public class ReadFragmentActivity extends FragmentActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
+	
+	/**
+	 * Saves the history.
+	 */
+	@Override
+	public void onPause() {
+		super.onPause();
+	}
+	
 	/**
 	 * Go to the beginning (first page) of a story. Apprehend the current page
 	 * to the history stack History is cleared.
@@ -181,7 +190,11 @@ public class ReadFragmentActivity extends FragmentActivity {
 	 */
 	public void onFragmentListClick(View v, Integer fragmentId) {
 		// TODO Auto-generated method stub
-
+		// Save the history
+		storyManager.pushToStack(fragmentId);
+		GlobalManager glob = (GlobalManager) getApplication();
+		LocalManager save = glob.getLocalManager();
+		save.saveStory(this.storyId, this.storyManager.getStory());
 		// fetch the destinationId of the next fragment to show
 		int selectedChoice = v.getId() - 1;
 
@@ -205,6 +218,9 @@ public class ReadFragmentActivity extends FragmentActivity {
 	 *            the story fragment to be displayed
 	 */
 	public void commitFragment(Integer fragmentId) {
+		if (fragmentId == null) {
+			return;
+		}
 		// prepare for the fragment
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager
