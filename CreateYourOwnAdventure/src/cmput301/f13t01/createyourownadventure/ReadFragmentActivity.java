@@ -46,7 +46,7 @@ import android.view.View;
 public class ReadFragmentActivity extends FragmentActivity {
 
 	// declaration of variables
-	FragmentManager fragmentManager;
+	//FragmentManager fragmentManager;
 	ReadStoryManager storyManager;
 	UUID storyId;
 
@@ -190,7 +190,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 	 */
 	public void commitFragment(Integer fragmentId) {
 		// prepare for the fragment
-		fragmentManager = getFragmentManager();
+		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
 
