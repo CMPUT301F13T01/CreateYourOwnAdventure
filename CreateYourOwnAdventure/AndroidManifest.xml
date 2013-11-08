@@ -34,19 +34,21 @@
         <activity
             android:name="cmput301.f13t01.createyourownadventure.EditStoryActivity"
             android:label="@string/title_activity_edit_story"
-            android:parentActivityName="cmput301.f13t01.createyourownadventure.MainActivity" >
+            android:launchMode="singleTask" >
         </activity>
         <activity
             android:name="cmput301.f13t01.createyourownadventure.EditFragmentInfoActivity"
             android:label="@string/title_activity_edit_fragment_info"
-            android:parentActivityName="cmput301.f13t01.createyourownadventure.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="cmput301.f13t01.createyourownadventure.MainActivity" />
+            android:launchMode="singleTask" >
         </activity>
         <activity
             android:name="cmput301.f13t01.createyourownadventure.EditFragmentContentActivity"
-            android:label="@string/title_activity_edit_fragment_content" >
+            android:label="@string/title_activity_edit_fragment_content"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="cmput301.f13t01.createyourownadventure.EditFragmentChoiceActivity"
+            android:label="@string/title_activity_edit_fragment_choice" >
         </activity>
     </application>
 

@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 public class EditFragmentContentActivity extends Activity implements
 		ChoiceListListener {
+	
+	static final int EDIT_CHOICE = 0;
 
 	private StoryFragment storyFragment;
 	private int fragmentId;
@@ -41,27 +43,27 @@ public class EditFragmentContentActivity extends Activity implements
 		Intent intent = getIntent();
 
 		if (intent != null) {
+			Log.d("oops", "WHY ARE YOU STARTING AGAIN?");
 			fragmentId = (int) intent.getIntExtra(
 					getResources().getString(R.string.fragment_id), -1);
 			storyFragment = (StoryFragment) intent
 					.getSerializableExtra(getResources().getString(
 							R.string.story_fragment));
-			Log.d("oops", "GOT ME A CONTENT FRAGMENT");
-		}
 
-		ArrayList<Media> content = storyFragment.getContentList();
+			ArrayList<Media> content = storyFragment.getContentList();
 
-		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT);
+			LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+					LinearLayout.LayoutParams.MATCH_PARENT,
+					LinearLayout.LayoutParams.WRAP_CONTENT);
 
-		// Display the fragment
-		for (Media media : content) {
-			if (media.getClass().equals(Text.class)) {
-				EditText edit = new EditText(getApplication());
-				edit.setText((CharSequence) media.getContent());
-				layout.addView(edit, params);
+			// Display the fragment
+			for (Media media : content) {
+				if (media.getClass().equals(Text.class)) {
+					EditText edit = new EditText(getApplication());
+					edit.setText((CharSequence) media.getContent());
+					layout.addView(edit, params);
+				}
 			}
 		}
 	}
@@ -71,7 +73,7 @@ public class EditFragmentContentActivity extends Activity implements
 	 */
 	private void setupActionBar() {
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setDisplayHomeAsUpEnabled(false);
 
 	}
 
@@ -124,10 +126,6 @@ public class EditFragmentContentActivity extends Activity implements
 		newFragment.show(ft, "dialog");
 	}
 
-	private void onAddChoice() {
-
-	}
-
 	private void onSelectAddContent() {
 		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -135,7 +133,7 @@ public class EditFragmentContentActivity extends Activity implements
 				LinearLayout.LayoutParams.WRAP_CONTENT);
 		EditText text = new EditText(getApplicationContext());
 		text.setTextColor(Color.BLACK);
-		text.setHint("hint");
+		text.setHint("Your Story Text");
 		layout.addView(text, params);
 	}
 
@@ -149,6 +147,7 @@ public class EditFragmentContentActivity extends Activity implements
 		finish();
 	}
 
+	@Override
 	public void onBackPressed() {
 		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 		storyFragment.removeAllContent();
@@ -174,8 +173,26 @@ public class EditFragmentContentActivity extends Activity implements
 
 	@Override
 	public void onChoiceSelected(Choice choice) {
-		// TODO Auto-generated method stub
+		Intent intent = new Intent(getApplicationContext(),
+				EditFragmentChoiceActivity.class);
 
+		intent.putExtra(getResources().getString(R.string.choice_is_new), false);
+		intent.putExtra(getResources().getString(R.string.fragment_id),
+				fragmentId);
+		intent.putExtra(getResources().getString(R.string.choice), choice);
+
+		startActivityForResult(intent, EDIT_CHOICE);
+	}
+
+	private void onAddChoice() {
+		Intent intent = new Intent(getApplicationContext(),
+				EditFragmentChoiceActivity.class);
+
+		intent.putExtra(getResources().getString(R.string.choice_is_new), true);
+		intent.putExtra(getResources().getString(R.string.fragment_id),
+				fragmentId);
+
+		startActivityForResult(intent, EDIT_CHOICE);
 	}
 
 }

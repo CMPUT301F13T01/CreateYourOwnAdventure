@@ -6,15 +6,13 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class EditFragmentInfoActivity extends Activity implements
-		ChoiceListListener {
+public class EditFragmentInfoActivity extends Activity {
 
 	static final int EDIT_FRAGMENT = 0;
 
@@ -27,7 +25,6 @@ public class EditFragmentInfoActivity extends Activity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_fragment_info);
-		// Show the Up button in the action bar.
 		setupActionBar();
 
 		// Get the story manager
@@ -63,7 +60,7 @@ public class EditFragmentInfoActivity extends Activity implements
 	 */
 	private void setupActionBar() {
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setDisplayHomeAsUpEnabled(false);
 
 	}
 
@@ -77,16 +74,6 @@ public class EditFragmentInfoActivity extends Activity implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
 		case R.id.action_edit_edit_content:
 			onSelectEditContent();
 			return true;
@@ -127,7 +114,7 @@ public class EditFragmentInfoActivity extends Activity implements
 	}
 
 	private void onSelectCancel() {
-		if(isNew) {
+		if (isNew) {
 			manager.removeFragment(fragmentId);
 		}
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
@@ -145,28 +132,22 @@ public class EditFragmentInfoActivity extends Activity implements
 		startActivityForResult(intent, EDIT_FRAGMENT);
 	}
 
-	public void onBackpressed() {
+	@Override
+	public void onBackPressed() {
+		Log.d("oops", "Back pressed!");
 
-		EditText title = (EditText) findViewById(R.id.edit_story_title);
-		EditText author = (EditText) findViewById(R.id.edit_story_author);
-		EditText desc = (EditText) findViewById(R.id.edit_story_description);
+		EditText title = (EditText) findViewById(R.id.fragment_title);
+		EditText desc = (EditText) findViewById(R.id.fragment_description);
 
-		manager.setTitle(title.getText().toString());
-		manager.setAuthor(author.getText().toString());
-		manager.setDescription(desc.getText().toString());
+		storyFragment.setTitle(title.getText().toString());
+		storyFragment.setDescription(desc.getText().toString());
 
-		// manager.saveStory();
+		manager.updateFragment(fragmentId, storyFragment);
 
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.fragment_save_toast), Toast.LENGTH_SHORT);
 		toast.show();
 		finish();
-	}
-
-	@Override
-	public void onChoiceSelected(Choice choice) {
-		// TODO Auto-generated method stub
-
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

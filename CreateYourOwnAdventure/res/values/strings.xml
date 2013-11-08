@@ -48,13 +48,19 @@
     <string name="story_fragments">Story Fragments</string>
     <string name="fragment_list">Story Fragment List</string>
     <string name="action_edit_add_fragment">Add Fragment</string>
+    <string name="action_edit_edit_fragment">Edit Fragment</string>
     <string name="set_first_page">Set</string>
+    
+    <!-- Strings used in edit choice activity -->
+    <string name="set_destination">Set</string>
+    <string name="choice_flavour_hint">Choice Flavour</string>
 
     <!-- String used for passing intents -->
     <string name="story_is_new">Story Status</string>
     <string name="story_id">Story ID</string>
     <string name="fragment_is_new">Fragment Status</string>
     <string name="fragment_id">Fragment ID</string>
+    <string name="choice_is_new">Choice Status</string>
     <string name="story_continue">Continue Story</string>
     <string name="action_publish">Publish</string>
     <string name="story_delete_toast">Story Deleted</string>
@@ -65,7 +71,8 @@
     <string name="tab1">Tab 1</string>
     <string name="title_activity_edit_fragment_info">EditFragmentInfoActivity</string>
     <string name="title_activity_edit_fragment_content">EditFragmentContentActivity</string>
-
     <string name="destination_id">Bundle FragmentId</string>
+    <string name="title_activity_edit_fragment_choice">EditFragmentChoiceActivity</string>
+    <string name="choice">Choice</string>
 
 </resources>

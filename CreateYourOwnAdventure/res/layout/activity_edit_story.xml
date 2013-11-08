@@ -52,9 +52,14 @@
                 android:id="@+id/edit_set_first_page"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/set_first_page"
-                android:onClick="showFragmentSelection" />
+                android:onClick="showFragmentSelection"
+                android:text="@string/set_first_page" />
         </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </ScrollView>

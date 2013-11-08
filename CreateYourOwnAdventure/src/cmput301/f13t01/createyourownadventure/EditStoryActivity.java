@@ -2,27 +2,41 @@ package cmput301.f13t01.createyourownadventure;
 
 import java.util.UUID;
 
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class EditStoryActivity extends FragmentActivity implements
 		StoryFragmentListListener {
 	private ReadStoryManager manager;
-	private boolean isNew;
+	private boolean isNew, buttonPressed = false;
 	private UUID storyId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_story);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setDisplayHomeAsUpEnabled(false);
+
+		final Button button = (Button) findViewById(R.id.edit_set_first_page);
+		button.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				buttonPressed = true;
+				showFragmentSelection();
+			}
+		});
 
 		// Get the story manager
 		GlobalManager app = (GlobalManager) getApplication();
@@ -50,10 +64,11 @@ public class EditStoryActivity extends FragmentActivity implements
 			app.setNewStoryManager();
 		}
 
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		DialogFragment newFragment = (DialogFragment) new StoryFragmentListFragment();
-		ft.add(R.id.edit_story_linear, newFragment);
-		ft.commit();
+//		FragmentTransaction ft = getFragmentManager().beginTransaction();
+//		Fragment newFragment = (Fragment) StoryFragmentListFragment
+//				.newInstance();
+//		ft.add(R.id.fragment_container, newFragment);
+//		ft.commit();
 
 	}
 
@@ -66,13 +81,24 @@ public class EditStoryActivity extends FragmentActivity implements
 
 	@Override
 	public void onStoryFragmentSelected(int fragmentId) {
-		Intent intent = new Intent(this, EditFragmentInfoActivity.class);
+		if (buttonPressed) {
+			manager.setFirstPage(fragmentId);
 
-		intent.putExtra(getResources().getString(R.string.fragment_is_new),
-				false);
-		intent.putExtra(getResources().getString(R.string.fragment_id),
-				fragmentId);
-		startActivity(intent);
+			TextView firstPage = (TextView) findViewById(R.id.edit_first_page);
+
+			firstPage.setText(getResources().getString(R.string.first_page)
+					+ " " + manager.getFragmentInfo(fragmentId).getTitle());
+
+			buttonPressed = false;
+		} else {
+			Intent intent = new Intent(this, EditFragmentInfoActivity.class);
+
+			intent.putExtra(getResources().getString(R.string.fragment_is_new),
+					false);
+			intent.putExtra(getResources().getString(R.string.fragment_id),
+					fragmentId);
+			startActivity(intent);
+		}
 	}
 
 	@Override
@@ -86,10 +112,10 @@ public class EditStoryActivity extends FragmentActivity implements
 			onSelectDelete();
 			return true;
 		case R.id.action_edit_add_fragment:
-			Intent intent = new Intent(this, EditFragmentInfoActivity.class);
-			intent.putExtra(getResources().getString(R.string.fragment_is_new),
-					true);
-			startActivity(intent);
+			onAddFragment();
+			return true;
+		case R.id.action_edit_edit_fragment:
+			onEditFragment();
 			return true;
 		case R.id.action_publish:
 			return true;
@@ -98,7 +124,22 @@ public class EditStoryActivity extends FragmentActivity implements
 		}
 	}
 
+	private void onEditFragment() {
+		showFragmentSelection();
+	}
+
+	private void onAddFragment() {
+		Intent intent = new Intent(this, EditFragmentInfoActivity.class);
+		intent.putExtra(getResources().getString(R.string.fragment_is_new),
+				true);
+		startActivity(intent);		
+	}
+
 	private void onSelectCancel() {
+		if(isNew) {
+			GlobalManager app = (GlobalManager) getApplication();
+			app.getLocalManager().removeStory(storyId);
+		}
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.cancel_toast), Toast.LENGTH_SHORT);
 		toast.show();
@@ -106,36 +147,58 @@ public class EditStoryActivity extends FragmentActivity implements
 	}
 
 	private void onSelectDelete() {
-		if (!isNew) {
-			// manager.deleteStory(storyId);
-		}
+		GlobalManager app = (GlobalManager) getApplication();
+		app.getLocalManager().removeStory(storyId);
+		
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.story_delete_toast), Toast.LENGTH_SHORT);
 		toast.show();
 		finish();
 	}
-	
-	@Override
-	protected void onStop() {
-		super.onStop();
-		
-	}
-	
+
 	public void onBackPressed() {
-		//manager.saveStory();
+
+		EditText title = (EditText) findViewById(R.id.edit_story_title);
+		EditText author = (EditText) findViewById(R.id.edit_story_author);
+		EditText desc = (EditText) findViewById(R.id.edit_story_description);
+
+		manager.setTitle(title.getText().toString());
+		manager.setAuthor(author.getText().toString());
+		manager.setDescription(desc.getText().toString());
+
+		// manager.saveStory();
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.story_save_toast), Toast.LENGTH_SHORT);
 		toast.show();
 		finish();
 	}
-	
-	public void onResume() {
-		super.onResume();
-		
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		DialogFragment newFragment = (DialogFragment) new StoryFragmentListFragment();
-		ft.replace(R.id.edit_story_linear, newFragment);
-		ft.commit();
+
+//	public void onResume() {
+//		super.onResume();
+//
+//		Log.d("oops", "Resumed EditStory");
+//		Log.d("oops", "Size: " + manager.getFragmentInfoList().size());
+//
+//		FragmentTransaction ft = getFragmentManager().beginTransaction();
+//		DialogFragment newFragment = (DialogFragment) StoryFragmentListFragment
+//				.newInstance();
+//		ft.replace(R.id.fragment_container, newFragment);
+//		ft.commit();
+//	}
+
+	public void showFragmentSelection() {
+		android.app.FragmentTransaction ft = getFragmentManager()
+				.beginTransaction();
+		android.app.Fragment prev = getFragmentManager().findFragmentByTag(
+				"dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		android.app.DialogFragment newFragment = (android.app.DialogFragment) StoryFragmentListFragment
+				.newInstance();
+		newFragment.show(ft, "dialog");
 	}
 
 }

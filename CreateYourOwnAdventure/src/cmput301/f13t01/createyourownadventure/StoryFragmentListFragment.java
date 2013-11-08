@@ -5,22 +5,17 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 
 public class StoryFragmentListFragment extends DialogFragment {
 
 	private StoryFragmentListListener listener;
 	private FragmentListAdapter adapter;
 	
-	static ChoiceListFragment newInstance() {
-		ChoiceListFragment f = new ChoiceListFragment();
+	static StoryFragmentListFragment newInstance() {
+		StoryFragmentListFragment f = new StoryFragmentListFragment();
 
 		// Supply id input as an argument.
 		Bundle args = new Bundle();
@@ -51,6 +46,7 @@ public class StoryFragmentListFragment extends DialogFragment {
 		FragmentListAdapter adapt = new FragmentListAdapter(getActivity(), info);
 		this.adapter = adapt;
 
+		// Add the onclick listener
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.story_fragments);
 		builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
@@ -77,8 +73,7 @@ public class StoryFragmentListFragment extends DialogFragment {
 		super.onCreate(savedInstanceState);
 
 		GlobalManager app = (GlobalManager) getActivity().getApplication();
-		ArrayList<StoryFragmentInfo> info = new ArrayList<StoryFragmentInfo>();
-		app.getStoryManager().getFragmentInfoList();
+		ArrayList<StoryFragmentInfo> info = app.getStoryManager().getFragmentInfoList();
 
 		this.adapter = new FragmentListAdapter(getActivity(), info);
 
