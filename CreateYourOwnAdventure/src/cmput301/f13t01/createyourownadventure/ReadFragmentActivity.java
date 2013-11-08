@@ -35,13 +35,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 /**
- *         ReadFragmentActivity, the activity called for reading any story
- *         fragment. Relies on ReadFragmentView for the display and
- *         ReadStoryManager for story access.
- *         
- *         @author Eddie Tai <eddie@ualberta.ca>
+ * ReadFragmentActivity, the activity called for reading any story fragment.
+ * Relies on ReadFragmentView for the display and ReadStoryManager for story
+ * access.
+ * 
+ * @author Eddie Tai <eddie@ualberta.ca>
  */
 public class ReadFragmentActivity extends FragmentActivity {
 
@@ -58,7 +59,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		GlobalManager app = (GlobalManager) getApplication();
-		
+
 		setContentView(R.layout.activity_view_fragment);
 
 		// enable the Up button in action bar
@@ -73,20 +74,29 @@ public class ReadFragmentActivity extends FragmentActivity {
 		// set the story in the story manager
 		app.setStoryManager(storyId);
 		this.storyManager = app.getStoryManager();
-		
-		Log.d("Blah", "blah blah");
 
 		// depending if we are reading from beginning,
 		// fetch the appropriate fragment ID accordingly
-		int fragmentId;
+		Integer fragmentId;
 		Boolean fromBeginning = (boolean) intent.getBooleanExtra(getResources()
 				.getString(R.string.story_continue), false);
 		if (fromBeginning) {
 			fragmentId = storyManager.getFirstPageId();
-			//fragmentId = 0;
-		} 
-		else {
+			// fragmentId = 0;
+		} else {
+			// show first page if the story has never been read
 			fragmentId = storyManager.getMostRecent();
+			if (fragmentId.equals(null)) {
+				fragmentId = storyManager.getFirstPageId();
+			}
+		}
+
+		// if there is no first page set, exit readmode
+		if (fragmentId.equals(null)) {
+			Toast.makeText(getBaseContext(),
+					"First page has not been set for this story!",
+					Toast.LENGTH_LONG).show();
+			finish();
 		}
 
 		commitFragment(fragmentId);
@@ -106,7 +116,8 @@ public class ReadFragmentActivity extends FragmentActivity {
 	 * Determines the resulting action of choosing a particular action in the
 	 * action bar.
 	 */
-	public boolean onOptionsItemSeqlected(MenuItem item) {
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
 
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
@@ -157,11 +168,14 @@ public class ReadFragmentActivity extends FragmentActivity {
 	}
 
 	/**
-	 * Sets the functionality of the clicklistener for the choice buttons.
-	 * This function fetches the destination ID for a chosen choice, and
-	 * generates a new fragment accordingly.
-	 * @param v the button that is pressed
-	 * @param fragmentId the id of the fragment to be displayed next
+	 * Sets the functionality of the clicklistener for the choice buttons. This
+	 * function fetches the destination ID for a chosen choice, and generates a
+	 * new fragment accordingly.
+	 * 
+	 * @param v
+	 *            the button that is pressed
+	 * @param fragmentId
+	 *            the id of the fragment to be displayed next
 	 */
 	public void onFragmentListClick(View v, Integer fragmentId) {
 		// TODO Auto-generated method stub
