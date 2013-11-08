@@ -78,7 +78,22 @@ public class GlobalManager extends Application {
 		readManager.setStory(story); // Do we want to just construct a new one?
 	}
 
-	public void setNewStoryManager() {
-		readManager.setStory(new Story());
+	/**
+	 * Saves a newly-created story and sets it as the loaded story in 
+	 * the ReadStoryManager
+	 */
+	public void createAndSetStory() {
+		UUID storyId = localManager.addStory(new Story());
+		readManager.setStory(localManager.getStory(storyId));
+	}
+	
+	/**
+	 * Saves an update to a preexisting story
+	 * 
+	 * @param storyId   ID of the story to update
+	 */
+	public void saveStory(UUID storyId) {
+		Story story = readManager.getStory();
+		localManager.saveStory(storyId, story);
 	}
 }

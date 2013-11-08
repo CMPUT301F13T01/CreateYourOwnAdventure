@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import android.text.SpannableString;
 
-/*
+/**
  * Class for Video type Media. Uses a String which refers to the resource name.
  */
 public class Video implements Media<String>, Serializable {

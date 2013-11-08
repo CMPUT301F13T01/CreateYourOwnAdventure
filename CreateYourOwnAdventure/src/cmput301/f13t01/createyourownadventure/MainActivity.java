@@ -42,15 +42,15 @@ import android.widget.ListView;
  *  @author Gerald Manweiler
  *  @version 1.3 Nov 6 2013
  */
-public class MainActivity extends Activity{
-	// local manager object to handle stories
+public class MainActivity extends Activity {
+	// local manager object to handle local story saving
 	private LocalManager objLibrary;
 	//story list view object
 	private ListView lsvStories = null;
 	//story info array list object
 	private ArrayList<StoryInfo> storyInfoList;
 	// adapter for story info array list
-	private StoryInfoListAdapter objStoryAdapter;	
+	private StoryInfoListAdapter objStoryAdapter;
 	
 	/**
 	 * create main screen
@@ -66,23 +66,9 @@ public class MainActivity extends Activity{
 		lsvStories = (ListView) findViewById(R.id.main_activity_listview);
 		registerForContextMenu(lsvStories);		
 		
-		//instantiate the local manager
-		objLibrary = new LocalManager(this.getApplicationContext());
-		//TODO this gets remove after demo
-	
-		//create and add fake stories to local library
-		for (int i = 1; i < 5; i++) {
-			//create fake story 
-			Story objStory = new Story();
-			String strCount = String.valueOf(i);
-			//give fake story an author, title and description
-			objStory.setAuthor("Author " + strCount);
-			objStory.setTitle("Fake Story" + strCount);
-			objStory.setDescription("fake story");
-			//add the story
-			objLibrary.addStory(objStory);
-		}
-		
+		//grab the local manager
+		GlobalManager app = (GlobalManager) getApplication();
+		objLibrary = app.getLocalManager();
 	}
 	
 	/**
@@ -219,6 +205,8 @@ public class MainActivity extends Activity{
 	
 	/**
 	 * starts edit story child activity
+	 * 
+	 * @param storyId UUID of story selected by user
 	 */
 	private void startEditStory(UUID storyId) {
 		//TODO quick and dirty test replace with a toast
@@ -232,10 +220,19 @@ public class MainActivity extends Activity{
 
 	/**
 	 * starts browse online story child activity
+	 * 
+	 * @param storyId UUID of story selected by user 
 	 */
 	private void startDeleteStory(UUID storyId) {
-		//TODO quick and dirty test
+		//quick and dirty test
 		System.out.println("You selected Delete Story");
+		//Send the signal to the LocalManager to delete the story
+		objLibrary.removeStory(storyId);
+		//update the ListView
+		storyInfoList = objLibrary.getStoryInfoList();
+		objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, storyInfoList);
+		lsvStories.setAdapter(objStoryAdapter);
+		objStoryAdapter.notifyDataSetChanged();
 
 	}
 	/**
@@ -244,7 +241,7 @@ public class MainActivity extends Activity{
 	private void startContinueStory(UUID storyId) {
 		//quick and dirty test
 		System.out.println("You selected Continue Story");
-		//create the intent and bundle to launch read story from beginning activity		
+		//create the intent to launch read story activity		
 	    Intent intent = new Intent(this, ReadFragmentActivity.class);
 	    intent.putExtra(getResources().getString(R.string.story_continue), false);
 		intent.putExtra(getResources().getString(R.string.story_id), storyId);
@@ -253,11 +250,13 @@ public class MainActivity extends Activity{
 
 	/**
 	 * starts reading story at beginning child activity
+	 * 
+	 * @param storyId UUID of story selected by user
 	 */
 	private void startAtBeginning(UUID storyId) {
 		//quick and dirty test
 		System.out.println("You selected Start at Beginning");
-		//create the intent and bundle to launch read story from beginning activity
+		//create the intent to launch read story activity
 	    Intent intent = new Intent(this, ReadFragmentActivity.class);
 	    intent.putExtra(getResources().getString(R.string.story_continue), true);
 		intent.putExtra(getResources().getString(R.string.story_id), storyId);

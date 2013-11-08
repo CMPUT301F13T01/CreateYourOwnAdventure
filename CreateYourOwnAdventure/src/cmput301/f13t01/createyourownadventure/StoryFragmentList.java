@@ -30,10 +30,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author Jesse Chu <jhchu@ualberta.ca>
- *
  * FragmentList, holds all Fragment objects and gives each a unique ID.
  * Every Story object should have one of these.
+ * 
+ * @author Jesse Chu <jhchu@ualberta.ca>
  */
 
 public class StoryFragmentList implements Serializable {
