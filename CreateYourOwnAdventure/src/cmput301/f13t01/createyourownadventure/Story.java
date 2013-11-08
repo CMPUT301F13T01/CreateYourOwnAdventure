@@ -25,14 +25,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
-* @author Jesse Chu <jhchu@ualberta.ca>
-*
-* Story object. Basic functional unit for a story.
+* Story object, basic functional unit for a story.
 * Has title, author, description, and first page attributes.
 * Aggregates History, FragmentList, and ChoiceMap objects.
 * - History tracks reader progress
 * - FragmentList is the container for the Fragments (Pages) of the story
 * - ChoiceMap stores the choices and associates for the Fragments
+* 
+* @author Jesse Chu <jhchu@ualberta.ca>
 */
 
 public class Story implements Serializable {

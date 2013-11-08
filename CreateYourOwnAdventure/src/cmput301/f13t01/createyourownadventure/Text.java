@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import android.text.SpannableString;
 
-/*
+/**
  * Class for Text type Media. Uses a SpannableString so it can be formatted.
  */
 @SuppressWarnings("serial")

@@ -28,12 +28,10 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * This interface is designed to interact with stored stories.
- * It is implemented for both ElasticSearch and LocalManagers.
- * Saving, Loading, and Deleting are handled.
+ * This class is designed to interact with stored stories on
+ * ElasticSearch. Saving, Loading, and Deleting are handled.
  * 
  * @author Jesse Chu
- * 
  */
 
 public class ESManager implements LibraryManager{

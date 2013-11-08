@@ -26,13 +26,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * @author Jesse Chu <jhchu@ualberta.ca>
- * 
- * Fragment object. Essentially a single page for a story.
+ * StoryFragment object, essentially a single page for a story.
  * Has title and description attributes.
  * Composed of Content and Annotations, which implement the Media interface.
  * Content and Annotations can be one of:
  * Text, Image, Video, Sound
+ * 
+ * @author Jesse Chu <jhchu@ualberta.ca>
  */
 
 public class StoryFragment implements Serializable {
