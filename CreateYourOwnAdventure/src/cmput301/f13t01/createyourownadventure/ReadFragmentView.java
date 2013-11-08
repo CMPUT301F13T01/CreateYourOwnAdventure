@@ -146,7 +146,6 @@ public class ReadFragmentView extends Fragment {
 				choiceButton.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						storyManager.pushToStack(fragmentId);
 						((ReadFragmentActivity) getActivity())
 								.onFragmentListClick(v, fragmentId);
 					}
