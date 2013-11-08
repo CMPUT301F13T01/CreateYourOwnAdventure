@@ -38,7 +38,7 @@ import java.util.ArrayList;
 public class ReadStoryManager {
 
 	// declaration of variables
-	Story story;
+	private Story story;
 
 	/**
 	 * Used by the global manager to inform the ReadStoryManager of what story
@@ -49,6 +49,15 @@ public class ReadStoryManager {
 	 */
 	public void setStory(Story story) {
 		this.story = story;
+	}
+	
+	/**
+	 * Getter for the currently loaded story
+	 * 
+	 * @return   Returns the story that is loaded
+	 */
+	public Story getStory() {
+		return story;
 	}
 	
 	/* Functions that deal with Story attributes */
