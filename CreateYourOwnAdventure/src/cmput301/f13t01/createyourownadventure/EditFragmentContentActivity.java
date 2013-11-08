@@ -10,14 +10,17 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class EditFragmentContentActivity extends Activity implements ChoiceListListener {
+public class EditFragmentContentActivity extends Activity implements
+		ChoiceListListener {
 
 	private StoryFragment storyFragment;
 	private int fragmentId;
@@ -107,7 +110,7 @@ public class EditFragmentContentActivity extends Activity implements ChoiceListL
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	private void showChoiceSelection() {
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		Fragment prev = getFragmentManager().findFragmentByTag("dialog");
@@ -120,7 +123,7 @@ public class EditFragmentContentActivity extends Activity implements ChoiceListL
 				.newInstance(fragmentId);
 		newFragment.show(ft, "dialog");
 	}
-	
+
 	private void onAddChoice() {
 
 	}
@@ -145,15 +148,34 @@ public class EditFragmentContentActivity extends Activity implements ChoiceListL
 		setResult(RESULT_CANCELED, intent);
 		finish();
 	}
-	
+
 	public void onBackPressed() {
+		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
+		storyFragment.removeAllContent();
+
+		for (int i = 0; i < layout.getChildCount(); i++) {
+			View v = layout.getChildAt(i);
+			if (v.getClass().equals(EditText.class)) {
+				EditText text = (EditText) v;
+				SpannableString string = new SpannableString(text.getText());
+				storyFragment.addContent(new Text(string));
+			}
+		}
+
+		Intent intent = new Intent();
+
+		intent.putExtra(getResources().getString(R.string.story_fragment),
+				storyFragment);
+
+		setResult(RESULT_OK, intent);
+
 		finish();
 	}
 
 	@Override
 	public void onChoiceSelected(Choice choice) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
