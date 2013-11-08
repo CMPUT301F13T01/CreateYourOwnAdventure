@@ -23,10 +23,6 @@ public class PreviewFragment extends Fragment {
 						getResources().getString(R.string.story_fragment));
 
 		ArrayList<Media> content = fragment.getContentList();
-		if (content == null) {
-			Log.d("blah", "IT'S NULL DUMMY");
-			return container;
-		}
 
 		// Inflate the view
 		View scrollable = inflater.inflate(R.layout.edit_fragment, container,
