@@ -39,5 +39,13 @@ package cmput301.f13t01.createyourownadventure;
  */
 
 public interface StoryFragmentListListener {
+
+	/**
+	 * Function to handle when a fragment is selected in the
+	 * StoryFragmentListFragment.
+	 * 
+	 * @param fragmentId
+	 *            the ID of the selected fragment.
+	 */
 	void onStoryFragmentSelected(int fragmentId);
 }

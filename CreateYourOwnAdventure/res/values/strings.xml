@@ -74,10 +74,10 @@
     <string name="fragment_save_toast">Fragment Saved</string>
     <string name="story_save_toast">Story Saved</string>
     <string name="tab1">Tab 1</string>
-    <string name="title_activity_edit_fragment_info">EditFragmentInfoActivity</string>
-    <string name="title_activity_edit_fragment_content">EditFragmentContentActivity</string>
+    <string name="title_activity_edit_fragment_info">Edit Fragment</string>
+    <string name="title_activity_edit_fragment_content">Edit Fragment</string>
     <string name="destination_id">Bundle FragmentId</string>
-    <string name="title_activity_edit_fragment_choice">EditFragmentChoiceActivity</string>
+    <string name="title_activity_edit_fragment_choice">Edit Choice</string>
     <string name="choice">Choice</string>
     <string name="title_activity_preview_fragment">PreviewFragmentActivity</string>
 
