@@ -83,7 +83,6 @@ public class ReadFragmentActivity extends FragmentActivity {
 					getResources().getString(R.string.story_continue), false);
 			if (fromBeginning) {
 				fragmentId = storyManager.getFirstPageId();
-				// fragmentId = 0;
 			} else {
 				// show first page if the story has never been read
 				fragmentId = storyManager.getMostRecent();
