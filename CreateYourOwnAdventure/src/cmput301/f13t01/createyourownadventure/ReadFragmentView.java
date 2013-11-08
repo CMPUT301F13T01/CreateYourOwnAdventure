@@ -37,12 +37,11 @@ import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
 /**
- * @author Eddie Tai <eddie@ualberta.ca>
- * 
  *         The view for the ReadFragmentActivity. Constructs the required
  *         fragment to display the media of the story fragment properly. Uses
  *         the story manager to access parts of the story for display.
- * 
+ *
+ * 		   @author Eddie Tai <eddie@ualberta.ca>
  */
 public class ReadFragmentView extends Fragment {
 

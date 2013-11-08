@@ -26,10 +26,10 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * @author Jesse Chu <jhchu@ualberta.ca>
- *
  * StoryInfo class.
  * For use of views that list Story objects.
+ * 
+ * @author Jesse Chu <jhchu@ualberta.ca>
  */
 
 public class StoryInfo implements Serializable {

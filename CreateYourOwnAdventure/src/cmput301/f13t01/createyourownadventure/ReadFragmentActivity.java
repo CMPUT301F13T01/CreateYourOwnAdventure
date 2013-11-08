@@ -36,11 +36,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 /**
- * @author Eddie Tai <eddie@ualberta.ca>
- * 
  *         ReadFragmentActivity, the activity called for reading any story
  *         fragment. Relies on ReadFragmentView for the display and
  *         ReadStoryManager for story access.
+ *         
+ *         @author Eddie Tai <eddie@ualberta.ca>
  */
 public class ReadFragmentActivity extends FragmentActivity {
 

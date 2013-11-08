@@ -27,13 +27,12 @@ package cmput301.f13t01.createyourownadventure;
 import java.util.ArrayList;
 
 /**
- * @author Eddie Tai <eddie@ualberta.ca>
- * 
  *         ReadStoryManager is the connection between various activities and 
  *         a story. The GlobalManager sets the story for the manager,
  *         and the manager enables various interactions with the story model,
  *         such as getting and setting attributes of a story and its fragments.
- * 
+ *         
+ * 		   @author Eddie Tai <eddie@ualberta.ca>
  */
 public class ReadStoryManager {
 

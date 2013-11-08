@@ -3,7 +3,7 @@ package cmput301.f13t01.createyourownadventure;
 import java.io.IOException;
 import java.io.Serializable;
 
-/*
+/**
  * Class for Image type Media. Uses a String which refers to the resource name.
  */
 public class Image implements Media<String>, Serializable {

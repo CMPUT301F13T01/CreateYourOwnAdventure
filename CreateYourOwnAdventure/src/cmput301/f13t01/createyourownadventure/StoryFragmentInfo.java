@@ -21,10 +21,10 @@ Used to get basic information about a StoryFragment
 package cmput301.f13t01.createyourownadventure;
 
 /**
- * @author Jesse Chu <jhchu@ualberta.ca>
- *
- * FragmentInfo class.
+ * StoryFragmentInfo class, used to represent StoryFragments in a list.
  * For use of views that list StoryFragment objects.
+ * 
+ * @author Jesse Chu <jhchu@ualberta.ca>
  */
 
 public class StoryFragmentInfo {
