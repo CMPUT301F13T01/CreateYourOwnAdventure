@@ -27,6 +27,8 @@ public class EditFragmentInfoActivity extends Activity {
 		setContentView(R.layout.activity_edit_fragment_info);
 		setupActionBar();
 
+		Log.d("oops", "This shouldn't get called again");
+
 		// Get the story manager
 		GlobalManager app = (GlobalManager) getApplication();
 		manager = app.getStoryManager();
@@ -83,27 +85,12 @@ public class EditFragmentInfoActivity extends Activity {
 		case R.id.action_edit_delete:
 			onSelectDelete();
 			return true;
-		case R.id.action_edit_edit_choice:
-			showChoiceSelection();
-			return true;
 		case R.id.action_edit_add_choice:
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void showChoiceSelection() {
-		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-		if (prev != null) {
-			ft.remove(prev);
-		}
-		ft.addToBackStack(null);
-
-		DialogFragment newFragment = (DialogFragment) ChoiceListFragment
-				.newInstance(fragmentId);
-		newFragment.show(ft, "dialog");
-	}
 
 	private void onSelectDelete() {
 		manager.removeFragment(fragmentId);
@@ -150,18 +137,21 @@ public class EditFragmentInfoActivity extends Activity {
 		finish();
 	}
 
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == RESULT_OK) {
-			Intent intent = getIntent();
 
-			if (intent != null) {
-				storyFragment = (StoryFragment) intent
+		if (resultCode == RESULT_OK) {
+
+			if (data != null) {
+				storyFragment = (StoryFragment) data
 						.getSerializableExtra(getResources().getString(
 								R.string.story_fragment));
 			}
-		} else if (requestCode == RESULT_CANCELED) {
+
+		} else if (resultCode == RESULT_CANCELED) {
 			// Do Nothing
 		}
+
 	}
 
 }

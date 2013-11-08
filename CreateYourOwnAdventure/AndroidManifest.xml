@@ -33,18 +33,15 @@
         </activity>
         <activity
             android:name="cmput301.f13t01.createyourownadventure.EditStoryActivity"
-            android:label="@string/title_activity_edit_story"
-            android:launchMode="singleTask" >
+            android:label="@string/title_activity_edit_story" >
         </activity>
         <activity
             android:name="cmput301.f13t01.createyourownadventure.EditFragmentInfoActivity"
-            android:label="@string/title_activity_edit_fragment_info"
-            android:launchMode="singleTask" >
+            android:label="@string/title_activity_edit_fragment_info" >
         </activity>
         <activity
             android:name="cmput301.f13t01.createyourownadventure.EditFragmentContentActivity"
-            android:label="@string/title_activity_edit_fragment_content"
-            android:launchMode="singleTask" >
+            android:label="@string/title_activity_edit_fragment_content" >
         </activity>
         <activity
             android:name="cmput301.f13t01.createyourownadventure.EditFragmentChoiceActivity"

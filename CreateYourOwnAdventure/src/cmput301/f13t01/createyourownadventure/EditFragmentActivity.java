@@ -147,12 +147,6 @@ public class EditFragmentActivity extends FragmentActivity implements
 	}
 
 	private void onAddContent() {
-		// LinearLayout layout = (LinearLayout)
-		// findViewById(R.id.edit_fragment_linear);
-		// LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-		// LinearLayout.LayoutParams.MATCH_PARENT,
-		// LinearLayout.LayoutParams.WRAP_CONTENT);
-		// layout.addView(new EditText(getApplicationContext()), params);
 		storyFragment.addContent(new Text());
 		android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager()
 				.beginTransaction();
@@ -174,7 +168,7 @@ public class EditFragmentActivity extends FragmentActivity implements
 		//		getResources().getString(R.string.choice_list));
 	}
 
-	public void onChoiceSelected(Choice choice) {
+	public void onChoiceSelected(Choice choice, int position) {
 		// TODO: Start the edit choice activity
 		return;
 	}

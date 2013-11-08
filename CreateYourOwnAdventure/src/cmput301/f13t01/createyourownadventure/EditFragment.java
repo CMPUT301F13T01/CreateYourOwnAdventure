@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +21,6 @@ public class EditFragment extends Fragment {
 				.getSerializable(
 						getResources().getString(R.string.story_fragment));
 		ArrayList<Media> content = fragment.getContentList();
-		if (content == null) {
-			Log.d("blah", "IT'S NULL DUMMY");
-			return container;
-		}
 
 		// Inflate the view
 		View scrollable = inflater.inflate(R.layout.edit_fragment, container,

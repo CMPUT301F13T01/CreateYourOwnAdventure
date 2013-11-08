@@ -11,12 +11,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EditFragmentChoiceActivity extends Activity implements
 		StoryFragmentListListener {
 
 	private Choice choice;
-	private int sourceId;
+	private int sourceId, position;
 	private boolean isNew;
 	private ReadStoryManager manager;
 
@@ -25,14 +26,13 @@ public class EditFragmentChoiceActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_fragment_choice);
 		setupActionBar();
-		
-        final Button button = (Button) findViewById(R.id.edit_set_destination);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showFragmentSelection();
-            }
-        });
 
+		final Button button = (Button) findViewById(R.id.edit_set_destination);
+		button.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				showFragmentSelection();
+			}
+		});
 
 		// Get the story manager
 		GlobalManager app = (GlobalManager) getApplication();
@@ -42,6 +42,9 @@ public class EditFragmentChoiceActivity extends Activity implements
 
 		sourceId = intent.getIntExtra(
 				getResources().getString(R.string.fragment_id), -1);
+
+		position = intent.getIntExtra(
+				getResources().getString(R.string.choice_position), -1);
 
 		isNew = intent.getBooleanExtra(
 				getResources().getString(R.string.choice_is_new), true);
@@ -54,10 +57,10 @@ public class EditFragmentChoiceActivity extends Activity implements
 
 		if (isNew) {
 			destText.setText("Destination: Not Set");
-			
+
 			choice = new Choice();
 			choice.setSourceId(sourceId);
-			
+
 		} else {
 			choice = (Choice) intent.getSerializableExtra(getResources()
 					.getString(R.string.choice));
@@ -102,25 +105,61 @@ public class EditFragmentChoiceActivity extends Activity implements
 	}
 
 	private void onSelectDelete() {
-		// TODO Auto-generated method stub
-		
+		if (!isNew)
+			manager.deleteChoice(sourceId, position);
+
+		Toast toast = Toast.makeText(getApplicationContext(), getResources()
+				.getString(R.string.choice_delete_toast), Toast.LENGTH_SHORT);
+		toast.show();
+
+		Intent intent = new Intent();
+		setResult(RESULT_CANCELED, intent);
+		finish();
 	}
 
 	private void onSelectCancel() {
-		// TODO Auto-generated method stub
-		
+		Toast toast = Toast.makeText(getApplicationContext(), getResources()
+				.getString(R.string.cancel_toast), Toast.LENGTH_SHORT);
+		toast.show();
+
+		Intent intent = new Intent();
+		setResult(RESULT_CANCELED, intent);
+		finish();
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (choice.getDestinationId() != null) {
+			TextView flavourText = (TextView) findViewById(R.id.edit_choice_flavour);
+			choice.setFlavourText(flavourText.getText().toString());
+			if(isNew)
+				manager.addChoice(sourceId, choice);
+			else
+				manager.updateChoice(sourceId, position, choice);
+			
+			Toast toast = Toast.makeText(getApplicationContext(), getResources()
+					.getString(R.string.choice_saved_toast), Toast.LENGTH_SHORT);
+			toast.show();
+		} else {
+			Toast toast = Toast.makeText(getApplicationContext(), getResources()
+					.getString(R.string.choice_not_saved_toast), Toast.LENGTH_SHORT);
+			toast.show();
+		}
+
+		Intent intent = new Intent();
+		setResult(RESULT_OK, intent);
+		finish();
 	}
 
 	public void showFragmentSelection() {
-		FragmentTransaction ft = getFragmentManager()
-				.beginTransaction();
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		android.app.Fragment prev = getFragmentManager().findFragmentByTag(
 				"dialog");
 		if (prev != null) {
 			ft.remove(prev);
 		}
 		ft.addToBackStack(null);
-		
+
 		DialogFragment newFragment = (DialogFragment) StoryFragmentListFragment
 				.newInstance();
 		newFragment.show(ft, "dialog");
@@ -129,12 +168,11 @@ public class EditFragmentChoiceActivity extends Activity implements
 	@Override
 	public void onStoryFragmentSelected(int fragmentId) {
 		choice.setDestinationId(fragmentId);
-		
+
 		TextView destText = (TextView) findViewById(R.id.edit_choice_destination);
-		
+
 		destText.setText("Destination: "
-				+ manager.getFragmentInfo(choice.getDestinationId())
-						.getTitle());
+				+ manager.getFragmentInfo(choice.getDestinationId()).getTitle());
 	}
 
 }

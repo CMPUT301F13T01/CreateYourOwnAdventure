@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 public class EditFragmentContentActivity extends Activity implements
 		ChoiceListListener {
-	
+
 	static final int EDIT_CHOICE = 0;
 
 	private StoryFragment storyFragment;
@@ -61,11 +61,13 @@ public class EditFragmentContentActivity extends Activity implements
 			for (Media media : content) {
 				if (media.getClass().equals(Text.class)) {
 					EditText edit = new EditText(getApplication());
-					edit.setText((CharSequence) media.getContent());
+					edit.setTextColor(Color.BLACK);
+					edit.setText(media.getContent().toString());
 					layout.addView(edit, params);
 				}
 			}
 		}
+
 	}
 
 	/**
@@ -87,16 +89,6 @@ public class EditFragmentContentActivity extends Activity implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
 		case R.id.action_edit_add_content:
 			onSelectAddContent();
 			return true;
@@ -124,6 +116,17 @@ public class EditFragmentContentActivity extends Activity implements
 		DialogFragment newFragment = (DialogFragment) ChoiceListFragment
 				.newInstance(fragmentId);
 		newFragment.show(ft, "dialog");
+		
+		ArrayList<Choice> choices = manager.getChoices(fragmentId);
+		int size;
+		
+		if(choices == null) {
+			size = 0;
+		}
+		else
+			size = choices.size();
+		
+		Log.d("oops", "Size: " + size);
 	}
 
 	private void onSelectAddContent() {
@@ -166,19 +169,23 @@ public class EditFragmentContentActivity extends Activity implements
 		intent.putExtra(getResources().getString(R.string.story_fragment),
 				storyFragment);
 
+		if (getParent() != null)
+			getParent().setResult(RESULT_OK, intent);
 		setResult(RESULT_OK, intent);
 
 		finish();
 	}
 
 	@Override
-	public void onChoiceSelected(Choice choice) {
+	public void onChoiceSelected(Choice choice, int position) {
 		Intent intent = new Intent(getApplicationContext(),
 				EditFragmentChoiceActivity.class);
 
 		intent.putExtra(getResources().getString(R.string.choice_is_new), false);
 		intent.putExtra(getResources().getString(R.string.fragment_id),
 				fragmentId);
+		intent.putExtra(getResources().getString(R.string.choice_position),
+				position);
 		intent.putExtra(getResources().getString(R.string.choice), choice);
 
 		startActivityForResult(intent, EDIT_CHOICE);
@@ -193,6 +200,16 @@ public class EditFragmentContentActivity extends Activity implements
 				fragmentId);
 
 		startActivityForResult(intent, EDIT_CHOICE);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (resultCode == RESULT_OK) {
+
+		} else if (resultCode == RESULT_CANCELED) {
+		}
 	}
 
 }

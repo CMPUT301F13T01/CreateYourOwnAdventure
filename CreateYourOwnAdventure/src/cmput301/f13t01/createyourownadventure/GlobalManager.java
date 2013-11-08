@@ -34,19 +34,19 @@ public class GlobalManager extends Application {
 	 * @see #setLocalManager()
 	 */
 	private static LocalManager localManager;
-	
-    private static Context context;
 
-    public void onCreate(){
-        super.onCreate();
-        context = getApplicationContext();
-        readManager = new ReadStoryManager();
-        localManager = new LocalManager(context);
-    }
+	private static Context context;
 
-    public static Context getAppContext() {
-        return context;
-    }
+	public void onCreate() {
+		super.onCreate();
+		context = getApplicationContext();
+		readManager = new ReadStoryManager();
+		localManager = new LocalManager(context);
+	}
+
+	public static Context getAppContext() {
+		return context;
+	}
 
 	/**
 	 * Get the Application's LocalManager.
@@ -67,8 +67,8 @@ public class GlobalManager extends Application {
 	}
 
 	/**
-	 * Set the ReadStoryManager for the story described in the local library by the ID
-	 * argument.
+	 * Set the ReadStoryManager for the story described in the local library by
+	 * the ID argument.
 	 * 
 	 * @param storyId
 	 *            the ID of the story to be managed.
@@ -79,18 +79,23 @@ public class GlobalManager extends Application {
 	}
 
 	/**
-	 * Saves a newly-created story and sets it as the loaded story in 
-	 * the ReadStoryManager
+	 * Saves a newly-created story and sets it as the loaded story in the
+	 * ReadStoryManager
+	 * 
+	 * @return storyId the ID of the newly created story.
 	 */
-	public void createAndSetStory() {
+	public UUID createAndSetStory() {
 		UUID storyId = localManager.addStory(new Story());
 		readManager.setStory(localManager.getStory(storyId));
+
+		return storyId;
 	}
-	
+
 	/**
 	 * Saves an update to a preexisting story
 	 * 
-	 * @param storyId   ID of the story to update
+	 * @param storyId
+	 *            ID of the story to update
 	 */
 	public void saveStory(UUID storyId) {
 		Story story = readManager.getStory();

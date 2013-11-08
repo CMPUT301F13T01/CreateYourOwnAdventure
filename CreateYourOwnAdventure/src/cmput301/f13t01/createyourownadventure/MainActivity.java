@@ -213,7 +213,7 @@ public class MainActivity extends Activity {
 		System.out.println("You selected Edit Story");
 		//create the intent to launch edit story activity
 	    Intent intent = new Intent(this, EditStoryActivity.class);
-	    intent.putExtra(getResources().getString(R.string.story_is_new), true);
+	    intent.putExtra(getResources().getString(R.string.story_is_new), false);
 		intent.putExtra(getResources().getString(R.string.story_id), storyId);
         startActivity(intent);		
 	}

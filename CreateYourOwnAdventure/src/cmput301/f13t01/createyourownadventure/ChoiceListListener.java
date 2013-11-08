@@ -12,5 +12,5 @@ package cmput301.f13t01.createyourownadventure;
  */
 
 public interface ChoiceListListener {
-		void onChoiceSelected(Choice choice);
+		void onChoiceSelected(Choice choice, int position);
 }

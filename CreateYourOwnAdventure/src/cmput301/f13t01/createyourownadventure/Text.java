@@ -46,12 +46,12 @@ public class Text implements Media<SpannableString>, Serializable {
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-		out.writeObject(content);
+		out.writeObject(content.toString());
 	}
 
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
-		content = (SpannableString) in.readObject();
+		content = new SpannableString((String) in.readObject());
 	}
 
 }

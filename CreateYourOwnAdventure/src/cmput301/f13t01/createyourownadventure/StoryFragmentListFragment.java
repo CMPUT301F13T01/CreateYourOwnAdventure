@@ -17,7 +17,6 @@ public class StoryFragmentListFragment extends DialogFragment {
 	static StoryFragmentListFragment newInstance() {
 		StoryFragmentListFragment f = new StoryFragmentListFragment();
 
-		// Supply id input as an argument.
 		Bundle args = new Bundle();
 		f.setArguments(args);
 

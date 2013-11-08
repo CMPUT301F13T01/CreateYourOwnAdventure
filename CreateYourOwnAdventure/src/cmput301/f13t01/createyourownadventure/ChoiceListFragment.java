@@ -44,8 +44,12 @@ public class ChoiceListFragment extends DialogFragment {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		ArrayList<Choice> choices = new ArrayList<Choice>();
-		// app.getStoryManager().getChoiceList(fragmentId);
+		super.onCreate(savedInstanceState);
+		
+		int fragmentId = getArguments().getInt(idString);
+		
+		GlobalManager app = (GlobalManager) getActivity().getApplication();
+		ArrayList<Choice> choices = app.getStoryManager().getChoices(fragmentId);
 
 		ChoiceListAdapter adapt = new ChoiceListAdapter(getActivity(), choices);
 		this.adapter = adapt;
@@ -55,7 +59,7 @@ public class ChoiceListFragment extends DialogFragment {
 		builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int item) {
 				Choice choice = adapter.getChoiceAtPosition(item);
-				listener.onChoiceSelected(choice);
+				listener.onChoiceSelected(choice, item);
 			}
 		});
 		return builder.create();
@@ -67,6 +71,14 @@ public class ChoiceListFragment extends DialogFragment {
 		Dialog dialog = getDialog();
 		Window window = dialog.getWindow();
 		window.setGravity(Gravity.TOP);
+		
+		int fragmentId = getArguments().getInt(idString);
+
+		GlobalManager app = (GlobalManager) getActivity().getApplication();
+		ArrayList<Choice> choices = app.getStoryManager()
+				.getChoices(fragmentId);
+
+		this.adapter = new ChoiceListAdapter(getActivity(), choices);
 
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
