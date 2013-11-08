@@ -26,6 +26,7 @@
     <string name="story_author">Story Author</string>
 
     <!-- Action bar strings for edit fragment activity -->
+    <string name="action_edit_preview">Preview</string>
     <string name="action_edit_add_content">Add Content</string>
     <string name="action_edit_edit_choice">Edit Choice</string>
     <string name="action_edit_add_choice">Add Choice</string>
@@ -50,7 +51,7 @@
     <string name="action_edit_add_fragment">Add Fragment</string>
     <string name="action_edit_edit_fragment">Edit Fragment</string>
     <string name="set_first_page">Set</string>
-    
+
     <!-- Strings used in edit choice activity -->
     <string name="set_destination">Set</string>
     <string name="choice_flavour_hint">Choice Flavour</string>
@@ -78,5 +79,6 @@
     <string name="destination_id">Bundle FragmentId</string>
     <string name="title_activity_edit_fragment_choice">EditFragmentChoiceActivity</string>
     <string name="choice">Choice</string>
+    <string name="title_activity_preview_fragment">PreviewFragmentActivity</string>
 
 </resources>

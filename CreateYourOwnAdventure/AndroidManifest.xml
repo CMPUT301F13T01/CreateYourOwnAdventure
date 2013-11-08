@@ -47,6 +47,10 @@
             android:name="cmput301.f13t01.createyourownadventure.EditFragmentChoiceActivity"
             android:label="@string/title_activity_edit_fragment_choice" >
         </activity>
+        <activity
+            android:name="cmput301.f13t01.createyourownadventure.PreviewFragmentActivity"
+            android:label="@string/title_activity_preview_fragment" >
+        </activity>
     </application>
 
 </manifest>

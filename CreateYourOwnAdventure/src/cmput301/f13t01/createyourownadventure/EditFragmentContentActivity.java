@@ -89,6 +89,9 @@ public class EditFragmentContentActivity extends Activity implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.action_edit_preview:
+			onSelectPreview();
+			return true;
 		case R.id.action_edit_add_content:
 			onSelectAddContent();
 			return true;
@@ -105,6 +108,28 @@ public class EditFragmentContentActivity extends Activity implements
 		return super.onOptionsItemSelected(item);
 	}
 
+	private void onSelectPreview() {
+		Intent intent = new Intent(getApplicationContext(), PreviewFragmentActivity.class);
+		
+		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
+		StoryFragment previewFragment = storyFragment;
+		previewFragment.removeAllContent();
+
+		for (int i = 0; i < layout.getChildCount(); i++) {
+			View v = layout.getChildAt(i);
+			if (v.getClass().equals(EditText.class)) {
+				EditText text = (EditText) v;
+				SpannableString string = new SpannableString(text.getText());
+				previewFragment.addContent(new Text(string));
+			}
+		}
+		
+		intent.putExtra(getResources().getString(R.string.story_fragment),
+				previewFragment);
+		
+		startActivity(intent);
+	}
+
 	private void showChoiceSelection() {
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		Fragment prev = getFragmentManager().findFragmentByTag("dialog");
@@ -115,18 +140,7 @@ public class EditFragmentContentActivity extends Activity implements
 
 		DialogFragment newFragment = (DialogFragment) ChoiceListFragment
 				.newInstance(fragmentId);
-		newFragment.show(ft, "dialog");
-		
-		ArrayList<Choice> choices = manager.getChoices(fragmentId);
-		int size;
-		
-		if(choices == null) {
-			size = 0;
-		}
-		else
-			size = choices.size();
-		
-		Log.d("oops", "Size: " + size);
+		newFragment.show(ft, "dialog");		
 	}
 
 	private void onSelectAddContent() {
