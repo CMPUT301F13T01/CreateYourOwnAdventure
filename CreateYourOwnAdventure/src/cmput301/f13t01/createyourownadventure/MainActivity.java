@@ -204,6 +204,8 @@ public class MainActivity extends Activity{
 	
 	/**
 	 * starts edit story child activity
+	 * 
+	 * @param storyId UUID of story selected by user
 	 */
 	private void startEditStory(UUID storyId) {
 		//TODO quick and dirty test replace with a toast
@@ -217,6 +219,8 @@ public class MainActivity extends Activity{
 
 	/**
 	 * starts browse online story child activity
+	 * 
+	 * @param storyId UUID of story selected by user 
 	 */
 	private void startDeleteStory(UUID storyId) {
 		//TODO quick and dirty test
@@ -238,6 +242,8 @@ public class MainActivity extends Activity{
 
 	/**
 	 * starts reading story at beginning child activity
+	 * 
+	 * @param storyId UUID of story selected by user
 	 */
 	private void startAtBeginning(UUID storyId) {
 		//quick and dirty test
