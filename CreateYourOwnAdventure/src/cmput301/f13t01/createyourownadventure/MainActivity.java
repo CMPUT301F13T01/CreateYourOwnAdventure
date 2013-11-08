@@ -34,7 +34,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 
 /**
- *  sets up and handles main screen ui that allows user to 
+ *  Sets up and handles main screen ui that allows user to 
  *  display stories saved on device, select a story to read from beginning, select a story to read 
  *  from last history, select a story to edit a story, select a story to delete,
  *  browse for online stories, and create a new story
@@ -53,9 +53,9 @@ public class MainActivity extends Activity {
 	private StoryInfoListAdapter objStoryAdapter;
 	
 	/**
-	 * create main screen
+	 * Create main screen
 	 * 
-	 * @param savedInstanceState the state of activity at last kill time
+	 * @param savedInstanceState    The state of activity at last kill time
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,7 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
-	 * resume activity updates the story list view
+	 * Resume activity updates the story list view
 	 */
 	protected void onResume() {
 		super.onResume();
@@ -86,10 +86,10 @@ public class MainActivity extends Activity {
 	
 	
 	/**
-	 * places browse online and create new story icons in action bar
+	 * Places browse online and create new story icons in action bar
 	 * 
-	 * @param menu the action bar menu xml resource to inflate into action bar
-	 * @return boolean true for display menu, false for no display
+	 * @param menu    The action bar menu xml resource to inflate into action bar
+	 * @return boolean    True for display menu, false for no display
 	 */	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
@@ -101,10 +101,10 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
-	 * deals with user action bar selection
+	 * Deals with user action bar selection
 	 * 
-	 * @param item the menu item resource selected by user
-	 * @return boolean true for successful handling of menu item selection, false otherwise (from superclass)
+	 * @param item    The menu item resource selected by user
+	 * @return boolean    Returns true for successful handling of menu item selection, false otherwise (from superclass)
 	 */		
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -125,11 +125,11 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
-	 * create contextual menu on long click of story item in story list view
+	 * Create contextual menu on long click of story item in story list view
 	 * 
-	 * @param menu the menu xml resource to inflate into contextual menu
-	 * @param v the view in which create the contextual menu
-	 * @param menuInfo the additional info about item selected
+	 * @param menu    The menu xml resource to inflate into contextual menu
+	 * @param v    The view in which create the contextual menu
+	 * @param menuInfo    The additional info about item selected
 	 */
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo){
@@ -145,10 +145,10 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
-	 * handle user selection of an on long click contextual menu item
+	 * Handle user selection of an on long click contextual menu item
 	 * 
-     * @param item the menu item resource selected by user
-	 * @return boolean true for successful handling of menu item selection, false otherwise (from superclass)	
+     * @param item    The menu item resource selected by user
+	 * @return boolean    Returns true for successful handling of menu item selection, false otherwise (from superclass)	
     */
 	@SuppressWarnings("unused")
 	@Override
@@ -184,7 +184,7 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * starts create new story child activity
+	 * Starts create new story child activity
 	 */
 	private void startCreateNewStory() {
 		//TODO quick and dirty test, replace with a toast
@@ -196,7 +196,7 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * starts browse online story child activity
+	 * Starts browse online story child activity
 	 */
 	private void startBrowseOnlineStories() {
 		//TODO quick and dirty test
@@ -204,9 +204,9 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
-	 * starts edit story child activity
+	 * Starts edit story child activity
 	 * 
-	 * @param storyId UUID of story selected by user
+	 * @param storyId    UUID of story selected by user
 	 */
 	private void startEditStory(UUID storyId) {
 		//TODO quick and dirty test replace with a toast
@@ -219,9 +219,9 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * starts browse online story child activity
+	 * Starts browse online story child activity
 	 * 
-	 * @param storyId UUID of story selected by user 
+	 * @param storyId    UUID of story selected by user 
 	 */
 	private void startDeleteStory(UUID storyId) {
 		//quick and dirty test
@@ -236,7 +236,7 @@ public class MainActivity extends Activity {
 
 	}
 	/**
-	 * starts read from last history child activity
+	 * Starts read from last history child activity
 	 */
 	private void startContinueStory(UUID storyId) {
 		//quick and dirty test
@@ -249,9 +249,9 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * starts reading story at beginning child activity
+	 * Starts reading story at beginning child activity
 	 * 
-	 * @param storyId UUID of story selected by user
+	 * @param storyId    UUID of story selected by user
 	 */
 	private void startAtBeginning(UUID storyId) {
 		//quick and dirty test

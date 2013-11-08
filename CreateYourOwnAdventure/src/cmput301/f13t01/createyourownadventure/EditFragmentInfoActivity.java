@@ -1,3 +1,28 @@
+/*
+EditFragmentInfoActivity activity for CreateYourOwnAdventure.
+This is the activity that allows the user to add, delete 
+or edit a particular story fragment's information.
+
+     Copyright  ©2013 Jesse Huard
+    <Contact: jhuard@ualberta.ca>
+    
+    License GPLv3: GNU GPL Version 3
+    <http://gnu.org/licenses/gpl.html>.
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package cmput301.f13t01.createyourownadventure;
 
 import android.app.Activity;
@@ -11,6 +36,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
+
+/**
+ * The activity that allows the user to edit and maintain a
+ * particular story fragment's information.
+ * 
+ * @author Jesse Huard
+ *
+ */
 
 public class EditFragmentInfoActivity extends Activity {
 
