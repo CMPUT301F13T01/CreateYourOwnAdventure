@@ -1,11 +1,14 @@
 package testSrc;
 
+import java.util.UUID;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import cmput301.f13t01.createyourownadventure.Choice;
 import cmput301.f13t01.createyourownadventure.ReadStoryManager;
 import cmput301.f13t01.createyourownadventure.Story;
 import cmput301.f13t01.createyourownadventure.StoryFragment;
@@ -17,39 +20,66 @@ public class FakeStoryData {
 	public FakeStoryData() {
 		// TODO Auto-generated constructor stub
 		
-		// Creation of fake story data
-		ReadStoryManager manager;
-		Context context;
-		SpannableString spanString1;
+		ReadStoryManager manager = new ReadStoryManager();
 		
 		// Fake story data
-		Integer storyid = 1;
+		UUID storyid = UUID.randomUUID();
 		Story story = new Story();
-		Boolean stitle = story.setTitle("Test Story");
-		Boolean sauthor = story.setAuthor("Test Author");
-		Boolean sdescription = story.setDescription("Test Description inserted");
-		Boolean sfirstPage = story.setFirstPage(1);
-		
+		Boolean stitle = manager.setTitle("Test Story");
+		Boolean sauthor = manager.setAuthor("Test Author");
+		Boolean sdescription = manager.setDescription("Test Description inserted");
+
 		// Fake media 1
-		spanString1 = new SpannableString("test spannable string");
-		ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.RED);
+		SpannableString spanString1 = new SpannableString("fragment 1 media 1");
 		StyleSpan boldSpan = new StyleSpan( Typeface.BOLD );
-		spanString1.setSpan(colorSpan, 0, 4, 0);
-		
-		
+		spanString1.setSpan(boldSpan, 0, 4, 0);
 		Text text1 = new Text(spanString1);
 		
+		// Fake media 2
+		SpannableString spanString2 = new SpannableString("fragment 1 media 2");
+		ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.RED);
+		spanString2.setSpan(colorSpan, 6, 12, 0);
+		Text text2 = new Text(spanString2);
+		
+		// Fake media 3
+		SpannableString spanString3 = new SpannableString("fragment 2 string");
+		Text text3 = new Text(spanString3);
+		
+		// Fake media 4
+		SpannableString spanString4 = new SpannableString("fragment 3 string");
+		Text text4 = new Text(spanString4);
 		
 		// Fake fragment 1
 		StoryFragment fragment1 = new StoryFragment();
 		Boolean f1title = fragment1.setTitle("Fragment 1 title");
 		Boolean f1description = fragment1.setDescription("Fragment 1 description");
-		//Boolean f1content = fragment1.addContent(f1media);
+		Boolean setcontent = fragment1.addContent(text1);
+		setcontent = fragment1.addContent(text2);
 		
 		// Fake fragment 2
 		StoryFragment fragment2 = new StoryFragment();
 		Boolean f2title = fragment2.setTitle("Fragment 2 title");
 		Boolean f2description = fragment2.setDescription("Fragment 2 description");
-		//Boolean f2content = fragment2.addContent(f2media);
+		setcontent = fragment2.addContent(text3);
+		
+		// Fake fragment 3
+		StoryFragment fragment3 = new StoryFragment();
+		Boolean f3title = fragment3.setTitle("Fragment 3 title");
+		Boolean f3description = fragment3.setDescription("Fragment 3 description");
+		setcontent = fragment3.addContent(text3);
+		
+		// Fake choices
+		Choice choice1f1 = new Choice(1, 2, "from 1 to 2");
+		Choice choice2f1 = new Choice(1, 1, "from 1 to 1");
+		Choice choice3f1 = new Choice(1, 3, "from 1 to 3 (end)");
+		Choice choice1f2 = new Choice(2, 1, "from 2 to 1");
+		Choice choice2f2 = new Choice(2, 3, "from 2 to 3 (end)");
+		
+		// Set choices
+		manager.addChoice(1, choice1f1);
+		manager.addChoice(1, choice2f1);
+		manager.addChoice(1, choice3f1);
+		manager.addChoice(2, choice1f2);
+		manager.addChoice(2, choice2f2);
 	}
 }
