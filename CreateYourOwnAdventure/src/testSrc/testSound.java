@@ -1,10 +1,11 @@
 package testSrc;
 
-import static org.junit.Assert.fail;
 import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import cmput301.f13t01.createyourownadventure.Sound;
 
 public class testSound extends TestCase {
 
@@ -14,9 +15,16 @@ public class testSound extends TestCase {
 	}
 	
 	@Test
-	public void testContent() {
-		assertTrue(true);
-		fail("Not yet implemented");
+	public void testSetContent() {
+		Sound sound = new Sound();
+		
+		String content = "resourceidentifier";
+		
+		sound.setContent(content);
+		
+		String resourceString = sound.getContent();
+		
+		assertTrue(resourceString.equals(content));
 	}
 
 }

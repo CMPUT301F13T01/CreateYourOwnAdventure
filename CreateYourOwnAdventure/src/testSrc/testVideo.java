@@ -1,10 +1,11 @@
 package testSrc;
 
-import static org.junit.Assert.fail;
 import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import cmput301.f13t01.createyourownadventure.Video;
 
 public class testVideo extends TestCase {
 
@@ -14,8 +15,15 @@ public class testVideo extends TestCase {
 	}
 	
 	@Test
-	public void testContent() {
-		assertTrue(true);
-		fail("Not yet implemented");
+	public void testSetContent() {
+		Video video = new Video();
+		
+		String content = "resourceidentifier";
+		
+		video.setContent(content);
+		
+		String resourceString = video.getContent();
+		
+		assertTrue(resourceString.equals(content));
 	}
 }
