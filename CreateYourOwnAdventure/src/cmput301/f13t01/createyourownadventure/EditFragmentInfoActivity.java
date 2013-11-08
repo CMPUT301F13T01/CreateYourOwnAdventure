@@ -45,8 +45,8 @@ public class EditFragmentInfoActivity extends Activity implements
 				storyFragment = manager.getFragment(fragmentId);
 			} else {
 				storyFragment = new StoryFragment();
+				fragmentId = manager.addFragment(storyFragment);
 			}
-			Log.d("oops", "GOT A NEW FRAGMENT");
 		}
 
 		// Find the proper EditText views
@@ -119,9 +119,7 @@ public class EditFragmentInfoActivity extends Activity implements
 	}
 
 	private void onSelectDelete() {
-		if (!isNew) {
-			manager.removeFragment(fragmentId);
-		}
+		manager.removeFragment(fragmentId);
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.fragment_delete_toast), Toast.LENGTH_SHORT);
 		toast.show();
@@ -129,6 +127,9 @@ public class EditFragmentInfoActivity extends Activity implements
 	}
 
 	private void onSelectCancel() {
+		if(isNew) {
+			manager.removeFragment(fragmentId);
+		}
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.cancel_toast), Toast.LENGTH_SHORT);
 		toast.show();
