@@ -3,7 +3,7 @@ EditFragmentInfoActivity activity for CreateYourOwnAdventure.
 This is the activity that allows the user to add, delete 
 or edit a particular story fragment's information.
 
-     Copyright  ©2013 Jesse Huard
+     Copyright  ï¿½2013 Jesse Huard
     <Contact: jhuard@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
@@ -59,8 +59,6 @@ public class EditFragmentInfoActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_fragment_info);
 		setupActionBar();
-
-		Log.d("oops", "This shouldn't get called again");
 
 		// Get the story manager
 		GlobalManager app = (GlobalManager) getApplication();
@@ -154,8 +152,7 @@ public class EditFragmentInfoActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		Log.d("oops", "Back pressed!");
-
+		
 		EditText title = (EditText) findViewById(R.id.fragment_title);
 		EditText desc = (EditText) findViewById(R.id.fragment_description);
 

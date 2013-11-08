@@ -4,7 +4,7 @@ This is the activity that allows the user to edit a story's
 information, as well as to decide if they wish to add a fragment,
 jump to a fragment, etc.
 
-     Copyright  ©2013 Jesse Huard
+     Copyright  ï¿½2013 Jesse Huard
     <Contact: jhuard@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
@@ -28,13 +28,9 @@ package cmput301.f13t01.createyourownadventure;
 
 import java.util.UUID;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
