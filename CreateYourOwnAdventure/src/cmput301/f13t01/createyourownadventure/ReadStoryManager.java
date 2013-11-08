@@ -75,7 +75,7 @@ public class ReadStoryManager {
      * @return the author of the story
      */
     public String getAuthor() {
-            return this.story.getAuthor();
+            return story.getAuthor();
     }
     
     /**
@@ -84,7 +84,7 @@ public class ReadStoryManager {
      * @return the description of the story
      */
     public String getDescription() {
-            return this.story.getDescription();
+            return story.getDescription();
     }
     
     /**
@@ -93,7 +93,7 @@ public class ReadStoryManager {
      * @return the ID of the first fragment of the story
      */
     public Integer getFirstPageId() {
-            return this.story.getFirstPage();
+            return story.getFirstPage();
     }
     
     public StoryFragment getFirstPage() {
@@ -107,7 +107,7 @@ public class ReadStoryManager {
      * @return true if successful, false otherwise
      */
     public boolean setTitle(String title) {
-            return this.story.setTitle(title);
+            return story.setTitle(title);
     }
     
     /**
@@ -117,7 +117,7 @@ public class ReadStoryManager {
      * @return true if successful, false otherwise
      */
     public boolean setAuthor(String author) {
-            return this.story.setAuthor(author);
+            return story.setAuthor(author);
     }
     
     /**
@@ -127,7 +127,7 @@ public class ReadStoryManager {
      * @return true if successful, false otherwise
      */
     public boolean setDescription(String description) {
-            return this.story.setDescription(description);
+            return story.setDescription(description);
     }
     
     /**
@@ -137,7 +137,7 @@ public class ReadStoryManager {
      * @return true if successful, false otherwise
      */
     public boolean setFirstPage(Integer id) {
-            return this.story.setFirstPage(id);
+            return story.setFirstPage(id);
     }
 
     
@@ -149,7 +149,7 @@ public class ReadStoryManager {
      * @return the requested StoryFragment, null if it doesn't exist
      */
     public StoryFragment getFragment(Integer id) {
-            return this.story.getFragment(id);
+            return story.getFragment(id);
     }
     
     /**
@@ -159,7 +159,7 @@ public class ReadStoryManager {
      * @return the ID of the StoryFragment, null if not found
      */
     public Integer getFragmentId(StoryFragment fragment) {
-            return this.story.getFragmentId(fragment);
+            return story.getFragmentId(fragment);
     }
     
     /**
@@ -170,7 +170,7 @@ public class ReadStoryManager {
      * @return a StoryFragmentInfo object for that ID
      */
     public StoryFragmentInfo getFragmentInfo(Integer id) {
-            return this.story.getFragmentInfo(id);
+            return story.getFragmentInfo(id);
     }
     
 	/**
@@ -180,7 +180,7 @@ public class ReadStoryManager {
 	 * @return an ArrayList of all StoryFragmentInfo
 	 */
     public ArrayList<StoryFragmentInfo> getFragmentInfoList() {
-    	return this.story.getFragmentInfoList();
+    	return story.getFragmentInfoList();
     }
 
 	/**
@@ -191,7 +191,7 @@ public class ReadStoryManager {
 	 * @return the ID given to the added StoryFragment
 	 */
     public Integer addFragment(StoryFragment newFragment) {
-    	return this.story.addFragment(newFragment);
+    	return story.addFragment(newFragment);
     }
 
 	/**
@@ -202,7 +202,7 @@ public class ReadStoryManager {
 	 * @return true if successful, false otherwise
 	 */
     public boolean removeFragment(Integer id) {
-    	return this.story.removeFragment(id);
+    	return story.removeFragment(id);
     }
     
 	/**
@@ -214,7 +214,7 @@ public class ReadStoryManager {
 	 * @returns true is successful, false otherwise
 	 */
 	public boolean updateFragment(Integer id, StoryFragment fragment) {
-		return this.story.updateFragment(id, fragment);
+		return story.updateFragment(id, fragment);
 	}
 
 
@@ -226,7 +226,7 @@ public class ReadStoryManager {
 	 * @param choice Choice object to add to the ChoiceMap
 	 */
 	public void addChoice(int fragmentId, Choice choice) {
-		this.story.addChoice(fragmentId, choice);
+		story.addChoice(fragmentId, choice);
 	}
 	
 	/**
@@ -238,7 +238,7 @@ public class ReadStoryManager {
 	 * @return Returns true if choice existed, otherwise returns false
 	 */
 	public boolean deleteChoice(int fragmentId, int index) {
-		return this.story.deleteChoice(fragmentId, index);
+		return story.deleteChoice(fragmentId, index);
 	}
 	
 	/**
@@ -251,7 +251,7 @@ public class ReadStoryManager {
 	 * @return Returns true if choice already existed, false otherwise
 	 */
 	public boolean updateChoice(int fragmentId, int index, Choice choice) {
-		return this.story.updateChoice(fragmentId, index, choice);
+		return story.updateChoice(fragmentId, index, choice);
 	}
 	
 	/**
@@ -261,7 +261,7 @@ public class ReadStoryManager {
 	 * @param fragmentId   ID of StoryFragment to remove references to
 	 */
 	public void cleanFragmentReferences(int fragmentId) {
-		this.story.cleanFragmentReferences(fragmentId);
+		story.cleanFragmentReferences(fragmentId);
 	}
 	
 	/**
@@ -272,7 +272,7 @@ public class ReadStoryManager {
 	 * @return ArrayList of Choice objects for the given StoryFragment ID
 	 */
 	public ArrayList<Choice> getChoices(int fragmentId) {
-		return this.story.getChoices(fragmentId);
+		return story.getChoices(fragmentId);
 	}
     
 	
@@ -284,7 +284,7 @@ public class ReadStoryManager {
 	 * @return Integer ID of last-viewed fragment
 	 */
 	public Integer getMostRecent() {
-		return this.story.getMostRecent();
+		return story.getMostRecent();
 	}
 	
 	/**
@@ -295,7 +295,7 @@ public class ReadStoryManager {
 	 * @return StoryFragmentID of previous StoryFragment
 	 */
 	public Integer goBack() {
-		return this.story.goBack();
+		return story.goBack();
 	}
 	
 	/**
@@ -305,7 +305,7 @@ public class ReadStoryManager {
 	 * @param fragment_id ID of StoryFragment to be pushed to stack
 	 */
 	public void pushToStack(Integer fragmentId) {
-		this.story.pushToStack(fragmentId);
+		story.pushToStack(fragmentId);
 	}
     
 	/**
@@ -313,7 +313,7 @@ public class ReadStoryManager {
 	 * Used when a user decides to start a new reading session.
 	 */
 	public void clearHistory() {
-		this.story.clearHistory();
+		story.clearHistory();
 	}
 	
 	/**
@@ -322,7 +322,7 @@ public class ReadStoryManager {
 	 * @return an ArrayList of Media content for the fragment
 	 */
 	public ArrayList<Media> getMediaList(Integer fragmentId) {
-		StoryFragment fragment = this.getFragment(fragmentId);
+		StoryFragment fragment = getFragment(fragmentId);
 		return fragment.getContentList();
 	}
 

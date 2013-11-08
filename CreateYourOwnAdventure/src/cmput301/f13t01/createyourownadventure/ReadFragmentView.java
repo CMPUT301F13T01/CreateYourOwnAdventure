@@ -53,7 +53,7 @@ public class ReadFragmentView extends Fragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		GlobalManager app = (GlobalManager) activity.getApplication();
-		ReadStoryManager storyManager = app.getStoryManager();
+		this.storyManager = app.getStoryManager();
 	}
 
 	@Override

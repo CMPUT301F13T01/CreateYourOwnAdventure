@@ -31,6 +31,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,9 +46,8 @@ import android.view.View;
 public class ReadFragmentActivity extends FragmentActivity {
 
 	// declaration of variables
-	GlobalManager app = (GlobalManager) getApplication();
-	ReadStoryManager storyManager = app.getStoryManager();
 	FragmentManager fragmentManager;
+	ReadStoryManager storyManager;
 	UUID storyId;
 
 	/**
@@ -57,6 +57,8 @@ public class ReadFragmentActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		GlobalManager app = (GlobalManager) getApplication();
+		
 		setContentView(R.layout.activity_view_fragment);
 
 		// enable the Up button in action bar
@@ -70,16 +72,21 @@ public class ReadFragmentActivity extends FragmentActivity {
 
 		// set the story in the story manager
 		app.setStoryManager(storyId);
+		this.storyManager = app.getStoryManager();
+		
+		Log.d("Blah", "blah blah");
 
 		// depending if we are reading from beginning,
 		// fetch the appropriate fragment ID accordingly
 		int fragmentId;
-		Boolean Continue = (boolean) intent.getBooleanExtra(getResources()
+		Boolean fromBeginning = (boolean) intent.getBooleanExtra(getResources()
 				.getString(R.string.story_continue), false);
-		if (Continue) {
-			fragmentId = storyManager.getMostRecent();
-		} else {
+		if (fromBeginning) {
 			fragmentId = storyManager.getFirstPageId();
+			//fragmentId = 0;
+		} 
+		else {
+			fragmentId = storyManager.getMostRecent();
 		}
 
 		commitFragment(fragmentId);

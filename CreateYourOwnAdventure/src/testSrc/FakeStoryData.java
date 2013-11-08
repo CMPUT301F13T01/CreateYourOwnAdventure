@@ -17,7 +17,7 @@ import cmput301.f13t01.createyourownadventure.Text;
 // generates a fake story
 public class FakeStoryData {
 
-	public FakeStoryData() {
+	public static Story CreateFakeStory() {
 		// TODO Auto-generated constructor stub
 		
 		ReadStoryManager manager = new ReadStoryManager();
@@ -25,7 +25,7 @@ public class FakeStoryData {
 		// Fake story data
 		UUID storyid = UUID.randomUUID();
 		Story story = new Story();
-		Boolean stitle = manager.setTitle("Test Story");
+		manager.setStory(story);
 		Boolean sauthor = manager.setAuthor("Test Author");
 		Boolean sdescription = manager.setDescription("Test Description inserted");
 
@@ -81,5 +81,15 @@ public class FakeStoryData {
 		manager.addChoice(1, choice3f1);
 		manager.addChoice(2, choice1f2);
 		manager.addChoice(2, choice2f2);
+		
+		// Add fragments
+		Integer id1 = manager.addFragment(fragment1);
+		Integer id2 = manager.addFragment(fragment2);
+		Integer id3 = manager.addFragment(fragment3);
+		Boolean work = manager.setFirstPage(id1);
+		
+		Boolean stitle = manager.setTitle(work.toString());
+		
+		return manager.getStory();
 	}
 }
