@@ -18,6 +18,16 @@ public class StoryFragmentListFragment extends DialogFragment {
 
 	private StoryFragmentListListener listener;
 	private FragmentListAdapter adapter;
+	
+	static ChoiceListFragment newInstance() {
+		ChoiceListFragment f = new ChoiceListFragment();
+
+		// Supply id input as an argument.
+		Bundle args = new Bundle();
+		f.setArguments(args);
+
+		return f;
+	}
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -68,7 +78,7 @@ public class StoryFragmentListFragment extends DialogFragment {
 
 		GlobalManager app = (GlobalManager) getActivity().getApplication();
 		ArrayList<StoryFragmentInfo> info = new ArrayList<StoryFragmentInfo>();
-		// app.getStoryManager().getStoryInfoList();
+		app.getStoryManager().getFragmentInfoList();
 
 		this.adapter = new FragmentListAdapter(getActivity(), info);
 
