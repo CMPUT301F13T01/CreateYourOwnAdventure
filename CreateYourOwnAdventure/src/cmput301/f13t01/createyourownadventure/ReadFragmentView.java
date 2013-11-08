@@ -39,11 +39,11 @@ import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
 /**
- *         The view for the ReadFragmentActivity. Constructs the required
- *         fragment to display the media of the story fragment properly. Uses
- *         the story manager to access parts of the story for display.
- *
- * 		   @author Eddie Tai <eddie@ualberta.ca>
+ * The view for the ReadFragmentActivity. Constructs the required fragment to
+ * display the media of the story fragment properly. Uses the story manager to
+ * access parts of the story for display.
+ * 
+ * @author Eddie Tai <eddie@ualberta.ca>
  */
 public class ReadFragmentView extends Fragment {
 
@@ -72,11 +72,12 @@ public class ReadFragmentView extends Fragment {
 		// LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 		// LinearLayout.LayoutParams.MATCH_PARENT,
 		// LinearLayout.LayoutParams.WRAP_CONTENT);
-		
+
 		// fetch story fragment Id
-		String resourceString = getResources().getString(R.string.destination_id);
+		String resourceString = getResources().getString(
+				R.string.destination_id);
 		fragmentId = getArguments().getInt(resourceString);
-		
+
 		ArrayList<Media> mediaList = storyManager.getMediaList(fragmentId);
 
 		// cycle through the media list
@@ -85,7 +86,7 @@ public class ReadFragmentView extends Fragment {
 			Media media = mediaList.get(i);
 
 			// get media file's type and do class comparisons
-			
+
 			// for Text type of media
 			if (media.getClass().equals(Text.class)) {
 				Text text = (Text) media;
@@ -130,23 +131,24 @@ public class ReadFragmentView extends Fragment {
 				String s = choices.get(i).getFlavourText();
 				flavourText.add(s);
 			}
-			
+
 			// use for loop to make series of buttons consisting of the
 			// flavour texts
 
 			for (Integer i = 0; i < flavourText.size(); i++) {
 				Button choiceButton = new Button(getActivity());
 				choiceButton.setText(flavourText.get(i));
-				choiceButton.setId(i+1);
+				choiceButton.setId(i + 1);
 				choiceButton.setTextSize(12);
 				layout.addView(choiceButton);
-				
+
 				// set each button's controller to use Activity's function
 				choiceButton.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						storyManager.pushToStack(fragmentId);
-						((ReadFragmentActivity)getActivity()).onFragmentListClick(v, fragmentId);
+						((ReadFragmentActivity) getActivity())
+								.onFragmentListClick(v, fragmentId);
 					}
 				});
 			}

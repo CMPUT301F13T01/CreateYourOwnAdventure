@@ -57,49 +57,51 @@ public class ReadFragmentActivity extends FragmentActivity {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		GlobalManager app = (GlobalManager) getApplication();
+		if (savedInstanceState == null) {
+			super.onCreate(savedInstanceState);
+			GlobalManager app = (GlobalManager) getApplication();
 
-		setContentView(R.layout.activity_view_fragment);
+			setContentView(R.layout.activity_view_fragment);
 
-		// enable the Up button in action bar
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+			// enable the Up button in action bar
+			getActionBar().setDisplayHomeAsUpEnabled(true);
 
-		// intent has the story ID, and story fragment ID to display
-		Intent intent = getIntent();
-		// receive id of story fragment to show
-		storyId = (UUID) intent.getSerializableExtra(getResources().getString(
-				R.string.story_id));
+			// intent has the story ID, and story fragment ID to display
+			Intent intent = getIntent();
+			// receive id of story fragment to show
+			storyId = (UUID) intent.getSerializableExtra(getResources()
+					.getString(R.string.story_id));
 
-		// set the story in the story manager
-		app.setStoryManager(storyId);
-		this.storyManager = app.getStoryManager();
+			// set the story in the story manager
+			app.setStoryManager(storyId);
+			this.storyManager = app.getStoryManager();
 
-		// depending if we are reading from beginning,
-		// fetch the appropriate fragment ID accordingly
-		Integer fragmentId;
-		Boolean fromBeginning = (boolean) intent.getBooleanExtra(getResources()
-				.getString(R.string.story_continue), false);
-		if (fromBeginning) {
-			fragmentId = storyManager.getFirstPageId();
-			// fragmentId = 0;
-		} else {
-			// show first page if the story has never been read
-			fragmentId = storyManager.getMostRecent();
-			if (fragmentId.equals(null)) {
+			// depending if we are reading from beginning,
+			// fetch the appropriate fragment ID accordingly
+			Integer fragmentId;
+			Boolean fromBeginning = (boolean) intent.getBooleanExtra(
+					getResources().getString(R.string.story_continue), false);
+			if (fromBeginning) {
 				fragmentId = storyManager.getFirstPageId();
+				// fragmentId = 0;
+			} else {
+				// show first page if the story has never been read
+				fragmentId = storyManager.getMostRecent();
+				if (fragmentId.equals(null)) {
+					fragmentId = storyManager.getFirstPageId();
+				}
 			}
-		}
 
-		// if there is no first page set, exit readmode
-		if (fragmentId.equals(null)) {
-			Toast.makeText(getBaseContext(),
-					"First page has not been set for this story!",
-					Toast.LENGTH_LONG).show();
-			finish();
-		}
+			// if there is no first page set, exit readmode
+			if (fragmentId.equals(null)) {
+				Toast.makeText(getBaseContext(),
+						"First page has not been set for this story!",
+						Toast.LENGTH_LONG).show();
+				finish();
+			}
 
-		commitFragment(fragmentId);
+			commitFragment(fragmentId);
+		}
 	}
 
 	/**
