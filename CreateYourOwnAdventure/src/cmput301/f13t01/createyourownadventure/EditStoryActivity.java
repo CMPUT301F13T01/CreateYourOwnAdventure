@@ -75,15 +75,6 @@ public class EditStoryActivity extends FragmentActivity implements
 		startActivity(intent);
 	}
 
-	@SuppressWarnings("unused")
-	private void showFragmentSelection() {
-		DialogFragment newFragment = new StoryFragmentListFragment();
-
-		// window.setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		newFragment.show(getSupportFragmentManager(),
-				getResources().getString(R.string.fragment_list));
-	}
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle presses on the action bar items
@@ -136,6 +127,15 @@ public class EditStoryActivity extends FragmentActivity implements
 				.getString(R.string.story_save_toast), Toast.LENGTH_SHORT);
 		toast.show();
 		finish();
+	}
+	
+	public void onResume() {
+		super.onResume();
+		
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		DialogFragment newFragment = (DialogFragment) new StoryFragmentListFragment();
+		ft.replace(R.id.edit_story_linear, newFragment);
+		ft.commit();
 	}
 
 }
