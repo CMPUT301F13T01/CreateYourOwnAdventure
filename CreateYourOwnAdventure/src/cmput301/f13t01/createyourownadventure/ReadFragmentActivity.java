@@ -106,7 +106,8 @@ public class ReadFragmentActivity extends FragmentActivity {
 	 * Determines the resulting action of choosing a particular action in the
 	 * action bar.
 	 */
-	public boolean onOptionsItemSeqlected(MenuItem item) {
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
 
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {

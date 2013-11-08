@@ -26,8 +26,10 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +93,9 @@ public class ReadFragmentView extends Fragment {
 				// get media content's SpannableString as s
 				SpannableString s = text.getContent();
 				TextView tv = new TextView(getActivity());
-				tv.setText("s", BufferType.SPANNABLE);
+				tv.setTextColor(Color.BLACK);
+				tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+				tv.setText(s, BufferType.SPANNABLE);
 				layout.addView(tv);
 			}
 
@@ -141,6 +145,7 @@ public class ReadFragmentView extends Fragment {
 				choiceButton.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
+						storyManager.pushToStack(fragmentId);
 						((ReadFragmentActivity)getActivity()).onFragmentListClick(v, fragmentId);
 					}
 				});
