@@ -68,21 +68,6 @@ public class MainActivity extends Activity{
 		
 		//instantiate the local manager
 		objLibrary = new LocalManager(this.getApplicationContext());
-		//TODO this gets remove after demo
-	
-		//create and add fake stories to local library
-		for (int i = 1; i < 5; i++) {
-			//create fake story 
-			Story objStory = new Story();
-			String strCount = String.valueOf(i);
-			//give fake story an author, title and description
-			objStory.setAuthor("Author " + strCount);
-			objStory.setTitle("Fake Story" + strCount);
-			objStory.setDescription("fake story");
-			//add the story
-			objLibrary.addStory(objStory);
-		}
-		
 	}
 	
 	/**
