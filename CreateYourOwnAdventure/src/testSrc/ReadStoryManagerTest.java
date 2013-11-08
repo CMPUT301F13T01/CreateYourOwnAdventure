@@ -9,43 +9,54 @@ import cmput301.f13t01.createyourownadventure.StoryFragment;
 import cmput301.f13t01.createyourownadventure.Text;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 
 public class ReadStoryManagerTest extends TestCase {
-
-	// Creation of fake story data
-	ReadStoryManager manager;
-	Context context;
-	
-	// Fake story data
-	Integer storyid = 1;
-	Story story = new Story();
-	Boolean stitle = story.setTitle("Test Story");
-	Boolean sauthor = story.setAuthor("Test Author");
-	Boolean sdescription = story.setDescription("Test Description inserted");
-	Boolean sfirstPage = story.setFirstPage(1);
-	
-	// Fake media 1
-	SpannableString spanstring = new SpannableString("test spannable string").setSpan(what, start, end, flags)
-	Stylespan colorSpan = new ForegroundColorSpan(Color.RED);
-	Text text1 = new Text(spanstring);
-	
-	
-	// Fake fragment 1
-	StoryFragment fragment1 = new StoryFragment();
-	Boolean f1title = fragment1.setTitle("Fragment 1 title");
-	Boolean f1description = fragment1.setDescription("Fragment 1 description");
-	Boolean f1content = fragment1.addContent(f1media);
-	
-	// Fake fragment 2
-	StoryFragment fragment2 = new StoryFragment();
-	Boolean f2title = fragment2.setTitle("Fragment 2 title");
-	Boolean f2description = fragment2.setDescription("Fragment 2 description");
-	Boolean f2content = fragment2.addContent(f2media);
-	
 	
 	@Before
 	public void setUp() throws Exception {
 		this.manager = new ReadStoryManager(storyId, fragmentId, view, context);
 	}
+	
+	public Story createmockstory() {
+		// Creation of fake story data
+		ReadStoryManager manager;
+		Context context;
+		SpannableString spanString1;
+		
+		// Fake story data
+		Integer storyid = 1;
+		Story story = new Story();
+		Boolean stitle = story.setTitle("Test Story");
+		Boolean sauthor = story.setAuthor("Test Author");
+		Boolean sdescription = story.setDescription("Test Description inserted");
+		Boolean sfirstPage = story.setFirstPage(1);
+		
+		// Fake media 1
+		spanString1 = new SpannableString("test spannable string");
+		ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.RED);
+		StyleSpan boldSpan = new StyleSpan( Typeface.BOLD );
+		spanString1.setSpan(colorSpan, 0, 4, 0);
+		
+		
+		Text text1 = new Text(spanString1);
+		
+		
+		// Fake fragment 1
+		StoryFragment fragment1 = new StoryFragment();
+		Boolean f1title = fragment1.setTitle("Fragment 1 title");
+		Boolean f1description = fragment1.setDescription("Fragment 1 description");
+		Boolean f1content = fragment1.addContent(f1media);
+		
+		// Fake fragment 2
+		StoryFragment fragment2 = new StoryFragment();
+		Boolean f2title = fragment2.setTitle("Fragment 2 title");
+		Boolean f2description = fragment2.setDescription("Fragment 2 description");
+		Boolean f2content = fragment2.addContent(f2media);
+	}
+	
 }
