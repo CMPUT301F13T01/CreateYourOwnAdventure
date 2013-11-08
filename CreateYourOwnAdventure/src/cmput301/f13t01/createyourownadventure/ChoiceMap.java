@@ -2,7 +2,7 @@
 ChoiceMap class for CreateYourOwnAdventure.
 Allows for access to all choices linking fragments in a story
 
-     Copyright  ©2013 Reginald Miller
+     Copyright  ï¿½2013 Reginald Miller
     <Contact: rmiller3@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
@@ -176,7 +176,7 @@ public class ChoiceMap implements Serializable {
 		ArrayList<Choice> destinations = choiceMapping.get(fragmentId);
 		
 		if (destinations == null) {
-			return null;
+			return new ArrayList<Choice>();
 		}
 		else {
 			return destinations;
