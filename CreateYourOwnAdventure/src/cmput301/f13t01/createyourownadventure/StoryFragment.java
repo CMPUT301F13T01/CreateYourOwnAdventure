@@ -51,8 +51,8 @@ public class StoryFragment implements Serializable {
 	 * Instantiated with default values.
 	 */
 	public StoryFragment() {
-		this.title = "New Page";
-		this.description = "A new page";
+//		this.title = "New Page";
+//		this.description = "A new page";
 		this.contentList = new ArrayList<Media>();
 		this.annotationList = new ArrayList<Media>();
 	}

@@ -3,7 +3,7 @@ EditFragmentChoiceActivity activity for CreateYourOwnAdventure.
 This is the activity that allows the user to edit a particular choice
 for a particular story fragment.
 
-     Copyright  ©2013 Jesse Huard
+     Copyright  ï¿½2013 Jesse Huard
     <Contact: jhuard@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
@@ -30,7 +30,6 @@ import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,11 +38,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * The activity that allows the user to edit a choice in
- * a particular fragment.
+ * This activity allows the user to edit a choice in a particular fragment.
  * 
  * @author Jesse Huard
- *
+ * 
  */
 
 public class EditFragmentChoiceActivity extends Activity implements
@@ -165,17 +163,19 @@ public class EditFragmentChoiceActivity extends Activity implements
 		if (choice.getDestinationId() != null) {
 			TextView flavourText = (TextView) findViewById(R.id.edit_choice_flavour);
 			choice.setFlavourText(flavourText.getText().toString());
-			if(isNew)
+			if (isNew)
 				manager.addChoice(sourceId, choice);
 			else
 				manager.updateChoice(sourceId, position, choice);
-			
-			Toast toast = Toast.makeText(getApplicationContext(), getResources()
-					.getString(R.string.choice_saved_toast), Toast.LENGTH_SHORT);
+
+			Toast toast = Toast.makeText(getApplicationContext(),
+					getResources().getString(R.string.choice_saved_toast),
+					Toast.LENGTH_SHORT);
 			toast.show();
 		} else {
-			Toast toast = Toast.makeText(getApplicationContext(), getResources()
-					.getString(R.string.choice_not_saved_toast), Toast.LENGTH_SHORT);
+			Toast toast = Toast.makeText(getApplicationContext(),
+					getResources().getString(R.string.choice_not_saved_toast),
+					Toast.LENGTH_SHORT);
 			toast.show();
 		}
 

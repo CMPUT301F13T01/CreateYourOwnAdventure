@@ -1,9 +1,9 @@
 /*
 ChoiceListFragment class for CreateYourOwnAdventure.
-This is the fragment that appears when selection of a choice from
-a list is needed.
+This class is used to create a dialog to show all available choices 
+for a fragment, and handle user selection of choices.
 
-     Copyright  ©2013 Jesse Huard
+     Copyright  ï¿½2013 Jesse Huard
     <Contact: jhuard@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
@@ -40,11 +40,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 /**
- * This is the fragment that appears when a list of choices
- * needs to be viewed.
+ * This class is used to create a dialog to show all available choices for a
+ * fragment, and handle user selection of choices. This dialog can be statically
+ * instantiated by giving it a fragmentId.
  * 
  * @author Jesse Huard
- *
+ * 
  */
 
 public class ChoiceListFragment extends DialogFragment {
@@ -78,11 +79,12 @@ public class ChoiceListFragment extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		int fragmentId = getArguments().getInt(idString);
-		
+
 		GlobalManager app = (GlobalManager) getActivity().getApplication();
-		ArrayList<Choice> choices = app.getStoryManager().getChoices(fragmentId);
+		ArrayList<Choice> choices = app.getStoryManager()
+				.getChoices(fragmentId);
 
 		ChoiceListAdapter adapt = new ChoiceListAdapter(getActivity(), choices);
 		this.adapter = adapt;
@@ -101,10 +103,10 @@ public class ChoiceListFragment extends DialogFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Dialog dialog = getDialog();
-		Window window = dialog.getWindow();
-		window.setGravity(Gravity.TOP);
-		
+//		Dialog dialog = getDialog();
+//		Window window = dialog.getWindow();
+//		window.setGravity(Gravity.TOP);
+
 		int fragmentId = getArguments().getInt(idString);
 
 		GlobalManager app = (GlobalManager) getActivity().getApplication();

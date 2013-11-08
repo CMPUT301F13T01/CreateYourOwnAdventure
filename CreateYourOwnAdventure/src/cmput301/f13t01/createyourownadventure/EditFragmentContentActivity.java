@@ -1,3 +1,28 @@
+/*
+EditFragmentContentActivity activity for CreateYourOwnAdventure.
+This is the activity that allows the user to edit a particular 
+story fragment's content.
+
+     Copyright  �2013 Jesse Huard
+    <Contact: jhuard@ualberta.ca>
+    
+    License GPLv3: GNU GPL Version 3
+    <http://gnu.org/licenses/gpl.html>.
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
@@ -9,7 +34,6 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +42,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+/**
+ * This activity allows the user to edit and maintain a particular story
+ * fragment's content.
+ * 
+ * @author Jesse Huard
+ * 
+ */
 
 public class EditFragmentContentActivity extends Activity implements
 		ChoiceListListener {
@@ -109,8 +141,9 @@ public class EditFragmentContentActivity extends Activity implements
 	}
 
 	private void onSelectPreview() {
-		Intent intent = new Intent(getApplicationContext(), PreviewFragmentActivity.class);
-		
+		Intent intent = new Intent(getApplicationContext(),
+				PreviewFragmentActivity.class);
+
 		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 		StoryFragment previewFragment = storyFragment;
 		previewFragment.removeAllContent();
@@ -123,10 +156,10 @@ public class EditFragmentContentActivity extends Activity implements
 				previewFragment.addContent(new Text(string));
 			}
 		}
-		
+
 		intent.putExtra(getResources().getString(R.string.story_fragment),
 				previewFragment);
-		
+
 		startActivity(intent);
 	}
 
@@ -140,7 +173,7 @@ public class EditFragmentContentActivity extends Activity implements
 
 		DialogFragment newFragment = (DialogFragment) ChoiceListFragment
 				.newInstance(fragmentId);
-		newFragment.show(ft, "dialog");		
+		newFragment.show(ft, "dialog");
 	}
 
 	private void onSelectAddContent() {

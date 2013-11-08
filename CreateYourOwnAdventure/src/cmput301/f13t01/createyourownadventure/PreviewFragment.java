@@ -3,7 +3,7 @@ PreviewFragment class for CreateYourOwnAdventure.
 This fragment is used to view the preview of a given story
 fragment while it is being edited, for ease of use.
 
-     Copyright  ©2013 Jesse Huard
+     Copyright  ï¿½2013 Jesse Huard
     <Contact: jhuard@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
@@ -42,6 +42,8 @@ import android.widget.TextView;
  * fragment that is currently being edited.
  * 
  * @author Jesse Huard
+ * @deprecated
+ * @see EditFragment
  *
  */
 

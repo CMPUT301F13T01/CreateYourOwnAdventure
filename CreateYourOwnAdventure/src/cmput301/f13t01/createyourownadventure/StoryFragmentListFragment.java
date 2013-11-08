@@ -1,9 +1,10 @@
 /*
 StoryFragmentListFragment class for CreateYourOwnAdventure.
-This is the fragment that will be used to display the story 
-fragments of a given story wherever they are needed.
+This class is used to create a dialog to show all available fragments for a
+story, and handle user selection of fragments. This dialog can be statically
+instantiated.
 
-     Copyright  ©2013 Jesse Huard
+     Copyright  ï¿½2013 Jesse Huard
     <Contact: jhuard@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
@@ -35,18 +36,19 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 /**
- * The fragment that is used to display the list of story fragments
- * wherever they may be needed.
+ * This class is used to create a dialog to show all available fragments for a
+ * story, and handle user selection of fragments. This dialog can be statically
+ * instantiated.
  * 
  * @author Jesse Huard
- *
+ * 
  */
 
 public class StoryFragmentListFragment extends DialogFragment {
 
 	private StoryFragmentListListener listener;
 	private FragmentListAdapter adapter;
-	
+
 	static StoryFragmentListFragment newInstance() {
 		StoryFragmentListFragment f = new StoryFragmentListFragment();
 
@@ -90,22 +92,21 @@ public class StoryFragmentListFragment extends DialogFragment {
 		return builder.create();
 	}
 
-/*	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		Dialog dialog = getDialog();
-		Window window = dialog.getWindow();
-		window.setGravity(Gravity.TOP);
-
-		return super.onCreateView(inflater, container, savedInstanceState);
-	}*/
+	/*
+	 * @Override public View onCreateView(LayoutInflater inflater, ViewGroup
+	 * container, Bundle savedInstanceState) { Dialog dialog = getDialog();
+	 * Window window = dialog.getWindow(); window.setGravity(Gravity.TOP);
+	 * 
+	 * return super.onCreateView(inflater, container, savedInstanceState); }
+	 */
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		GlobalManager app = (GlobalManager) getActivity().getApplication();
-		ArrayList<StoryFragmentInfo> info = app.getStoryManager().getFragmentInfoList();
+		ArrayList<StoryFragmentInfo> info = app.getStoryManager()
+				.getFragmentInfoList();
 
 		this.adapter = new FragmentListAdapter(getActivity(), info);
 
