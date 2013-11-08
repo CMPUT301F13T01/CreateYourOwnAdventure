@@ -40,12 +40,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * The activity that allows the user to edit a story's information,
- * in addition to make decisions regarding which fragment they would
- * like to view, add, etc.
+ * The activity that allows the user to edit a story's information, in addition
+ * to make decisions regarding which fragment they would like to view, add, etc.
  * 
  * @author Jesse Huard
- *
+ * 
  */
 
 public class EditStoryActivity extends FragmentActivity implements
@@ -77,26 +76,32 @@ public class EditStoryActivity extends FragmentActivity implements
 
 		isNew = (boolean) intent.getBooleanExtra(
 				getResources().getString(R.string.story_is_new), false);
-		if (isNew == false) {
-			storyId = (UUID) intent.getSerializableExtra(getResources()
-					.getString(R.string.story_id));
-			app.setStoryManager(storyId);
 
-			EditText title = (EditText) findViewById(R.id.edit_story_title);
-			EditText author = (EditText) findViewById(R.id.edit_story_author);
-			EditText desc = (EditText) findViewById(R.id.edit_story_description);
-
-			title.setText(manager.getTitle());
-			author.setText(manager.getAuthor());
-			desc.setText(manager.getDescription());
-
+		final Story story = (Story) getLastCustomNonConfigurationInstance();
+		if (story != null) {
+			app.setStoryManager(story);
 		} else {
-			storyId = app.createAndSetStory();
+			if (isNew == false) {
+				storyId = (UUID) intent.getSerializableExtra(getResources()
+						.getString(R.string.story_id));
+				app.setStoryManager(storyId);
+
+				EditText title = (EditText) findViewById(R.id.edit_story_title);
+				EditText author = (EditText) findViewById(R.id.edit_story_author);
+				EditText desc = (EditText) findViewById(R.id.edit_story_description);
+
+				title.setText(manager.getTitle());
+				author.setText(manager.getAuthor());
+				desc.setText(manager.getDescription());
+
+			} else {
+				storyId = app.createAndSetStory();
+			}
 		}
-		
+
 		TextView firstPage = (TextView) findViewById(R.id.edit_first_page);
 		StoryFragment firstPageFragment = manager.getFirstPage();
-		
+
 		if (firstPageFragment == null) {
 			firstPage
 					.setText(getResources().getString(R.string.first_page)
@@ -246,6 +251,12 @@ public class EditStoryActivity extends FragmentActivity implements
 		android.app.DialogFragment newFragment = (android.app.DialogFragment) StoryFragmentListFragment
 				.newInstance();
 		newFragment.show(ft, "dialog");
+	}
+
+	@Override
+	public Object onRetainCustomNonConfigurationInstance() {
+		final Story story = manager.getStory();
+		return story;
 	}
 
 }

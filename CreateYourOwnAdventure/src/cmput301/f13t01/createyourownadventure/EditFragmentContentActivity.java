@@ -75,7 +75,6 @@ public class EditFragmentContentActivity extends Activity implements
 		Intent intent = getIntent();
 
 		if (intent != null) {
-			Log.d("oops", "WHY ARE YOU STARTING AGAIN?");
 			fragmentId = (int) intent.getIntExtra(
 					getResources().getString(R.string.fragment_id), -1);
 			storyFragment = (StoryFragment) intent

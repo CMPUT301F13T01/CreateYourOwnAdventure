@@ -30,6 +30,7 @@ import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,6 +77,7 @@ public class EditFragmentChoiceActivity extends Activity implements
 
 		position = intent.getIntExtra(
 				getResources().getString(R.string.choice_position), -1);
+		Log.d("oops", "pos start: " + position);
 
 		isNew = intent.getBooleanExtra(
 				getResources().getString(R.string.choice_is_new), true);
@@ -160,6 +162,7 @@ public class EditFragmentChoiceActivity extends Activity implements
 
 	@Override
 	public void onBackPressed() {
+		Log.d("oops", "pos: " + position);
 		if (choice.getDestinationId() != null) {
 			TextView flavourText = (TextView) findViewById(R.id.edit_choice_flavour);
 			choice.setFlavourText(flavourText.getText().toString());

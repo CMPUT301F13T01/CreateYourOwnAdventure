@@ -101,4 +101,8 @@ public class GlobalManager extends Application {
 		Story story = readManager.getStory();
 		localManager.saveStory(storyId, story);
 	}
+
+	public void setStoryManager(Story story) {
+		readManager.setStory(story);
+	}
 }
