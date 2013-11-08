@@ -3,7 +3,7 @@ EditFragment class for CreateYourOwnAdventure.
 This is the fragment that will contain the means to add,
 delete, and edit media for a particular story fragment.
 
-     Copyright  ©2013 Jesse Huard
+     Copyright  ï¿½2013 Jesse Huard
     <Contact: jhuard@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
@@ -36,11 +36,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 /**
- * Fragment that grabs the media and displays them, but also
- * allows for the editing of them.
+ * Displays a story fragment and allows for it to be edited.
  * 
  * @author Jesse Huard
- *
+ * @deprecated
+ * 
  */
 
 public class EditFragment extends Fragment {

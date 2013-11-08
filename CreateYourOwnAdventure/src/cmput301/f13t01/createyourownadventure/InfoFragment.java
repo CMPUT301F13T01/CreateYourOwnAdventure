@@ -3,7 +3,7 @@ InfoFragment class for CreateYourOwnAdventure.
 This is the fragment that displays the information of a
 given story fragment.
 
-     Copyright  ©2013 Jesse Huard
+     Copyright  ï¿½2013 Jesse Huard
     <Contact: jhuard@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
@@ -38,6 +38,8 @@ import android.widget.EditText;
  * of a given story fragment.
  * 
  * @author Jesse Huard
+ * @deprecated
+ * @see EditFragment
  * 
  */
 public class InfoFragment extends Fragment {

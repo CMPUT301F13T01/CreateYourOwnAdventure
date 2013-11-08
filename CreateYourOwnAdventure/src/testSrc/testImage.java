@@ -1,10 +1,12 @@
 package testSrc;
 
-import static org.junit.Assert.fail;
 import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import cmput301.f13t01.createyourownadventure.Image;
+
 
 public class testImage extends TestCase {
 
@@ -14,9 +16,16 @@ public class testImage extends TestCase {
 	}
 	
 	@Test
-	public void testContent() {
-		assertTrue(true);
-		fail("Not yet implemented");
+	public void testSetContent() {
+		Image image = new Image();
+		
+		String content = "resourceidentifier";
+		
+		image.setContent(content);
+		
+		String resourceString = image.getContent();
+		
+		assertTrue(resourceString.equals(content));
 	}
 
 }

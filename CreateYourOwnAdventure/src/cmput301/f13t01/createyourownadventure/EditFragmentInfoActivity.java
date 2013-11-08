@@ -1,7 +1,7 @@
 /*
 EditFragmentInfoActivity activity for CreateYourOwnAdventure.
-This is the activity that allows the user to add, delete 
-or edit a particular story fragment's information.
+This is the activity that allows the user to edit a particular 
+story fragment's information.
 
      Copyright  �2013 Jesse Huard
     <Contact: jhuard@ualberta.ca>
@@ -38,11 +38,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * The activity that allows the user to edit and maintain a
- * particular story fragment's information.
+ * This activity allows the user to edit and maintain a particular story
+ * fragment's information.
  * 
  * @author Jesse Huard
- *
+ * 
  */
 
 public class EditFragmentInfoActivity extends Activity {
@@ -122,7 +122,6 @@ public class EditFragmentInfoActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-
 	private void onSelectDelete() {
 		manager.removeFragment(fragmentId);
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
@@ -152,7 +151,7 @@ public class EditFragmentInfoActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		
+
 		EditText title = (EditText) findViewById(R.id.fragment_title);
 		EditText desc = (EditText) findViewById(R.id.fragment_description);
 
