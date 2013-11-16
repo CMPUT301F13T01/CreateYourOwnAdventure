@@ -72,18 +72,19 @@ public class EditStoryActivity extends FragmentActivity implements
 		GlobalManager app = (GlobalManager) getApplication();
 		manager = app.getStoryManager();
 
-		Intent intent = getIntent();
+		if (savedInstanceState != null) {
+			isNew = savedInstanceState.getBoolean(getResources().getString(
+					R.string.story_is_new));
+			storyId = (UUID) savedInstanceState.getSerializable(getResources()
+					.getString(R.string.story_id));
 
-		isNew = (boolean) intent.getBooleanExtra(
-				getResources().getString(R.string.story_is_new), false);
-
-		if ( savedInstanceState != null) {
-			final Story story = (Story) savedInstanceState.get(getResources().getString(R.string.story));
-			app.setStoryManager(story);
-			
-			isNew = savedInstanceState.getBoolean(getResources().getString(R.string.story_is_new));
-			storyId = (UUID) savedInstanceState.getSerializable(getResources().getString(R.string.story_id));
+			app.setStoryManager(storyId);
 		} else {
+			Intent intent = getIntent();
+
+			isNew = (boolean) intent.getBooleanExtra(
+					getResources().getString(R.string.story_is_new), false);
+
 			if (isNew == false) {
 				storyId = (UUID) intent.getSerializableExtra(getResources()
 						.getString(R.string.story_id));
@@ -236,13 +237,14 @@ public class EditStoryActivity extends FragmentActivity implements
 				.newInstance();
 		newFragment.show(ft, "dialog");
 	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putSerializable(getResources().getString(R.string.story), manager.getStory());
-		outState.putBoolean(getResources().getString(R.string.story_is_new), isNew);
-		outState.putSerializable(getResources().getString(R.string.story_id), storyId);
+		outState.putBoolean(getResources().getString(R.string.story_is_new),
+				isNew);
+		outState.putSerializable(getResources().getString(R.string.story_id),
+				storyId);
 	}
 
 }
