@@ -47,7 +47,7 @@ import android.widget.Toast;
 public class ReadFragmentActivity extends FragmentActivity {
 
 	// declaration of variables
-	//FragmentManager fragmentManager;
+	// FragmentManager fragmentManager;
 	ReadStoryManager storyManager;
 	UUID storyId;
 	Integer fragmentId;
@@ -58,14 +58,23 @@ public class ReadFragmentActivity extends FragmentActivity {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		if (savedInstanceState == null) {
-			super.onCreate(savedInstanceState);
-			GlobalManager app = (GlobalManager) getApplication();
+		super.onCreate(savedInstanceState);
 
-			setContentView(R.layout.activity_view_fragment);
+		GlobalManager app = (GlobalManager) getApplication();
 
-			// enable the Up button in action bar
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		setContentView(R.layout.activity_view_fragment);
+
+		// enable the Up button in action bar
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+
+		if (savedInstanceState != null) {
+			storyId = (UUID) savedInstanceState.getSerializable(getResources()
+					.getString(R.string.story_id));
+			app.setStoryManager(storyId);
+			this.storyManager = app.getStoryManager();
+			fragmentId = storyManager.getMostRecent();		
+
+		} else {
 
 			// intent has the story ID, and story fragment ID to display
 			Intent intent = getIntent();
@@ -87,7 +96,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 			} else {
 				// show first page if the story has never been read
 				fragmentId = storyManager.getMostRecent();
-				if (fragmentId==null) {
+				if (fragmentId == null) {
 					fragmentId = storyManager.getFirstPageId();
 				}
 			}
@@ -99,9 +108,9 @@ public class ReadFragmentActivity extends FragmentActivity {
 						Toast.LENGTH_LONG).show();
 				finish();
 			}
-
-			commitFragment(fragmentId);
 		}
+
+		commitFragment(fragmentId);
 	}
 
 	/**
@@ -135,7 +144,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	/**
 	 * Saves the history.
 	 */
@@ -148,7 +157,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 		LocalManager save = glob.getLocalManager();
 		save.saveStory(this.storyId, this.storyManager.getStory());
 	}
-	
+
 	/**
 	 * Go to the beginning (first page) of a story. Apprehend the current page
 	 * to the history stack History is cleared.
@@ -241,5 +250,12 @@ public class ReadFragmentActivity extends FragmentActivity {
 		newFragment.setArguments(bundle);
 		fragmentTransaction.replace(R.id.read_fragment_activity, newFragment);
 		fragmentTransaction.commit();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(getResources().getString(R.string.story_id),
+				storyId);
 	}
 }
