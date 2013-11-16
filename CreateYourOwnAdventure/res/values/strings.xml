@@ -57,6 +57,7 @@
     <string name="choice_flavour_hint">Choice Flavour</string>
 
     <!-- String used for passing intents -->
+    <string name="story">Story</string>
     <string name="choice_position">Choice Position</string>
     <string name="story_is_new">Story Status</string>
     <string name="story_id">Story ID</string>

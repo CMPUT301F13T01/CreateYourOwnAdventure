@@ -77,9 +77,12 @@ public class EditStoryActivity extends FragmentActivity implements
 		isNew = (boolean) intent.getBooleanExtra(
 				getResources().getString(R.string.story_is_new), false);
 
-		final Story story = (Story) getLastCustomNonConfigurationInstance();
-		if (story != null) {
+		if ( savedInstanceState != null) {
+			final Story story = (Story) savedInstanceState.get(getResources().getString(R.string.story));
 			app.setStoryManager(story);
+			
+			isNew = savedInstanceState.getBoolean(getResources().getString(R.string.story_is_new));
+			storyId = (UUID) savedInstanceState.getSerializable(getResources().getString(R.string.story_id));
 		} else {
 			if (isNew == false) {
 				storyId = (UUID) intent.getSerializableExtra(getResources()
@@ -112,12 +115,6 @@ public class EditStoryActivity extends FragmentActivity implements
 			firstPage.setText(getResources().getString(R.string.first_page)
 					+ " " + manager.getFirstPage().getTitle());
 		}
-
-		// FragmentTransaction ft = getFragmentManager().beginTransaction();
-		// Fragment newFragment = (Fragment) StoryFragmentListFragment
-		// .newInstance();
-		// ft.add(R.id.fragment_container, newFragment);
-		// ft.commit();
 
 	}
 
@@ -225,19 +222,6 @@ public class EditStoryActivity extends FragmentActivity implements
 		finish();
 	}
 
-	// public void onResume() {
-	// super.onResume();
-	//
-	// Log.d("oops", "Resumed EditStory");
-	// Log.d("oops", "Size: " + manager.getFragmentInfoList().size());
-	//
-	// FragmentTransaction ft = getFragmentManager().beginTransaction();
-	// DialogFragment newFragment = (DialogFragment) StoryFragmentListFragment
-	// .newInstance();
-	// ft.replace(R.id.fragment_container, newFragment);
-	// ft.commit();
-	// }
-
 	public void showFragmentSelection() {
 		android.app.FragmentTransaction ft = getFragmentManager()
 				.beginTransaction();
@@ -252,11 +236,13 @@ public class EditStoryActivity extends FragmentActivity implements
 				.newInstance();
 		newFragment.show(ft, "dialog");
 	}
-
+	
 	@Override
-	public Object onRetainCustomNonConfigurationInstance() {
-		final Story story = manager.getStory();
-		return story;
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(getResources().getString(R.string.story), manager.getStory());
+		outState.putBoolean(getResources().getString(R.string.story_is_new), isNew);
+		outState.putSerializable(getResources().getString(R.string.story_id), storyId);
 	}
 
 }
