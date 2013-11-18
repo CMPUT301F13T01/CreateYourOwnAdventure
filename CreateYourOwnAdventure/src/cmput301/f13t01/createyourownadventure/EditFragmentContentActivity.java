@@ -36,11 +36,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.Toast;
 
 /**
@@ -52,7 +56,7 @@ import android.widget.Toast;
  */
 
 public class EditFragmentContentActivity extends Activity implements
-		ChoiceListListener {
+		ChoiceListListener, OnMenuItemClickListener {
 
 	static final int EDIT_CHOICE = 0;
 
@@ -176,6 +180,36 @@ public class EditFragmentContentActivity extends Activity implements
 	}
 
 	private void onSelectAddContent() {
+		View v = findViewById(R.id.action_edit_add_content);
+
+		PopupMenu popup = new PopupMenu(this, v);
+		MenuInflater inflater = popup.getMenuInflater();
+		inflater.inflate(R.menu.add_content_menu, popup.getMenu());
+		
+		popup.setOnMenuItemClickListener(this);
+
+		popup.show();
+
+	}
+
+	@Override
+	public boolean onMenuItemClick(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_edit_add_text:
+			onSelectAddText();
+			return true;
+		case R.id.action_edit_add_image:
+			return true;
+		case R.id.action_edit_add_sound:
+			return true;
+		case R.id.action_edit_add_video:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	private void onSelectAddText() {
 		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,

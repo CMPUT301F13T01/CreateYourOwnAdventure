@@ -5,6 +5,8 @@
         android:title="@string/action_edit_preview"/>
     <item
         android:id="@+id/action_edit_add_content"
+        android:icon="@drawable/add_content"
+        android:showAsAction="always"
         android:title="@string/action_edit_add_content"/>
     <item
         android:id="@+id/action_edit_add_choice"
@@ -12,8 +14,5 @@
     <item
         android:id="@+id/action_edit_edit_choice"
         android:title="@string/action_edit_edit_choice"/>
-    <item
-        android:id="@+id/action_edit_cancel"
-        android:title="@string/action_edit_cancel"/>
 
 </menu>
