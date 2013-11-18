@@ -12,8 +12,5 @@
     <item
         android:id="@+id/action_edit_add_video"
         android:title="@string/action_edit_add_video"/>
-    <item
-        android:id="@+id/action_edit_cancel"
-        android:title="@string/action_edit_cancel"/>
 
 </menu>
