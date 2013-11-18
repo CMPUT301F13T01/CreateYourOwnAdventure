@@ -274,9 +274,9 @@ public class ReadStoryManager {
 	public ArrayList<Choice> getChoices(int fragmentId) {
 		return story.getChoices(fragmentId);
 	}
-    
 	
     /* Functions that deal with the History */
+	
 	/**
 	 * Returns the ID of the last-viewed Story Fragment.
 	 * If History is empty, returns null.
@@ -324,6 +324,16 @@ public class ReadStoryManager {
 	public ArrayList<Media> getMediaList(Integer fragmentId) {
 		StoryFragment fragment = getFragment(fragmentId);
 		return fragment.getContentList();
+	}
+	
+	/**
+	 * Given a fragment Id for a story, fetch the Annotation List for a fragment
+	 * 
+	 * @return an ArrayList of Media content for the fragment
+	 */
+	public ArrayList<Media> getAnnotationList(Integer fragmentId) {
+		StoryFragment fragment = getFragment(fragmentId);
+		return fragment.getAnnotationList();
 	}
 
 }

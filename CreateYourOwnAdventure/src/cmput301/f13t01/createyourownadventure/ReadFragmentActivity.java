@@ -24,6 +24,7 @@ ReadStoryManager to control the content and interaction.
 package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 import android.app.FragmentManager;
@@ -31,7 +32,6 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -202,7 +202,6 @@ public class ReadFragmentActivity extends FragmentActivity {
 	 *            the id of the fragment to be displayed next
 	 */
 	public void onFragmentListClick(View v, Integer fragmentId) {
-		// TODO Auto-generated method stub
 		// Save the history
 		storyManager.pushToStack(fragmentId);
 		GlobalManager glob = (GlobalManager) getApplication();
@@ -212,7 +211,19 @@ public class ReadFragmentActivity extends FragmentActivity {
 		int selectedChoice = v.getId() - 1;
 
 		ArrayList<Choice> choiceList = storyManager.getChoices(fragmentId);
+		
+		// if random choice is selected, pick a random choice from choiceList
+		if (selectedChoice == choiceList.size()) {
+			Random random = new Random();
+			selectedChoice = random.nextInt(choiceList.size());
+		}
 		Choice choice = choiceList.get(selectedChoice);
+		
+		// make a toast to show the choice that the reader has selected
+		String s = choice.getFlavourText();
+		Toast.makeText(getBaseContext(),"You have selected choice \"" +
+				s+"\"",Toast.LENGTH_LONG).show();
+		
 		Integer destinationId = choice.getDestinationId();
 
 		// generate new fragment to replace the old one
