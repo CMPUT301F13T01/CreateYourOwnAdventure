@@ -321,6 +321,7 @@ public class ReadStoryManager {
 	 * 
 	 * @return an ArrayList of Media content for the fragment
 	 */
+	@SuppressWarnings("rawtypes")
 	public ArrayList<Media> getMediaList(Integer fragmentId) {
 		StoryFragment fragment = getFragment(fragmentId);
 		return fragment.getContentList();
@@ -331,6 +332,7 @@ public class ReadStoryManager {
 	 * 
 	 * @return an ArrayList of Media content for the fragment
 	 */
+	@SuppressWarnings("rawtypes")
 	public ArrayList<Media> getAnnotationList(Integer fragmentId) {
 		StoryFragment fragment = getFragment(fragmentId);
 		return fragment.getAnnotationList();

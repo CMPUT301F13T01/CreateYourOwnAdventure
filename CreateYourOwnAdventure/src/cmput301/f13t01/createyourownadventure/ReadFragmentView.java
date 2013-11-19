@@ -117,12 +117,13 @@ public class ReadFragmentView extends Fragment {
 				// TO-DO
 			}
 		}
-		
+
 		// shows the annotations for the fragment, if any
-		ArrayList<Media> annotateList = storyManager.getAnnotationList(fragmentId);
+		ArrayList<Media> annotateList = storyManager
+				.getAnnotationList(fragmentId);
 
 		// add the re-factored view maker here
-		
+
 		// from story level with fragment id, get the array list of choice
 		// objects
 		ArrayList<Choice> choices = storyManager.getChoices(fragmentId);
@@ -143,7 +144,7 @@ public class ReadFragmentView extends Fragment {
 
 			for (Integer i = 0; i < flavourText.size(); i++) {
 				Button choiceButton = new Button(getActivity());
-				
+
 				choiceButton.setText(flavourText.get(i));
 				choiceButton.setId(i + 1);
 				choiceButton.setTextSize(12);
@@ -158,25 +159,26 @@ public class ReadFragmentView extends Fragment {
 					}
 				});
 			}
-			
+
 			// add a random choice if there are at least 2 choices
 			if (flavourText.size() > 1) {
 				Button randomChoiceButton = new Button(getActivity());
 				randomChoiceButton.setText("Pick a random choice!");
-				randomChoiceButton.setId(flavourText.size()+1);
+				randomChoiceButton.setId(flavourText.size() + 1);
 				randomChoiceButton.setTextSize(12);
 				layout.addView(randomChoiceButton);
 
 				// set the button's controller to use Activity's function
-				randomChoiceButton.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						((ReadFragmentActivity) getActivity())
-								.onFragmentListClick(v, fragmentId);
-					}
-				});
+				randomChoiceButton
+						.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								((ReadFragmentActivity) getActivity())
+										.onFragmentListClick(v, fragmentId);
+							}
+						});
 			}
-			
+
 		}
 
 		return scrollable;

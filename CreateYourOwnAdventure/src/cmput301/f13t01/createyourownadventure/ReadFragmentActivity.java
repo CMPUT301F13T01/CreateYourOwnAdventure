@@ -72,7 +72,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 					.getString(R.string.story_id));
 			app.setStoryManager(storyId);
 			this.storyManager = app.getStoryManager();
-			fragmentId = storyManager.getMostRecent();		
+			fragmentId = storyManager.getMostRecent();
 
 		} else {
 
@@ -211,19 +211,20 @@ public class ReadFragmentActivity extends FragmentActivity {
 		int selectedChoice = v.getId() - 1;
 
 		ArrayList<Choice> choiceList = storyManager.getChoices(fragmentId);
-		
+
 		// if random choice is selected, pick a random choice from choiceList
 		if (selectedChoice == choiceList.size()) {
 			Random random = new Random();
 			selectedChoice = random.nextInt(choiceList.size());
 		}
 		Choice choice = choiceList.get(selectedChoice);
-		
+
 		// make a toast to show the choice that the reader has selected
 		String s = choice.getFlavourText();
-		Toast.makeText(getBaseContext(),"You have selected choice \"" +
-				s+"\"",Toast.LENGTH_LONG).show();
-		
+		Toast.makeText(getBaseContext(),
+				"You have selected choice \"" + s + "\"", Toast.LENGTH_LONG)
+				.show();
+
 		Integer destinationId = choice.getDestinationId();
 
 		// generate new fragment to replace the old one
