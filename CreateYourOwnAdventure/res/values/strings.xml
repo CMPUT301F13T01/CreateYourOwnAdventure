@@ -87,5 +87,8 @@
     <string name="title_activity_edit_fragment_choice">Edit Choice</string>
     <string name="choice">Choice</string>
     <string name="title_activity_preview_fragment">PreviewFragmentActivity</string>
+    
+    <string name="display_help">Help</string>
+    <string name="action_help">Help</string>
 
 </resources>
