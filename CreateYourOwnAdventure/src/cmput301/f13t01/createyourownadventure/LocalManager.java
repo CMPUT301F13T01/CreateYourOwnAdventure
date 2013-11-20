@@ -193,7 +193,7 @@ public class LocalManager implements Serializable, LibraryManager {
 		// Attempts to save a Story to a file
 		try{
 		    // Generate the save file name
-		    String saveFile = id.toString()+".story";
+		    String saveFile = "./stories/"+id.toString()+".story";
 			// Output streams to save Story object
 			FileOutputStream fos = context.openFileOutput(saveFile, Context.MODE_PRIVATE);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -219,7 +219,7 @@ public class LocalManager implements Serializable, LibraryManager {
 	 */
 	public Story loadStory(UUID id) {
 	    // Generate the save file name
-	    String saveFile = id.toString()+".story";
+	    String saveFile = "./stories/"+id.toString()+".story";
 		// Attempts to Story from file
 		try {
 			// Input streams to load Story object
@@ -239,6 +239,34 @@ public class LocalManager implements Serializable, LibraryManager {
 		} catch (ClassNotFoundException e) {
 			return null;
 		}
+	}
+	
+	/**
+	 * Saves a given image and returns the ID assigned.
+	 * 
+	 * @param image the image to save
+	 * @return the ID that the image was saved with
+	 */
+	public UUID saveImage(String image) {
+		UUID id = UUID.randomUUID();
+		// Attempts to save a Image to a file
+		try{
+		    // Generate the save file name
+		    String saveFile = "./images/"+id.toString()+".jpg";
+			// Output streams to save Image
+			FileOutputStream fos = context.openFileOutput(saveFile, Context.MODE_PRIVATE);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			// Save the Story
+            oos.writeObject(image);
+			fos.close();
+		} catch (FileNotFoundException e) {
+			// Write access error
+			e.printStackTrace();
+		} catch (IOException e) {
+			// Something went wrong
+			e.printStackTrace();
+		}
+		return id;
 	}
 	
 	/**
