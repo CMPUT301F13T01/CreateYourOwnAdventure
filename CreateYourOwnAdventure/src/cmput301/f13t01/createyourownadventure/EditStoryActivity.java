@@ -166,9 +166,27 @@ public class EditStoryActivity extends FragmentActivity implements
 			return true;
 		case R.id.action_publish:
 			return true;
+		case R.id.action_help:
+			onSelectHelp();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void onSelectHelp() {
+		android.app.FragmentTransaction ft = getFragmentManager()
+				.beginTransaction();
+		android.app.Fragment prev = getFragmentManager().findFragmentByTag(
+				"help_dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		android.app.DialogFragment newFragment = (android.app.DialogFragment) HelpFragment
+				.newInstance(HelpMessage.EDIT_STORY);
+		newFragment.show(ft, "help_dialog");
 	}
 
 	private void onEditFragment() {
@@ -227,7 +245,7 @@ public class EditStoryActivity extends FragmentActivity implements
 		android.app.FragmentTransaction ft = getFragmentManager()
 				.beginTransaction();
 		android.app.Fragment prev = getFragmentManager().findFragmentByTag(
-				"dialog");
+				"choice_dialog");
 		if (prev != null) {
 			ft.remove(prev);
 		}
@@ -235,7 +253,7 @@ public class EditStoryActivity extends FragmentActivity implements
 
 		android.app.DialogFragment newFragment = (android.app.DialogFragment) StoryFragmentListFragment
 				.newInstance();
-		newFragment.show(ft, "dialog");
+		newFragment.show(ft, "choice_dialog");
 	}
 
 	@Override
