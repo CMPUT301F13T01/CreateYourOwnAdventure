@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.apache.http.HttpEntity;
@@ -22,6 +23,11 @@ import cmput301.f13t01.createyourownadventure.StoryInfo;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+/*
+ * TODO: Add methods for posting a story's resources to the 
+ * server as well as getting them when needed.
+ */
 
 public class ESClient {
 
@@ -48,8 +54,7 @@ public class ESClient {
 	}
 	
 	public void postStoryInfo(StoryInfo info) throws IllegalStateException, IOException {
-		HttpPost httpPost = new HttpPost("http://cmput301.softwareprocess.es:8080/cmput301f13t01/"+info.getId().toString()+"/1");
-		//HttpPost httpPost = new HttpPost("http://cmput301.softwareprocess.es:8080/cmput301f13t01/1");
+		HttpPost httpPost = new HttpPost("http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryInfo");
 		StringEntity stringentity = null;
 		try {
 			stringentity = new StringEntity(gson.toJson(info));
@@ -91,9 +96,20 @@ public class ESClient {
         
 	}
 	
-	public void getStoryInfo(UUID id){
+	/*
+	 *  TODO: Implement this to grab 30 or 50 StoryInfo objects with
+	 *  proper queries
+	 */
+	public ArrayList<StoryInfo> getStoryInfos(UUID id){
+		
+		ArrayList<StoryInfo> infos = new ArrayList<StoryInfo>();
+		
         try{
-        	HttpGet getRequest = new HttpGet("http://cmput301.softwareprocess.es:8080/cmput301f13t01/"+id.toString()+"/1");
+        	/*
+        	 * TODO: This doesn't do proper query of StoryInfo objects, need specific
+        	 * _id or need way to query first available 30 or 50
+        	 */
+        	HttpGet getRequest = new HttpGet("http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryInfo");
         	//HttpGet getRequest = new HttpGet("http://cmput301.softwareprocess.es:8080/cmput301f13t01/1/3DT0jWgkRhCHnT_M4nL_rw?pretty=1");
             getRequest.addHeader("Accept","application/json");
 
@@ -115,6 +131,8 @@ public class ESClient {
             System.out.println(info.getDescription());
             
             response.getEntity().consumeContent();
+            
+            infos.add(info);
 
         } catch (ClientProtocolException e) {
 
@@ -124,6 +142,8 @@ public class ESClient {
 
             e.printStackTrace();
         }
+        
+        return infos;
 	}
 	
 	public void deleteStoryInfo(UUID id) throws IOException {
@@ -160,40 +180,40 @@ public class ESClient {
         return json;
     }
 	
-	public static void main(String [] args){
+	//public static void main(String [] args){
 
-        ESClient client = new ESClient();
-        StoryInfo info = client.initializeStoryInfo();
-        System.out.println("StoryInfo has -> Title: "+info.getTitle()+", " +
-         		"Author: "+info.getAuthor()+", Description: "+info.getDescription());
+        //ESClient client = new ESClient();
+        //StoryInfo info = client.initializeStoryInfo();
+        //System.out.println("StoryInfo has -> Title: "+info.getTitle()+", " +
+         		//"Author: "+info.getAuthor()+", Description: "+info.getDescription());
 
         //insert the info
-        try {
-            client.postStoryInfo(info);
-        } catch (IllegalStateException e) {
+        //try {
+            //client.postStoryInfo(info);
+        //} catch (IllegalStateException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
+            //e.printStackTrace();
+        //} catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+            //e.printStackTrace();
+        //}
         
-        try {
-            client.postStoryInfo(info);
-        } catch (IllegalStateException e) {
+        //try {
+            //client.postStoryInfo(info);
+        //} catch (IllegalStateException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
+            //e.printStackTrace();
+        //} catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+            //e.printStackTrace();
+        //}
 	
-        client.getStoryInfo(client.id);
+        //client.getStoryInfo(client.id);
         
         //try {
         	//client.deleteStoryInfo(client.id);
         //} catch (IOException e) {
         	//e.printStackTrace();
         //}
-    }
+    //}
 }
