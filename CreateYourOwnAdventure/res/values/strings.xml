@@ -13,6 +13,8 @@
     <!-- edit story on long click contextual menu -->
     <string name="action_edit_story">Edit Story</string>
     <string name="action_delete_story">Delete Story</string>
+    <!--  random story selection -->
+     <string name="action_random_story">Select Random Story</string>   	
 
     <!-- Edit Fragment -->
     <string name="title_activity_edit_fragment">Edit Fragment</string>
@@ -28,6 +30,10 @@
     <!-- Action bar strings for edit fragment activity -->
     <string name="action_edit_preview">Preview</string>
     <string name="action_edit_add_content">Add Content</string>
+    <string name="action_edit_add_text">Text</string>
+    <string name="action_edit_add_image">Image</string>
+    <string name="action_edit_add_sound">Sound</string>
+    <string name="action_edit_add_video">Video</string>
     <string name="action_edit_edit_choice">Edit Choice</string>
     <string name="action_edit_add_choice">Add Choice</string>
     <string name="action_edit_delete">Delete</string>
@@ -57,6 +63,7 @@
     <string name="choice_flavour_hint">Choice Flavour</string>
 
     <!-- String used for passing intents -->
+    <string name="story">Story</string>
     <string name="choice_position">Choice Position</string>
     <string name="story_is_new">Story Status</string>
     <string name="story_id">Story ID</string>
@@ -80,5 +87,8 @@
     <string name="title_activity_edit_fragment_choice">Edit Choice</string>
     <string name="choice">Choice</string>
     <string name="title_activity_preview_fragment">PreviewFragmentActivity</string>
+    
+    <string name="display_help">Help</string>
+    <string name="action_help">Help</string>
 
 </resources>

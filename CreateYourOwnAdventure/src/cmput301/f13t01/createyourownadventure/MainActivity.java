@@ -20,7 +20,9 @@
 package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  *  Sets up and handles main screen ui that allows user to 
@@ -118,7 +121,11 @@ public class MainActivity extends Activity {
 	        case R.id.action_create_new_story:
 	        	//start create new story child activity
 	            startCreateNewStory();
-	            return true;	        	
+	            return true;
+	        case R.id.action_random_story:
+	        	//select a random story to start reading at begininng       	
+	        	startRandomStory();
+	        	return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -137,11 +144,6 @@ public class MainActivity extends Activity {
 		//inflate menu specified in xml resource
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main_story_menu, menu);
-		
-		//get the info on which item was selected
-		//AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
-		//now get the adapter thats populating the list view
-		//StoryInfo item = objStoryAdapter.getItem(info.position);
 	}
 	
 	/**
@@ -181,6 +183,37 @@ public class MainActivity extends Activity {
             return super.onOptionsItemSelected(item);
 	    }		
 
+	}
+	
+	/**
+	 * select random story and opens it for reading from beginning
+	 */
+	private void startRandomStory() {
+		//feedback to user, echoing menu text
+		Toast toast = Toast.makeText(getApplicationContext(), getResources()
+				.getString(R.string.action_random_story), Toast.LENGTH_SHORT);
+		toast.show();
+		//get the story info list from manager and the size of list
+		ArrayList<StoryInfo> randStorySource = objLibrary.getStoryInfoList();
+		//if list size zero or less, no stories to select
+		if (randStorySource.size() <= 0){
+			return;
+		}
+		else
+		{
+			//new random object and story list size
+		 	Random r = new Random();
+		 	int listSize = randStorySource.size();
+			//get next integer random number in range 0 to listSize - 1		 	
+			int randStory = r.nextInt(listSize);
+			//get the uuid of the randomly selected story
+		    UUID randStoryId = randStorySource.get(randStory).getId();
+			//create the intent and launch read story activity from beginning
+		    Intent intent = new Intent(this, ReadFragmentActivity.class);
+		    intent.putExtra(getResources().getString(R.string.story_continue), true);
+			intent.putExtra(getResources().getString(R.string.story_id), randStoryId);
+	        startActivity(intent);	
+		}
 	}
 
 	/**

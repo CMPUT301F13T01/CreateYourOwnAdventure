@@ -72,15 +72,19 @@ public class EditStoryActivity extends FragmentActivity implements
 		GlobalManager app = (GlobalManager) getApplication();
 		manager = app.getStoryManager();
 
-		Intent intent = getIntent();
+		if (savedInstanceState != null) {
+			isNew = savedInstanceState.getBoolean(getResources().getString(
+					R.string.story_is_new));
+			storyId = (UUID) savedInstanceState.getSerializable(getResources()
+					.getString(R.string.story_id));
 
-		isNew = (boolean) intent.getBooleanExtra(
-				getResources().getString(R.string.story_is_new), false);
-
-		final Story story = (Story) getLastCustomNonConfigurationInstance();
-		if (story != null) {
-			app.setStoryManager(story);
+			app.setStoryManager(storyId);
 		} else {
+			Intent intent = getIntent();
+
+			isNew = (boolean) intent.getBooleanExtra(
+					getResources().getString(R.string.story_is_new), false);
+
 			if (isNew == false) {
 				storyId = (UUID) intent.getSerializableExtra(getResources()
 						.getString(R.string.story_id));
@@ -112,12 +116,6 @@ public class EditStoryActivity extends FragmentActivity implements
 			firstPage.setText(getResources().getString(R.string.first_page)
 					+ " " + manager.getFirstPage().getTitle());
 		}
-
-		// FragmentTransaction ft = getFragmentManager().beginTransaction();
-		// Fragment newFragment = (Fragment) StoryFragmentListFragment
-		// .newInstance();
-		// ft.add(R.id.fragment_container, newFragment);
-		// ft.commit();
 
 	}
 
@@ -168,9 +166,27 @@ public class EditStoryActivity extends FragmentActivity implements
 			return true;
 		case R.id.action_publish:
 			return true;
+		case R.id.action_help:
+			onSelectHelp();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void onSelectHelp() {
+		android.app.FragmentTransaction ft = getFragmentManager()
+				.beginTransaction();
+		android.app.Fragment prev = getFragmentManager().findFragmentByTag(
+				"help_dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		android.app.DialogFragment newFragment = (android.app.DialogFragment) HelpFragment
+				.newInstance(HelpMessage.EDIT_STORY);
+		newFragment.show(ft, "help_dialog");
 	}
 
 	private void onEditFragment() {
@@ -225,24 +241,11 @@ public class EditStoryActivity extends FragmentActivity implements
 		finish();
 	}
 
-	// public void onResume() {
-	// super.onResume();
-	//
-	// Log.d("oops", "Resumed EditStory");
-	// Log.d("oops", "Size: " + manager.getFragmentInfoList().size());
-	//
-	// FragmentTransaction ft = getFragmentManager().beginTransaction();
-	// DialogFragment newFragment = (DialogFragment) StoryFragmentListFragment
-	// .newInstance();
-	// ft.replace(R.id.fragment_container, newFragment);
-	// ft.commit();
-	// }
-
 	public void showFragmentSelection() {
 		android.app.FragmentTransaction ft = getFragmentManager()
 				.beginTransaction();
 		android.app.Fragment prev = getFragmentManager().findFragmentByTag(
-				"dialog");
+				"choice_dialog");
 		if (prev != null) {
 			ft.remove(prev);
 		}
@@ -250,13 +253,16 @@ public class EditStoryActivity extends FragmentActivity implements
 
 		android.app.DialogFragment newFragment = (android.app.DialogFragment) StoryFragmentListFragment
 				.newInstance();
-		newFragment.show(ft, "dialog");
+		newFragment.show(ft, "choice_dialog");
 	}
 
 	@Override
-	public Object onRetainCustomNonConfigurationInstance() {
-		final Story story = manager.getStory();
-		return story;
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putBoolean(getResources().getString(R.string.story_is_new),
+				isNew);
+		outState.putSerializable(getResources().getString(R.string.story_id),
+				storyId);
 	}
 
 }

@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import cmput301.f13t01.createyourownadventure.Choice;
 import cmput301.f13t01.createyourownadventure.ChoiceMap;
-import cmput301.f13t01.createyourownadventure.History;
 import cmput301.f13t01.createyourownadventure.ReadStoryManager;
 import cmput301.f13t01.createyourownadventure.Story;
 import cmput301.f13t01.createyourownadventure.StoryFragment;
@@ -152,7 +151,7 @@ public class ReadStoryManagerTest extends TestCase {
 		testList = choicemap.getChoices(2);
 		assertTrue(testList.size() == 1);
 	}
-	
+
 	@Test
 	public void testHistoryMove() {
 		assertTrue(manager.goBack() == null);
@@ -164,7 +163,5 @@ public class ReadStoryManagerTest extends TestCase {
 		manager.clearHistory();
 		assertTrue(manager.getMostRecent() == null);
 	}
-	
-
 
 }

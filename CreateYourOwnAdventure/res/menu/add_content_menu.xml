@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_edit_add_text"
+        android:title="@string/action_edit_add_text"/>
+    <item
+        android:id="@+id/action_edit_add_image"
+        android:title="@string/action_edit_add_image"/>
+    <item
+        android:id="@+id/action_edit_add_sound"
+        android:title="@string/action_edit_add_sound"/>
+    <item
+        android:id="@+id/action_edit_add_video"
+        android:title="@string/action_edit_add_video"/>
+
+</menu>

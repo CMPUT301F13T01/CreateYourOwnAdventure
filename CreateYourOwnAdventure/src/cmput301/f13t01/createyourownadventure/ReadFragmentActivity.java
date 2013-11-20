@@ -24,6 +24,7 @@ ReadStoryManager to control the content and interaction.
 package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 import android.app.FragmentManager;
@@ -31,7 +32,6 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,7 +47,7 @@ import android.widget.Toast;
 public class ReadFragmentActivity extends FragmentActivity {
 
 	// declaration of variables
-	//FragmentManager fragmentManager;
+	// FragmentManager fragmentManager;
 	ReadStoryManager storyManager;
 	UUID storyId;
 	Integer fragmentId;
@@ -58,14 +58,23 @@ public class ReadFragmentActivity extends FragmentActivity {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		if (savedInstanceState == null) {
-			super.onCreate(savedInstanceState);
-			GlobalManager app = (GlobalManager) getApplication();
+		super.onCreate(savedInstanceState);
 
-			setContentView(R.layout.activity_view_fragment);
+		GlobalManager app = (GlobalManager) getApplication();
 
-			// enable the Up button in action bar
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		setContentView(R.layout.activity_view_fragment);
+
+		// enable the Up button in action bar
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+
+		if (savedInstanceState != null) {
+			storyId = (UUID) savedInstanceState.getSerializable(getResources()
+					.getString(R.string.story_id));
+			app.setStoryManager(storyId);
+			this.storyManager = app.getStoryManager();
+			fragmentId = storyManager.getMostRecent();
+
+		} else {
 
 			// intent has the story ID, and story fragment ID to display
 			Intent intent = getIntent();
@@ -87,7 +96,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 			} else {
 				// show first page if the story has never been read
 				fragmentId = storyManager.getMostRecent();
-				if (fragmentId==null) {
+				if (fragmentId == null) {
 					fragmentId = storyManager.getFirstPageId();
 				}
 			}
@@ -99,9 +108,9 @@ public class ReadFragmentActivity extends FragmentActivity {
 						Toast.LENGTH_LONG).show();
 				finish();
 			}
-
-			commitFragment(fragmentId);
 		}
+
+		commitFragment(fragmentId);
 	}
 
 	/**
@@ -135,7 +144,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	/**
 	 * Saves the history.
 	 */
@@ -148,7 +157,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 		LocalManager save = glob.getLocalManager();
 		save.saveStory(this.storyId, this.storyManager.getStory());
 	}
-	
+
 	/**
 	 * Go to the beginning (first page) of a story. Apprehend the current page
 	 * to the history stack History is cleared.
@@ -193,7 +202,6 @@ public class ReadFragmentActivity extends FragmentActivity {
 	 *            the id of the fragment to be displayed next
 	 */
 	public void onFragmentListClick(View v, Integer fragmentId) {
-		// TODO Auto-generated method stub
 		// Save the history
 		storyManager.pushToStack(fragmentId);
 		GlobalManager glob = (GlobalManager) getApplication();
@@ -203,7 +211,20 @@ public class ReadFragmentActivity extends FragmentActivity {
 		int selectedChoice = v.getId() - 1;
 
 		ArrayList<Choice> choiceList = storyManager.getChoices(fragmentId);
+
+		// if random choice is selected, pick a random choice from choiceList
+		if (selectedChoice == choiceList.size()) {
+			Random random = new Random();
+			selectedChoice = random.nextInt(choiceList.size());
+		}
 		Choice choice = choiceList.get(selectedChoice);
+
+		// make a toast to show the choice that the reader has selected
+		String s = choice.getFlavourText();
+		Toast.makeText(getBaseContext(),
+				"You have selected choice \"" + s + "\"", Toast.LENGTH_LONG)
+				.show();
+
 		Integer destinationId = choice.getDestinationId();
 
 		// generate new fragment to replace the old one
@@ -241,5 +262,12 @@ public class ReadFragmentActivity extends FragmentActivity {
 		newFragment.setArguments(bundle);
 		fragmentTransaction.replace(R.id.read_fragment_activity, newFragment);
 		fragmentTransaction.commit();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(getResources().getString(R.string.story_id),
+				storyId);
 	}
 }

@@ -12,6 +12,11 @@
     <item android:id="@+id/action_create_new_story" 
           android:title="@string/action_create_new_story" 
           android:icon="@drawable/create_new_story" 
-          android:showAsAction="ifRoom" />    
+          android:showAsAction="ifRoom" /> 
+          
+    <!--  select random story -->
+    <item android:id="@+id/action_random_story"
+          android:title="@string/action_random_story" 
+          android:showAsAction="never" /> 
 
 </menu>

@@ -25,6 +25,7 @@ story fragment's content.
 
 package cmput301.f13t01.createyourownadventure;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -32,15 +33,22 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.Toast;
 
 /**
@@ -52,9 +60,10 @@ import android.widget.Toast;
  */
 
 public class EditFragmentContentActivity extends Activity implements
-		ChoiceListListener {
+		ChoiceListListener, OnMenuItemClickListener {
 
-	static final int EDIT_CHOICE = 0;
+	private static final int EDIT_CHOICE = 0;
+	private static final int SELECT_IMAGE = 1;
 
 	private StoryFragment storyFragment;
 	private int fragmentId;
@@ -176,6 +185,37 @@ public class EditFragmentContentActivity extends Activity implements
 	}
 
 	private void onSelectAddContent() {
+		View v = findViewById(R.id.action_edit_add_content);
+
+		PopupMenu popup = new PopupMenu(this, v);
+		MenuInflater inflater = popup.getMenuInflater();
+		inflater.inflate(R.menu.add_content_menu, popup.getMenu());
+
+		popup.setOnMenuItemClickListener(this);
+
+		popup.show();
+
+	}
+
+	@Override
+	public boolean onMenuItemClick(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_edit_add_text:
+			onSelectAddText();
+			return true;
+		case R.id.action_edit_add_image:
+			onSelectAddImage();
+			return true;
+		case R.id.action_edit_add_sound:
+			return true;
+		case R.id.action_edit_add_video:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	private void onSelectAddText() {
 		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,
@@ -184,6 +224,91 @@ public class EditFragmentContentActivity extends Activity implements
 		text.setTextColor(Color.BLACK);
 		text.setHint("Your Story Text");
 		layout.addView(text, params);
+	}
+
+	private void onSelectAddImage() {
+		// TODO: Give an option to use camera, select from story photos, or
+		// select from gallery.
+
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		startActivityForResult(intent, SELECT_IMAGE);
+	}
+
+	private void addImage(Uri image) {
+		try {
+			Log.d("oops", "Adding image");
+
+			Bitmap bitmap = decodeUri(image, 256, 256);
+			if (bitmap == null)
+				Log.d("oops", "Your bitmap is null");
+			else
+				Log.d("oops", "Bitmap not null");
+
+			LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+					LinearLayout.LayoutParams.MATCH_PARENT,
+					LinearLayout.LayoutParams.WRAP_CONTENT);
+
+			ImageView imageView = new ImageView(this);
+			imageView.setImageBitmap(bitmap);
+			imageView.setVisibility(View.VISIBLE);
+
+			layout.addView(imageView, params);
+
+			Log.d("oops", "Done adding image");
+
+		} catch (FileNotFoundException e) {
+			Log.d("oops", "Couldn't find the file...");
+			e.printStackTrace();
+		}
+	}
+
+	private Bitmap decodeUri(Uri selectedImage, int reqWidth, int reqHeight)
+			throws FileNotFoundException {
+
+		// First decode image size
+		final BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeStream(
+				getContentResolver().openInputStream(selectedImage), null,
+				options);
+
+		// Calculate inSampleSize
+		options.inSampleSize = calculateInSampleSize(options, reqWidth,
+				reqHeight);
+
+		// Decode bitmap with inSampleSize set
+		options.inJustDecodeBounds = false;
+		return BitmapFactory.decodeStream(
+				getContentResolver().openInputStream(selectedImage), null,
+				options);
+
+	}
+
+	public static int calculateInSampleSize(BitmapFactory.Options options,
+			int reqWidth, int reqHeight) {
+		// Raw height and width of image
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		int inSampleSize = 1;
+
+		if (height > reqHeight || width > reqWidth) {
+
+			final int halfHeight = height / 2;
+			final int halfWidth = width / 2;
+
+			// Calculate the largest inSampleSize value that is a power of 2 and
+			// keeps both
+			// height and width larger than the requested height and width.
+			while ((halfHeight / inSampleSize) > reqHeight
+					&& (halfWidth / inSampleSize) > reqWidth) {
+				inSampleSize *= 2;
+			}
+		}
+
+		return inSampleSize;
 	}
 
 	private void onSelectCancel() {
@@ -252,10 +377,16 @@ public class EditFragmentContentActivity extends Activity implements
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (resultCode == RESULT_OK) {
-
-		} else if (resultCode == RESULT_CANCELED) {
+		switch (requestCode) {
+		case EDIT_CHOICE:
+			if (resultCode == RESULT_OK) {
+				// Don't need to do anything right now.
+			}
+		case SELECT_IMAGE:
+			if (resultCode == RESULT_OK) {
+				Uri image = data.getData();
+				addImage(image);
+			}
 		}
 	}
-
 }
