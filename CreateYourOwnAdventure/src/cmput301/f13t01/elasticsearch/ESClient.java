@@ -160,10 +160,10 @@ public class ESClient {
 	 * some sort of sorting mechanism. Also need to work on how to not grab
 	 * every object into the response.
 	 */
-	public ArrayList<StoryInfo> getStoryInfos(int num) {
+	public ArrayList<StoryInfo> getStoryInfos(int from, int num) {
 
 		// Make sure a positive number is passed
-		if (num <= 0) {
+		if (num <= 0 || from < 0) {
 			return null;
 		}
 
@@ -172,7 +172,7 @@ public class ESClient {
 		try {
 			HttpPost getRequest = new HttpPost(
 					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryInfo/_search?pretty=1");
-			String query = "{\"from\" : 0, \"size\" : " + num + "}";
+			String query = "{\"from\" : "+from+", \"size\" : " + num + "}";
 			StringEntity stringentity = new StringEntity(query);
 
 			getRequest.setHeader("Accept", "application/json");
@@ -349,8 +349,6 @@ public class ESClient {
 			e.printStackTrace();
 		}
 
-		int num = 3;
-
 		// Guarantee that all info is posted and retrievable
 		try {
 			Thread.sleep(1000);
@@ -358,7 +356,7 @@ public class ESClient {
 			e.printStackTrace();
 		}
 
-		ArrayList<StoryInfo> infos = client.getStoryInfos(num);
+		ArrayList<StoryInfo> infos = client.getStoryInfos(0, 50);
 
 		System.out.println("Size of arraylist is: " + infos.size());
 
@@ -423,10 +421,10 @@ public class ESClient {
 		ESClient client = new ESClient();
 		
 		// Test posting, getting or deleting of StoryInfo objects
-		// testStoryInfo(client);
+		testStoryInfo(client);
 		
 		// Test posting, getting or deleting of Story objects
-		testStory(client);
+		//testStory(client);
 			
 	}
 
