@@ -33,187 +33,401 @@ public class ESClient {
 
 	private HttpClient httpclient = new DefaultHttpClient();
 	private Gson gson = new Gson();
-	
-	private UUID id;
-	
+
 	private Story testStory;
-	
+
 	public ESClient() {
-		this.id = UUID.randomUUID();
 		this.testStory = new Story();
 		this.testStory.setAuthor("Reggie");
 		this.testStory.setTitle("Who am I?");
 		this.testStory.setDescription("This is a test");
 	}
-	
+
 	private StoryInfo initializeStoryInfo() {
-		
-		StoryInfo info = new StoryInfo(id, testStory);
-		
+
+		StoryInfo info = new StoryInfo(UUID.randomUUID(), testStory);
+
 		return info;
 	}
-	
-	public void postStoryInfo(StoryInfo info) throws IllegalStateException, IOException {
-		HttpPost httpPost = new HttpPost("http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryInfo");
+
+	public void postStoryInfo(StoryInfo info) throws IllegalStateException,
+			IOException {
+		HttpPost httpPost = new HttpPost(
+				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryInfo/"
+						+ info.getId().toString());
 		StringEntity stringentity = null;
 		try {
 			stringentity = new StringEntity(gson.toJson(info));
 		} catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		httpPost.setHeader("Accept", "application/json");
+
+		httpPost.setEntity(stringentity);
+		HttpResponse response = null;
+		try {
+			response = httpclient.execute(httpPost);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String status = response.getStatusLine().toString();
+		System.out.println(status);
+		HttpEntity entity = response.getEntity();
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				entity.getContent()));
+		String output;
+		System.err.println("Output from Server -> ");
+		while ((output = br.readLine()) != null) {
+			System.err.println(output);
+		}
+
+		try {
+			entity.consumeContent();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	// THIS IS NEARLY DUPLICATE CODE TO POSTSTORYINFO
+	//		-- WILL NEED REFACTORING
+	public void postStory(UUID id, Story story) {
+		HttpPost httpPost = new HttpPost(
+				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Story/"
+						+ id.toString());
+
+		// Want no memory of local user's history
+		story.clearHistory();
+		
+		StringEntity stringentity = null;
+		try {
+			stringentity = new StringEntity(gson.toJson(story));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		httpPost.setHeader("Accept", "application/json");
+
+		httpPost.setEntity(stringentity);
+		HttpResponse response = null;
+
+		try {
+			response = httpclient.execute(httpPost);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String status = response.getStatusLine().toString();
+		System.out.println(status);
+		HttpEntity entity = response.getEntity();
+
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					entity.getContent()));
+			String output;
+			System.err.println("Output from Server -> ");
+			while ((output = br.readLine()) != null) {
+				System.err.println(output);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			entity.consumeContent();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	/*
+	 * TODO: Modify to have some sort of way of querying the objects based on
+	 * some sort of sorting mechanism. Also need to work on how to not grab
+	 * every object into the response.
+	 */
+	public ArrayList<StoryInfo> getStoryInfos(int num) {
+
+		// Make sure a positive number is passed
+		if (num <= 0) {
+			return null;
+		}
+
+		ArrayList<StoryInfo> infos = new ArrayList<StoryInfo>();
+
+		try {
+			HttpPost getRequest = new HttpPost(
+					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryInfo/_search?pretty=1");
+			String query = "{\"from\" : 0, \"size\" : " + num + "}";
+			StringEntity stringentity = new StringEntity(query);
+
+			getRequest.setHeader("Accept", "application/json");
+			getRequest.setEntity(stringentity);
+
+			HttpResponse response = httpclient.execute(getRequest);
+
+			String status = response.getStatusLine().toString();
+			System.out.println(status);
+
+			String json = getEntityContent(response);
+
+			// We have to tell GSON what type we expect
+			Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<StoryInfo>>() {
+			}.getType();
+			// Now we expect to get a StoryInfo response
+			ElasticSearchSearchResponse<StoryInfo> esResponse = gson.fromJson(
+					json, elasticSearchSearchResponseType);
+			// We get the StoryInfo objects from it!
+			for (ElasticSearchResponse<StoryInfo> r : esResponse.getHits()) {
+				StoryInfo info = r.getSource();
+				infos.add(info);
+
+			}
+
+			response.getEntity().consumeContent();
+
+		} catch (ClientProtocolException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+		return infos;
+	}
+	
+	// Similar to getStoryInfo, but different enough to
+	// warrant its own method
+	public Story getStory(UUID id) {
+
+		try {
+			HttpGet getRequest = new HttpGet(
+					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Story/"+id.toString());
+
+			getRequest.setHeader("Accept", "application/json");
+
+			HttpResponse response = httpclient.execute(getRequest);
+
+			String status = response.getStatusLine().toString();
+			System.out.println(status);
+
+			String json = getEntityContent(response);
+
+			// We have to tell GSON what type we expect
+			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
+			// Now we expect to get a StoryInfo response
+			ElasticSearchResponse<Story> esResponse = gson.fromJson(
+					json, elasticSearchResponseType);
+			// We get the StoryInfo objects from it!
+			Story story = esResponse.getSource();
+			
+			response.getEntity().consumeContent();
+			
+			return story;
+
+		} catch (ClientProtocolException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
 		}
 		
-		httpPost.setHeader("Accept","application/json");
-		
-		httpPost.setEntity(stringentity);
-        HttpResponse response = null;
-        try {
-                response = httpclient.execute(httpPost);
-        } catch (ClientProtocolException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-        } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-        }
-        
-        String status = response.getStatusLine().toString();
-        System.out.println(status);
-        HttpEntity entity = response.getEntity();
-        BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
-        String output;
-        System.err.println("Output from Server -> ");
-        while ((output = br.readLine()) != null) {
-                System.err.println(output);
-        }
-
-        try {
-                entity.consumeContent();
-        } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-        }
-        
+		return null;
 	}
-	
-	/*
-	 *  TODO: Implement this to grab 30 or 50 StoryInfo objects with
-	 *  proper queries
-	 */
-	public ArrayList<StoryInfo> getStoryInfos(UUID id){
-		
-		ArrayList<StoryInfo> infos = new ArrayList<StoryInfo>();
-		
-        try{
-        	/*
-        	 * TODO: This doesn't do proper query of StoryInfo objects, need specific
-        	 * _id or need way to query first available 30 or 50
-        	 */
-        	HttpGet getRequest = new HttpGet("http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryInfo");
-        	//HttpGet getRequest = new HttpGet("http://cmput301.softwareprocess.es:8080/cmput301f13t01/1/3DT0jWgkRhCHnT_M4nL_rw?pretty=1");
-            getRequest.addHeader("Accept","application/json");
 
-            HttpResponse response = httpclient.execute(getRequest);
-
-            String status = response.getStatusLine().toString();
-            System.out.println(status);
-
-            String json = getEntityContent(response);
-            
-            // We have to tell GSON what type we expect
-            Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<StoryInfo>>(){}.getType();
-            // Now we expect to get a StoryInfo response
-            ElasticSearchResponse<StoryInfo> esResponse = gson.fromJson(json, elasticSearchResponseType);
-            // We get the StoryInfo from it!
-            StoryInfo info = esResponse.getSource();
-            System.out.println(info.getTitle());
-            System.out.println(info.getAuthor());
-            System.out.println(info.getDescription());
-            
-            response.getEntity().consumeContent();
-            
-            infos.add(info);
-
-        } catch (ClientProtocolException e) {
-
-            e.printStackTrace();
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-        
-        return infos;
-	}
-	
 	public void deleteStoryInfo(UUID id) throws IOException {
-        HttpDelete httpDelete = new HttpDelete("http://cmput301.softwareprocess.es:8080/cmput301f13t01/"+id.toString()+"/1");
-        httpDelete.addHeader("Accept","application/json");
+		HttpDelete httpDelete = new HttpDelete(
+				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryInfo/"
+						+ id.toString());
+		httpDelete.addHeader("Accept", "application/json");
 
-        HttpResponse response = httpclient.execute(httpDelete);
+		HttpResponse response = httpclient.execute(httpDelete);
 
-        String status = response.getStatusLine().toString();
-        System.out.println(status);
+		String status = response.getStatusLine().toString();
+		System.out.println(status);
 
-        HttpEntity entity = response.getEntity();
-        BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
-        String output;
-        System.err.println("Output from Server -> ");
-        while ((output = br.readLine()) != null) {
-                System.err.println(output);
-        }
-        
-        entity.consumeContent();
-    }
+		HttpEntity entity = response.getEntity();
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				entity.getContent()));
+		String output;
+		System.err.println("Output from Server -> ");
+		while ((output = br.readLine()) != null) {
+			System.err.println(output);
+		}
+
+		entity.consumeContent();
+	}
 	
+	//This is VERY similar to deleteStoryInfo, will need refactoring!
+	public void deleteStory(UUID id) throws IOException {
+		HttpDelete httpDelete = new HttpDelete(
+				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Story/"
+						+ id.toString());
+		httpDelete.addHeader("Accept", "application/json");
+
+		HttpResponse response = httpclient.execute(httpDelete);
+
+		String status = response.getStatusLine().toString();
+		System.out.println(status);
+
+		HttpEntity entity = response.getEntity();
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				entity.getContent()));
+		String output;
+		System.err.println("Output from Server -> ");
+		while ((output = br.readLine()) != null) {
+			System.err.println(output);
+		}
+
+		entity.consumeContent();
+	}
+
 	String getEntityContent(HttpResponse response) throws IOException {
-        BufferedReader br = new BufferedReader(
-                        new InputStreamReader((response.getEntity().getContent())));
-        String output;
-        System.err.println("Output from Server -> ");
-        String json = "";
-        while ((output = br.readLine()) != null) {
-            System.err.println(output);
-            json += output;
-        }
-        System.err.println("JSON:"+json);
-        return json;
-    }
-	
-	//public static void main(String [] args){
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				(response.getEntity().getContent())));
+		String output;
+		System.err.println("Output from Server -> ");
+		String json = "";
+		while ((output = br.readLine()) != null) {
+			System.err.println(output);
+			json += output;
+		}
+		System.err.println("JSON:" + json);
+		return json;
+	}
 
-        //ESClient client = new ESClient();
-        //StoryInfo info = client.initializeStoryInfo();
-        //System.out.println("StoryInfo has -> Title: "+info.getTitle()+", " +
-         		//"Author: "+info.getAuthor()+", Description: "+info.getDescription());
-
-        //insert the info
-        //try {
-            //client.postStoryInfo(info);
-        //} catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
-            //e.printStackTrace();
-        //} catch (IOException e) {
-            // TODO Auto-generated catch block
-            //e.printStackTrace();
-        //}
-        
-        //try {
-            //client.postStoryInfo(info);
-        //} catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
-            //e.printStackTrace();
-        //} catch (IOException e) {
-            // TODO Auto-generated catch block
-            //e.printStackTrace();
-        //}
 	
-        //client.getStoryInfo(client.id);
-        
-        //try {
-        	//client.deleteStoryInfo(client.id);
-        //} catch (IOException e) {
-        	//e.printStackTrace();
-        //}
-    //}
+	// For testing purposes only
+	public static void testStoryInfo(ESClient client) {
+		StoryInfo info1 = client.initializeStoryInfo();
+		StoryInfo info2 = client.initializeStoryInfo();
+		StoryInfo info3 = client.initializeStoryInfo();
+		// System.out.println("StoryInfo has -> Title: "+info.getTitle()+", " +
+		// "Author: "+info.getAuthor()+", Description: "+info.getDescription());
+
+		// insert all StoryInfo objects
+
+		try {
+			client.postStoryInfo(info1);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			client.postStoryInfo(info2);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			client.postStoryInfo(info3);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		int num = 3;
+
+		// Guarantee that all info is posted and retrievable
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		ArrayList<StoryInfo> infos = client.getStoryInfos(num);
+
+		System.out.println("Size of arraylist is: " + infos.size());
+
+		try {
+			client.deleteStoryInfo(info1.getId());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			client.deleteStoryInfo(info2.getId());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			client.deleteStoryInfo(info3.getId());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void testStory(ESClient client) {
+		
+		UUID testId = UUID.randomUUID();
+		
+		client.postStory(testId, client.testStory);
+		
+		// Guarantee that all info is posted and retrievable
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		
+		Story story = client.getStory(testId);
+		
+		System.out.println("Story has -> Title: "+story.getTitle()+", Author: "+story.getAuthor()+
+				", Description: "+story.getDescription());
+		
+		try {
+			client.deleteStory(testId);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Story otherStory = client.getStory(testId);
+		
+		if (otherStory == null) {
+			System.out.println("Non-existent story");
+		}
+		else {
+			System.out.println("YA BLEW IT");
+		}
+		
+		return;
+	}
+	
+	// For testing purposes only
+	public static void main(String[] args) {
+
+		ESClient client = new ESClient();
+		
+		// Test posting, getting or deleting of StoryInfo objects
+		// testStoryInfo(client);
+		
+		// Test posting, getting or deleting of Story objects
+		testStory(client);
+			
+	}
+
 }
