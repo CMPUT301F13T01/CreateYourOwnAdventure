@@ -14,15 +14,15 @@ public class StoryResource {
 	 * 		ARRAYLIST<MEDIARESOURCE>
 	 */
 	
-	private String id;
+	private UUID id;
 	private ArrayList<MediaResource> resources;
 	
 	public StoryResource(UUID id) {
-		this.id = id.toString();
+		this.id = id;
 		this.resources = new ArrayList<MediaResource>();
 	}
 	
-	public String getStoryId() {
+	public UUID getStoryId() {
 		return this.id;
 	}
 	

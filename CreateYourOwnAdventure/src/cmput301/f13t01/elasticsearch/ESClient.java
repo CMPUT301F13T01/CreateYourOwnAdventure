@@ -1,6 +1,10 @@
+// Image encoding from xil3 and Cheok Yan Cheng here:
+// http://stackoverflow.com/questions/4830711/how-to-convert-a-image-into-base64-string/4830846#4830846
+
 package cmput301.f13t01.elasticsearch;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -18,6 +22,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import cmput301.f13t01.createyourownadventure.Story;
 import cmput301.f13t01.createyourownadventure.StoryInfo;
 
@@ -43,6 +49,7 @@ public class ESClient {
 		this.testStory.setDescription("This is a test");
 	}
 
+	// For testing purposes only!
 	private StoryInfo initializeStoryInfo() {
 
 		StoryInfo info = new StoryInfo(UUID.randomUUID(), testStory);
@@ -98,7 +105,7 @@ public class ESClient {
 	}
 
 	// THIS IS NEARLY DUPLICATE CODE TO POSTSTORYINFO
-	//		-- WILL NEED REFACTORING
+	// -- WILL NEED REFACTORING
 	public void postStory(UUID id, Story story) {
 		HttpPost httpPost = new HttpPost(
 				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Story/"
@@ -106,10 +113,124 @@ public class ESClient {
 
 		// Want no memory of local user's history
 		story.clearHistory();
-		
+
 		StringEntity stringentity = null;
 		try {
 			stringentity = new StringEntity(gson.toJson(story));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		httpPost.setHeader("Accept", "application/json");
+
+		httpPost.setEntity(stringentity);
+		HttpResponse response = null;
+
+		try {
+			response = httpclient.execute(httpPost);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String status = response.getStatusLine().toString();
+		System.out.println(status);
+		HttpEntity entity = response.getEntity();
+
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					entity.getContent()));
+			String output;
+			System.err.println("Output from Server -> ");
+			while ((output = br.readLine()) != null) {
+				System.err.println(output);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			entity.consumeContent();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	// THIS IS NEARLY DUPLICATE CODE TO POSTSTORYINFO
+	// -- WILL NEED REFACTORING
+	public void postStoryResources(StoryResource storyResource) {
+		HttpPost httpPost = new HttpPost(
+				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryResource/"
+						+ storyResource.getStoryId().toString());
+
+		StringEntity stringentity = null;
+		try {
+			stringentity = new StringEntity(gson.toJson(storyResource));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		httpPost.setHeader("Accept", "application/json");
+
+		httpPost.setEntity(stringentity);
+		HttpResponse response = null;
+
+		try {
+			response = httpclient.execute(httpPost);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String status = response.getStatusLine().toString();
+		System.out.println(status);
+		HttpEntity entity = response.getEntity();
+
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					entity.getContent()));
+			String output;
+			System.err.println("Output from Server -> ");
+			while ((output = br.readLine()) != null) {
+				System.err.println(output);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			entity.consumeContent();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	// THIS IS NEARLY DUPLICATE CODE TO POSTSTORYINFO
+	// -- WILL NEED REFACTORING
+	public void postImage(String id, Bitmap bm) {
+		HttpPost httpPost = new HttpPost(
+				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Image/"
+						+ id);
+
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+		byte[] b = baos.toByteArray();
+
+		StringEntity stringentity = null;
+		try {
+			stringentity = new StringEntity(gson.toJson(b));
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -172,7 +293,7 @@ public class ESClient {
 		try {
 			HttpPost getRequest = new HttpPost(
 					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryInfo/_search?pretty=1");
-			String query = "{\"from\" : "+from+", \"size\" : " + num + "}";
+			String query = "{\"from\" : " + from + ", \"size\" : " + num + "}";
 			StringEntity stringentity = new StringEntity(query);
 
 			getRequest.setHeader("Accept", "application/json");
@@ -211,14 +332,15 @@ public class ESClient {
 
 		return infos;
 	}
-	
+
 	// Similar to getStoryInfo, but different enough to
 	// warrant its own method
 	public Story getStory(UUID id) {
 
 		try {
 			HttpGet getRequest = new HttpGet(
-					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Story/"+id.toString());
+					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Story/"
+							+ id.toString());
 
 			getRequest.setHeader("Accept", "application/json");
 
@@ -230,15 +352,16 @@ public class ESClient {
 			String json = getEntityContent(response);
 
 			// We have to tell GSON what type we expect
-			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
+			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>() {
+			}.getType();
 			// Now we expect to get a StoryInfo response
-			ElasticSearchResponse<Story> esResponse = gson.fromJson(
-					json, elasticSearchResponseType);
+			ElasticSearchResponse<Story> esResponse = gson.fromJson(json,
+					elasticSearchResponseType);
 			// We get the StoryInfo objects from it!
 			Story story = esResponse.getSource();
-			
+
 			response.getEntity().consumeContent();
-			
+
 			return story;
 
 		} catch (ClientProtocolException e) {
@@ -249,7 +372,93 @@ public class ESClient {
 
 			e.printStackTrace();
 		}
-		
+
+		return null;
+	}
+
+	// Similar to getStoryInfo, needs refactoring
+	public StoryResource getStoryResources(UUID id) {
+
+		try {
+			HttpGet getRequest = new HttpGet(
+					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryResource/"
+							+ id.toString());
+
+			getRequest.setHeader("Accept", "application/json");
+
+			HttpResponse response = httpclient.execute(getRequest);
+
+			String status = response.getStatusLine().toString();
+			System.out.println(status);
+
+			String json = getEntityContent(response);
+
+			// We have to tell GSON what type we expect
+			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<StoryResource>>() {
+			}.getType();
+			// Now we expect to get a StoryInfo response
+			ElasticSearchResponse<StoryResource> esResponse = gson.fromJson(
+					json, elasticSearchResponseType);
+			// We get the StoryInfo objects from it!
+			StoryResource storyResource = esResponse.getSource();
+
+			response.getEntity().consumeContent();
+
+			return storyResource;
+
+		} catch (ClientProtocolException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	// Quite similar to other get methods
+	public Bitmap getImage(String id) {
+
+		try {
+			HttpGet getRequest = new HttpGet(
+					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Image/"
+							+ id);
+
+			getRequest.setHeader("Accept", "application/json");
+
+			HttpResponse response = httpclient.execute(getRequest);
+
+			String status = response.getStatusLine().toString();
+			System.out.println(status);
+
+			String json = getEntityContent(response);
+
+			// We have to tell GSON what type we expect
+			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<byte[]>>() {
+			}.getType();
+			// Now we expect to get a StoryInfo response
+			ElasticSearchResponse<byte[]> esResponse = gson.fromJson(json,
+					elasticSearchResponseType);
+			// We get the StoryInfo objects from it!
+			byte[] b = esResponse.getSource();
+
+			response.getEntity().consumeContent();
+
+			Bitmap bm = BitmapFactory.decodeByteArray(b, 0, b.length);
+
+			return bm;
+
+		} catch (ClientProtocolException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
 		return null;
 	}
 
@@ -275,8 +484,8 @@ public class ESClient {
 
 		entity.consumeContent();
 	}
-	
-	//This is VERY similar to deleteStoryInfo, will need refactoring!
+
+	// This is VERY similar to deleteStoryInfo, will need refactoring!
 	public void deleteStory(UUID id) throws IOException {
 		HttpDelete httpDelete = new HttpDelete(
 				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Story/"
@@ -300,7 +509,54 @@ public class ESClient {
 		entity.consumeContent();
 	}
 
-	String getEntityContent(HttpResponse response) throws IOException {
+	// This is VERY similar to deleteStoryInfo, will need refactoring!
+	public void deleteStoryResources(UUID id) throws IOException {
+		HttpDelete httpDelete = new HttpDelete(
+				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryResource/"
+						+ id.toString());
+		httpDelete.addHeader("Accept", "application/json");
+
+		HttpResponse response = httpclient.execute(httpDelete);
+
+		String status = response.getStatusLine().toString();
+		System.out.println(status);
+
+		HttpEntity entity = response.getEntity();
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				entity.getContent()));
+		String output;
+		System.err.println("Output from Server -> ");
+		while ((output = br.readLine()) != null) {
+			System.err.println(output);
+		}
+
+		entity.consumeContent();
+	}
+
+	// This is VERY similar to deleteStoryInfo, will need refactoring!
+	public void deleteImage(String id) throws IOException {
+		HttpDelete httpDelete = new HttpDelete(
+				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Image/"+ id);
+		httpDelete.addHeader("Accept", "application/json");
+
+		HttpResponse response = httpclient.execute(httpDelete);
+
+		String status = response.getStatusLine().toString();
+		System.out.println(status);
+
+		HttpEntity entity = response.getEntity();
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				entity.getContent()));
+		String output;
+		System.err.println("Output from Server -> ");
+		while ((output = br.readLine()) != null) {
+			System.err.println(output);
+		}
+
+		entity.consumeContent();
+	}
+
+	private String getEntityContent(HttpResponse response) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				(response.getEntity().getContent())));
 		String output;
@@ -314,7 +570,6 @@ public class ESClient {
 		return json;
 	}
 
-	
 	// For testing purposes only
 	public static void testStoryInfo(ESClient client) {
 		StoryInfo info1 = client.initializeStoryInfo();
@@ -378,54 +633,55 @@ public class ESClient {
 			e.printStackTrace();
 		}
 	}
-	
+
+	// For testing purposes only
 	public static void testStory(ESClient client) {
-		
+
 		UUID testId = UUID.randomUUID();
-		
+
 		client.postStory(testId, client.testStory);
-		
+
 		// Guarantee that all info is posted and retrievable
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		Story story = client.getStory(testId);
-		
-		System.out.println("Story has -> Title: "+story.getTitle()+", Author: "+story.getAuthor()+
-				", Description: "+story.getDescription());
-		
+
+		System.out.println("Story has -> Title: " + story.getTitle()
+				+ ", Author: " + story.getAuthor() + ", Description: "
+				+ story.getDescription());
+
 		try {
 			client.deleteStory(testId);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		Story otherStory = client.getStory(testId);
-		
+
 		if (otherStory == null) {
 			System.out.println("Non-existent story");
-		}
-		else {
+		} else {
 			System.out.println("YA BLEW IT");
 		}
-		
+
 		return;
 	}
-	
+
 	// For testing purposes only
 	public static void main(String[] args) {
 
 		ESClient client = new ESClient();
-		
+
 		// Test posting, getting or deleting of StoryInfo objects
 		testStoryInfo(client);
-		
+
 		// Test posting, getting or deleting of Story objects
-		//testStory(client);
-			
+		// testStory(client);
+
 	}
 
 }
