@@ -1,6 +1,6 @@
 /*
-Video class for CreateYourOwnAdventure.
-Holds a string which represents its resource string.
+ImageURI class for CreateYourOwnAdventure.
+Holds a Uri which represents its resource string.
 
      Copyright  �2013 Jesse Huard
     <Contact: jhuard@ualberta.ca>
@@ -27,43 +27,48 @@ package cmput301.f13t01.createyourownadventure;
 import java.io.IOException;
 import java.io.Serializable;
 
+import android.net.Uri;
 import android.text.SpannableString;
 
 /**
- * Class for Video type Media. Uses a String which refers to the resource name.
+ * Class for Image type Media. Uses a Uri which refers to the resource name.
  */
 @SuppressWarnings("serial")
-public class Video implements Media<String>, Serializable {
-	public static final MediaType type = MediaType.VIDEO;
-
-	private String content;
+public class ImageUri implements Media<Uri>, Serializable {
+	public static final MediaType type = MediaType.IMAGEURI;
+	
+	private Uri content;
 	private MediaInteractionManager manager;
-
-	/**
-	 * Returns the resource identifier string.
-	 * 
-	 * @return the resource identifier string.
-	 */
-	@Override
-	public String getContent() {
-		return this.content;
-	}
-
-	/**
-	 * Sets the resource identifier string.
-	 * 
-	 * @param content
-	 *            the new resource identifier string.
-	 */
-	@Override
-	public void setContent(String content) {
+	
+	public ImageUri(Uri content) {
 		this.content = content;
 	}
 
 	/**
-	 * Gets the <code>MediaInteractionManager</code> of the Video.
+	 * Returns the resource identifier Uri.
 	 * 
-	 * @return the Video's <code>MediaInteractionManager</code>.
+	 * @return the resource identifier Uri.
+	 */
+	@Override
+	public Uri getContent() {
+		return this.content;
+	}
+
+	/**
+	 * Sets the resource identifier Uri.
+	 * 
+	 * @param content
+	 *            the new resource identifier Uri.
+	 */
+	@Override
+	public void setContent(Uri content) {
+		this.content = content;
+	}
+
+	/**
+	 * Gets the <code>MediaInteractionManager</code> for the image.
+	 * 
+	 * @return the image's <code>MediaInteractionManager</code>.
 	 */
 	@Override
 	public MediaInteractionManager getManager() {
@@ -71,11 +76,11 @@ public class Video implements Media<String>, Serializable {
 	}
 
 	/**
-	 * Sets the <code>MediaInteractionManager</code> of the Video.
+	 * Sets the <code>MediaInteractionManager</code> of Image.
 	 * 
 	 * @param manager
 	 *            the <code>MediaInteractionManager</code> to be used with the
-	 *            Video.
+	 *            Image.
 	 */
 	@Override
 	public void setManager(MediaInteractionManager manager) {
@@ -83,9 +88,9 @@ public class Video implements Media<String>, Serializable {
 	}
 
 	/**
-	 * Return a string representation of the content.
+	 * Return a Uri representation of the content.
 	 * 
-	 * @return the string representation of the content.
+	 * @return the Uri representation of the content.
 	 */
 	public String toString() {
 		return this.content.toString();
@@ -97,6 +102,6 @@ public class Video implements Media<String>, Serializable {
 
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
-		content = (String) in.readObject();
+		content = (Uri) in.readObject();
 	}
 }

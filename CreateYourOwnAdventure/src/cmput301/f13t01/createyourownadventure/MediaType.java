@@ -3,7 +3,7 @@ MediaType enum for CreateYourOwnAdventure.
 This is an enumeration that classifies all the possible media types
 that will be viewable in a story fragment.
 
-     Copyright  ©2013 Jesse Huard
+     Copyright  ï¿½2013 Jesse Huard
     <Contact: jhuard@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
@@ -34,7 +34,7 @@ package cmput301.f13t01.createyourownadventure;
  */
 
 public enum MediaType {
-	TEXT, IMAGE, SOUND, VIDEO;
+	TEXT, IMAGE, SOUND, VIDEO, IMAGEURI;
 
 	@Override
 	public String toString() {
