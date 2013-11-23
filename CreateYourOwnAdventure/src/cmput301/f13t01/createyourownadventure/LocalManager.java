@@ -30,10 +30,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectStreamException;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,6 +44,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import android.content.Context;
+import android.net.Uri;
 
 /**
  * This class is designed to maintain all of the
@@ -193,7 +197,7 @@ public class LocalManager implements Serializable, LibraryManager {
 		// Attempts to save a Story to a file
 		try{
 		    // Generate the save file name
-		    String saveFile = "./stories/"+id.toString()+".story";
+		    String saveFile = id.toString()+".story";
 			// Output streams to save Story object
 			FileOutputStream fos = context.openFileOutput(saveFile, Context.MODE_PRIVATE);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -219,7 +223,7 @@ public class LocalManager implements Serializable, LibraryManager {
 	 */
 	public Story loadStory(UUID id) {
 	    // Generate the save file name
-	    String saveFile = "./stories/"+id.toString()+".story";
+	    String saveFile = id.toString()+".story";
 		// Attempts to Story from file
 		try {
 			// Input streams to load Story object
@@ -242,31 +246,43 @@ public class LocalManager implements Serializable, LibraryManager {
 	}
 	
 	/**
-	 * Saves a given image and returns the ID assigned.
+	 * Saves a given image by URI and returns the URI assigned.
 	 * 
-	 * @param image the image to save
-	 * @return the ID that the image was saved with
+	 * @param image the image to save's URI
+	 * @return the URI that the image was saved with
 	 */
-	public UUID saveImage(String image) {
+	public String saveImage(Uri imageUri) {
+		// Determines path to save images
+		String folderPath = context.getFilesDir().getAbsolutePath() + "/images";
+		File folder = new File(folderPath);
+		// Ensures folder exists
+		if (!folder.exists()) {
+			folder.mkdir();
+		}
+		// Generates an ID for the image
 		UUID id = UUID.randomUUID();
-		// Attempts to save a Image to a file
-		try{
-		    // Generate the save file name
-		    String saveFile = "./images/"+id.toString()+".jpg";
-			// Output streams to save Image
-			FileOutputStream fos = context.openFileOutput(saveFile, Context.MODE_PRIVATE);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			// Save the Story
-            oos.writeObject(image);
-			fos.close();
+		String saveFilePath = folder+"/"+id.toString()+".png";
+		File imageFile = new File(saveFilePath);
+		// Copy the file over
+		try {
+			InputStream is = new FileInputStream(new File(imageUri.getPath()));
+			OutputStream os = new FileOutputStream(imageFile);
+			byte[] buf = new byte[1024];
+			int len;
+			while((len = is.read(buf)) > 0) {
+				os.write(buf, 0, len);
+			}
+			is.close();
+			os.close();
 		} catch (FileNotFoundException e) {
-			// Write access error
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// Something went wrong
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return id;
+		// Return the assigned file name
+		return imageFile.getName();
 	}
 	
 	/**
