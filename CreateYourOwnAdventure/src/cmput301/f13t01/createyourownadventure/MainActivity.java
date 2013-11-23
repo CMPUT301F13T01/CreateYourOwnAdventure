@@ -126,6 +126,8 @@ public class MainActivity extends Activity {
 	        	//select a random story to start reading at begininng       	
 	        	startRandomStory();
 	        	return true;
+			case R.id.action_help:
+				onSelectHelp();	
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -183,6 +185,20 @@ public class MainActivity extends Activity {
             return super.onOptionsItemSelected(item);
 	    }		
 
+	}
+	
+	/**
+	 * displays screen specific help
+	 */
+	private void onSelectHelp() {
+		android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+		android.app.Fragment prev = getFragmentManager().findFragmentByTag("help_dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+		android.app.DialogFragment newFragment = (android.app.DialogFragment) HelpFragment.newInstance(HelpMessage.MAIN_SCREEN);
+		newFragment.show(ft, "help_dialog");
 	}
 	
 	/**

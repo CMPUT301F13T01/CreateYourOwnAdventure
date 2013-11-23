@@ -18,5 +18,10 @@
     <item android:id="@+id/action_random_story"
           android:title="@string/action_random_story" 
           android:showAsAction="never" /> 
-
+          
+   <!--   help display -->
+   <item android:id="@+id/action_help"
+         android:title="@string/action_help"
+         android:showAsAction="never" />
+          
 </menu>
