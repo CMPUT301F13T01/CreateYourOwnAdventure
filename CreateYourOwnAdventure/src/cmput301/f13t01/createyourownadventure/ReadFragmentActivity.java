@@ -219,12 +219,6 @@ public class ReadFragmentActivity extends FragmentActivity {
 		}
 		Choice choice = choiceList.get(selectedChoice);
 
-		// make a toast to show the choice that the reader has selected
-		String s = choice.getFlavourText();
-		Toast.makeText(getBaseContext(),
-				"You have selected choice \"" + s + "\"", Toast.LENGTH_LONG)
-				.show();
-
 		Integer destinationId = choice.getDestinationId();
 
 		// generate new fragment to replace the old one
