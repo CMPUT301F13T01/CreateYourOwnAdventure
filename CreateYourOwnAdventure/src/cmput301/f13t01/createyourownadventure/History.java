@@ -77,16 +77,10 @@ public class History implements Serializable {
 		
 		int size = historyStack.size();
 		
-		if (size > 1) {
+		if (size >= 1) {
 			int lastIndex = size - 1;
 			historyStack.remove(lastIndex);
 			return historyStack.get(lastIndex - 1);
-		}
-		//If currently on first fragment, return null
-		else if (size == 1) {
-			int lastIndex = size - 1;
-			historyStack.remove(lastIndex);
-			return null;
 		}
 		//If stack is empty
 		else {

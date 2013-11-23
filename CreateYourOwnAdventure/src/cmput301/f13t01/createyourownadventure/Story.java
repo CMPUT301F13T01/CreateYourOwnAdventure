@@ -206,12 +206,17 @@ public class Story implements Serializable {
 
     	/**
     	 * Removes a requested Fragment from the FragmentList.
+    	 * If the requested Fragment is the first page of the story,
+    	 * the first page of the story is now a Null.
     	 * Returns boolean based on success/failure.
     	 * 
     	 * @param id ID of the Fragment to remove
     	 * @return true if successful, false otherwise
     	 */
         public boolean removeFragment(Integer id) {
+        	if (id == this.firstPage) {
+        		this.firstPage = null;
+        	}
         	return this.fragmentList.removeFragment(id);
         }
         
