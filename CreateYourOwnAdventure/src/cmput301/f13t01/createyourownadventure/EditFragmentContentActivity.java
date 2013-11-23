@@ -40,10 +40,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.util.Log;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -223,6 +225,9 @@ public class EditFragmentContentActivity extends Activity implements
 		EditText text = new EditText(getApplicationContext());
 		text.setTextColor(Color.BLACK);
 		text.setHint("Your Story Text");
+		
+		text.setOnLongClickListener(new EditContentViewListener(layout));
+		
 		layout.addView(text, params);
 	}
 
@@ -238,13 +243,6 @@ public class EditFragmentContentActivity extends Activity implements
 
 	private void addImage(Uri image) {
 		try {
-			Log.d("oops", "Adding image");
-
-			Bitmap bitmap = decodeUri(image, 256, 256);
-			if (bitmap == null)
-				Log.d("oops", "Your bitmap is null");
-			else
-				Log.d("oops", "Bitmap not null");
 
 			LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -252,12 +250,16 @@ public class EditFragmentContentActivity extends Activity implements
 					LinearLayout.LayoutParams.WRAP_CONTENT);
 
 			ImageView imageView = new ImageView(this);
-			imageView.setImageBitmap(bitmap);
 			imageView.setVisibility(View.VISIBLE);
+			imageView.setAdjustViewBounds(true);
+			
+			Log.d("oops", "Layout width: " + layout.getWidth() + " height: " + layout.getHeight());
+			
+			Bitmap bitmap = decodeUri(image, 256, 256);
+			
+			imageView.setImageBitmap(bitmap);
 
 			layout.addView(imageView, params);
-
-			Log.d("oops", "Done adding image");
 
 		} catch (FileNotFoundException e) {
 			Log.d("oops", "Couldn't find the file...");
@@ -388,5 +390,54 @@ public class EditFragmentContentActivity extends Activity implements
 				addImage(image);
 			}
 		}
+	}
+	
+	class EditContentViewListener implements View.OnLongClickListener {
+		
+		private LinearLayout layout;
+		
+		public EditContentViewListener(LinearLayout layout) {
+			this.layout = layout;
+		}
+		
+		@Override
+		public boolean onLongClick(View v) {
+			PopupMenu popup = new PopupMenu(getApplicationContext(), v);
+			MenuInflater inflater = popup.getMenuInflater();
+			inflater.inflate(R.menu.edit_long_click_menu, popup.getMenu());
+
+			popup.setOnMenuItemClickListener(new SimplePopupListener(v, (ViewGroup) layout));
+
+			popup.show();
+			
+			return true;
+		}
+	}
+	
+	class SimplePopupListener implements OnMenuItemClickListener {
+		
+		View view;
+		ViewGroup group;
+		
+		SimplePopupListener(View v, ViewGroup group) {
+			this.view = v;
+			this.group = group;
+		}
+
+		@Override
+		public boolean onMenuItemClick(MenuItem item) {
+			switch(item.getItemId()) {
+			case R.id.action_edit_delete_content:
+				ContextMenuInfo info = item.getMenuInfo();
+				if(info != null) {
+					Log.d("oops", "Popup Menu Info is not null");
+				} else {
+					Log.d("oops", "Popup Menu Info is null");
+				}
+				group.removeView(view);
+			}
+			return false;
+		}
+		
 	}
 }
