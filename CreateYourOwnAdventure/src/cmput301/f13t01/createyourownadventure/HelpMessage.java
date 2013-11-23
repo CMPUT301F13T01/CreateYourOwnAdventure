@@ -35,7 +35,12 @@ package cmput301.f13t01.createyourownadventure;
 public enum HelpMessage {
 	EDIT_STORY(
 			"You can edit the basic story information here. To set the first page, press the set button. "
-					+ "You will not be able to read your story unless you set the first page.");
+					+ "You will not be able to read your story unless you set the first page."),
+	MAIN_SCREEN(
+			"Select web icon on actionbar to browse online stories. Select + icon on actionbar to create a new story. "
+			+ " Open Overflow on actionbar to get Select Random Story and this help. \n\r\n\r"
+			+ "Long Click on a story to get contextual menu. In the contextual menu, select Start at Beginning or Continue to read a story. "
+			+ " Select Edit Story or Delete Story to manipulate a story.");
 
 	private String message;
 
