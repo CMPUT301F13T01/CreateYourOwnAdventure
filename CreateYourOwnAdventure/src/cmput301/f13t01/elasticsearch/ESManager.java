@@ -22,10 +22,14 @@ All saving & loading is handled here, along with deletion.
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package cmput301.f13t01.createyourownadventure;
+package cmput301.f13t01.elasticsearch;
 
 import java.util.ArrayList;
 import java.util.UUID;
+
+import cmput301.f13t01.createyourownadventure.LibraryManager;
+import cmput301.f13t01.createyourownadventure.Story;
+import cmput301.f13t01.createyourownadventure.StoryInfo;
 
 /**
  * This class is designed to interact with stored stories on
