@@ -1,0 +1,23 @@
+package cmput301.f13t01.elasticsearch;
+
+import cmput301.f13t01.createyourownadventure.Media;
+import cmput301.f13t01.createyourownadventure.MediaType;
+
+public class MediaResource {
+	
+	private String identifier;
+	private MediaType type;
+	
+	public MediaResource(Media media) {
+		// this.identifier = media.getResource();
+		// this.type = media.type;
+	}
+	
+	public String getIdentifier() {
+		return identifier;
+	}
+	
+	public MediaType getType() {
+		return type;
+	}
+}
