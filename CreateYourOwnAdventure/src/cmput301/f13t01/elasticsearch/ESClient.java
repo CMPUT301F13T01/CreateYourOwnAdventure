@@ -219,6 +219,7 @@ public class ESClient {
 
 	// THIS IS NEARLY DUPLICATE CODE TO POSTSTORYINFO
 	// -- WILL NEED REFACTORING
+	/*
 	public void postImage(String id, Bitmap bm) {
 		HttpPost httpPost = new HttpPost(
 				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Image/"
@@ -275,6 +276,7 @@ public class ESClient {
 		}
 
 	}
+	*/
 
 	/*
 	 * TODO: Modify to have some sort of way of querying the objects based on
@@ -419,6 +421,7 @@ public class ESClient {
 	}
 
 	// Quite similar to other get methods
+	/*
 	public Bitmap getImage(String id) {
 
 		try {
@@ -461,6 +464,7 @@ public class ESClient {
 
 		return null;
 	}
+	*/
 
 	public void deleteStoryInfo(UUID id) throws IOException {
 		HttpDelete httpDelete = new HttpDelete(
@@ -677,10 +681,10 @@ public class ESClient {
 		ESClient client = new ESClient();
 
 		// Test posting, getting or deleting of StoryInfo objects
-		testStoryInfo(client);
+		// testStoryInfo(client);
 
 		// Test posting, getting or deleting of Story objects
-		// testStory(client);
+		testStory(client);
 
 	}
 

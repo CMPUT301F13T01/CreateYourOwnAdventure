@@ -9,8 +9,15 @@ public class MediaResource {
 	private MediaType type;
 	
 	public MediaResource(Media media) {
-		this.identifier = media.getResource();
-		this.type = media.type;
+		// this.identifier = media.getResource();
+		// this.type = media.type;
 	}
 	
+	public String getIdentifier() {
+		return identifier;
+	}
+	
+	public MediaType getType() {
+		return type;
+	}
 }

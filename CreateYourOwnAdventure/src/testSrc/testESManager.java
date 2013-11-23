@@ -7,8 +7,8 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import cmput301.f13t01.createyourownadventure.ESManager;
 import cmput301.f13t01.createyourownadventure.Story;
+import cmput301.f13t01.elasticsearch.ESManager;
 
 public class testESManager extends TestCase{
 
