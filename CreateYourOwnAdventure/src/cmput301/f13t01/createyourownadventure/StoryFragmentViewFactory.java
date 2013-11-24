@@ -9,16 +9,18 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class StoryFragmentViewFactory {
 
 	@SuppressWarnings("rawtypes")
 	public static void ConstructView(LinearLayout layout,
-			ArrayList<Media> content, Context context) {
+			ArrayList<Media> content, Context context, Boolean forEdit) {
 
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,
@@ -27,10 +29,18 @@ public class StoryFragmentViewFactory {
 		// Display the fragment
 		for (Media media : content) {
 			if (media.getClass().equals(Text.class)) {
-				EditText edit = new EditText(context);
-				edit.setTextColor(Color.BLACK);
-				edit.setText(media.getContent().toString());
-				layout.addView(edit, params);
+				if (forEdit) {
+					EditText edit = new EditText(context);
+					edit.setTextColor(Color.BLACK);
+					edit.setText(media.getContent().toString());
+					layout.addView(edit, params);
+				} else {
+					TextView text = new TextView(context);
+					text.setTextColor(Color.BLACK);
+					text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+					text.setText((CharSequence) media.getContent());
+					layout.addView(text, params);
+				}
 			} else if (media.getClass().equals(Image.class)) {
 				Image image = (Image) media;
 				Uri imageUri = Uri.parse(context.getFilesDir()
