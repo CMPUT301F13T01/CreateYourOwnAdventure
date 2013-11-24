@@ -36,6 +36,10 @@ public enum HelpMessage {
 	EDIT_STORY(
 			"You can edit the basic story information here. To set the first page, press the set button. "
 					+ "You will not be able to read your story unless you set the first page."),
+	BROWSE_ONLINE(
+			"Select New Search to clear input boxes. Enter the Title and/or Author and/or Content to search for. "
+			+ " Select Next to get next batch of found stories. Select Save icon to save a selected story to local device \n\r\n\r"
+			+ " Open Overflow on actionbar to get Select Random Story and this help."),
 	MAIN_SCREEN(
 			"Select web icon on actionbar to browse online stories. Select + icon on actionbar to create a new story. "
 			+ " Open Overflow on actionbar to get Select Random Story and this help. \n\r\n\r"
