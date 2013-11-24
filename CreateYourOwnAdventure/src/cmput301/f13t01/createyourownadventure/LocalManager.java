@@ -251,7 +251,7 @@ public class LocalManager implements Serializable, LibraryManager {
 	 * @param image the image to save's URI
 	 * @return the URI that the image was saved with
 	 */
-	public String saveImage(Uri mediaUri, MediaType mediaType) {
+	public String saveMedia(Uri mediaUri, MediaType mediaType) {
 		// Determines path to save images
 		String folderPath = context.getFilesDir().getAbsolutePath()+"/"+mediaType.toString();
 		File folder = new File(folderPath);
