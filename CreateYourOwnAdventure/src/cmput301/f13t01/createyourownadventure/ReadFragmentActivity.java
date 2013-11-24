@@ -32,9 +32,12 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.Toast;
 
 /**
@@ -140,6 +143,10 @@ public class ReadFragmentActivity extends FragmentActivity {
 		case R.id.action_return_to_previous_page:
 			// Go back to the previous story fragment according to history stack
 			toPrevious();
+			return true;
+			// help function
+		case R.id.action_help:
+			onSelectHelp();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -263,4 +270,22 @@ public class ReadFragmentActivity extends FragmentActivity {
 		outState.putSerializable(getResources().getString(R.string.story_id),
 				storyId);
 	}
+
+	/**
+	 * displays screen specific help
+	 */
+	private void onSelectHelp() {
+		android.app.FragmentTransaction ft = getFragmentManager()
+				.beginTransaction();
+		android.app.Fragment prev = getFragmentManager().findFragmentByTag(
+				"help_dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+		android.app.DialogFragment newFragment = (android.app.DialogFragment) HelpFragment
+				.newInstance(HelpMessage.READ_STORY);
+		newFragment.show(ft, "help_dialog");
+	}
+
 }

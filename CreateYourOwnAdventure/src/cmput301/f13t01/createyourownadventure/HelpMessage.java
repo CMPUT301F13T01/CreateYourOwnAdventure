@@ -44,7 +44,12 @@ public enum HelpMessage {
 			"Select web icon on actionbar to browse online stories. Select + icon on actionbar to create a new story. "
 			+ " Open Overflow on actionbar to get Select Random Story and this help. \n\r\n\r"
 			+ "Long Click on a story to get contextual menu. In the contextual menu, select Start at Beginning or Continue to read a story. "
-			+ " Select Edit Story or Delete Story to manipulate a story.");
+			+ " Select Edit Story or Delete Story to manipulate a story."),
+	READ_STORY(
+			"You can read the content of a story here. Select the buttons at the bottom to make a choice, if any. If there are" +
+			" more than 2 available choices, there is an option to pick the choice randomly. \n\r\n\r" +
+			"Select the back button to return to the previously viewed page in the story. \n\r\n\r" +
+			"Select the calendar icon to return to the first page, clearing all history of pages that you have viewed for this story.");
 
 	private String message;
 
