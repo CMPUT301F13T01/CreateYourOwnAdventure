@@ -37,7 +37,7 @@ import android.text.SpannableString;
  */
 @SuppressWarnings("serial")
 public class Text implements Media<SpannableString>, Serializable {
-	public static final MediaType type = MediaType.TEXT;
+	public final MediaType type = MediaType.TEXT;
 	
 	private SpannableString content;
 	private MediaInteractionManager manager;

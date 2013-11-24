@@ -32,7 +32,7 @@ import java.io.Serializable;
  */
 @SuppressWarnings("serial")
 public class Sound implements Media<String>, Serializable {
-	public static final MediaType type = MediaType.SOUND;
+	public final MediaType type = MediaType.SOUND;
 	
 	private String content;
 	private MediaInteractionManager manager;

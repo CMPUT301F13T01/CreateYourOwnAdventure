@@ -34,7 +34,7 @@ import android.text.SpannableString;
  */
 @SuppressWarnings("serial")
 public class Video implements Media<String>, Serializable {
-	public static final MediaType type = MediaType.VIDEO;
+	public final MediaType type = MediaType.VIDEO;
 
 	private String content;
 	private MediaInteractionManager manager;

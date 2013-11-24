@@ -35,7 +35,7 @@ import android.text.SpannableString;
  */
 @SuppressWarnings("serial")
 public class ImageUri implements Media<Uri>, Serializable {
-	public static final MediaType type = MediaType.IMAGEURI;
+	public final MediaType type = MediaType.IMAGEURI;
 	
 	private Uri content;
 	private MediaInteractionManager manager;

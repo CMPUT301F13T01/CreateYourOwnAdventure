@@ -32,7 +32,7 @@ import java.io.Serializable;
  */
 @SuppressWarnings("serial")
 public class Image implements Media<String>, Serializable {
-	public static final MediaType type = MediaType.IMAGE;
+	public final MediaType type = MediaType.IMAGE;
 	
 	private String content;
 	private MediaInteractionManager manager;
