@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import android.net.Uri;
-import android.text.SpannableString;
 
 /**
  * Class for Image type Media. Uses a Uri which refers to the resource name.
@@ -97,11 +96,11 @@ public class ImageUri implements Media<Uri>, Serializable {
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-		out.writeObject(content);
+		out.writeObject(content.toString());
 	}
 
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
-		content = (Uri) in.readObject();
+		content = Uri.parse((String) in.readObject());
 	}
 }
