@@ -237,7 +237,7 @@ public class MainActivity extends Activity {
 	 */
 	private void startCreateNewStory() {
 		//TODO quick and dirty test, replace with a toast
-		System.out.println("You selected Create New Story");
+		//System.out.println("You selected Create New Story");
 		//create the intent to launch create new story activity
 	    Intent intent = new Intent(this, EditStoryActivity.class);
 		intent.putExtra(getResources().getString(R.string.story_is_new), true);
@@ -249,7 +249,10 @@ public class MainActivity extends Activity {
 	 */
 	private void startBrowseOnlineStories() {
 		//TODO quick and dirty test
-		System.out.println("You selected Browse Online Stories");
+		//System.out.println("You selected Browse Online Stories");
+	    Intent intent = new Intent(this, BrowseOnlineStoriesActivity.class);
+		//intent.putExtra(getResources().getString(R.string.story_is_new), true);
+        startActivity(intent);		
 	}
 	
 	/**
@@ -274,7 +277,7 @@ public class MainActivity extends Activity {
 	 */
 	private void startDeleteStory(UUID storyId) {
 		//quick and dirty test
-		System.out.println("You selected Delete Story");
+		//System.out.println("You selected Delete Story");
 		//Send the signal to the LocalManager to delete the story
 		objLibrary.removeStory(storyId);
 		//update the ListView
@@ -289,7 +292,7 @@ public class MainActivity extends Activity {
 	 */
 	private void startContinueStory(UUID storyId) {
 		//quick and dirty test
-		System.out.println("You selected Continue Story");
+		//System.out.println("You selected Continue Story");
 		//create the intent to launch read story activity		
 	    Intent intent = new Intent(this, ReadFragmentActivity.class);
 	    intent.putExtra(getResources().getString(R.string.story_continue), false);
@@ -304,7 +307,7 @@ public class MainActivity extends Activity {
 	 */
 	private void startAtBeginning(UUID storyId) {
 		//quick and dirty test
-		System.out.println("You selected Start at Beginning");
+		//System.out.println("You selected Start at Beginning");
 		//create the intent to launch read story activity
 	    Intent intent = new Intent(this, ReadFragmentActivity.class);
 	    intent.putExtra(getResources().getString(R.string.story_continue), true);
