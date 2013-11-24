@@ -66,16 +66,8 @@ public class PreviewFragmentActivity extends Activity {
 				LinearLayout.LayoutParams.MATCH_PARENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT);
 
-		// Display the fragment
-		for (Media media : content) {
-			if (media.getClass().equals(Text.class)) {
-				TextView text = new TextView(getApplicationContext());
-				text.setTextColor(Color.BLACK);
-				text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-				text.setText((CharSequence) media.getContent());
-				layout.addView(text, params);
-			}
-		}
+
+		StoryFragmentViewFactory.ConstructView(layout, content, this, false);
 	}
 
 	@Override

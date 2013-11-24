@@ -109,7 +109,7 @@ public class EditFragmentContentActivity extends Activity implements
 
 		ArrayList<Media> content = storyFragment.getContentList();
 
-		StoryFragmentViewFactory.ConstructView(layout, content, this);
+		StoryFragmentViewFactory.ConstructView(layout, content, this, true);
 	}
 
 	/**
@@ -403,6 +403,7 @@ public class EditFragmentContentActivity extends Activity implements
 				fragment.addContent(new Text(string));
 			} else if (v.getClass().equals(ImageView.class)) {
 				fragment.addContent(new ImageUri(imageURIs.get(UriIndex)));
+				UriIndex++;
 			}
 		}
 
