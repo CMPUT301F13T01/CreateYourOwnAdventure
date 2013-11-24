@@ -251,9 +251,9 @@ public class LocalManager implements Serializable, LibraryManager {
 	 * @param image the image to save's URI
 	 * @return the URI that the image was saved with
 	 */
-	public String saveImage(Uri imageUri) {
+	public String saveImage(Uri mediaUri, MediaType mediaType) {
 		// Determines path to save images
-		String folderPath = context.getFilesDir().getAbsolutePath() + "/images";
+		String folderPath = context.getFilesDir().getAbsolutePath()+"/"+mediaType.toString();
 		File folder = new File(folderPath);
 		// Ensures folder exists
 		if (!folder.exists()) {
@@ -261,12 +261,12 @@ public class LocalManager implements Serializable, LibraryManager {
 		}
 		// Generates an ID for the image
 		UUID id = UUID.randomUUID();
-		String saveFilePath = folder+"/"+id.toString()+".png";
-		File imageFile = new File(saveFilePath);
+		String saveFilePath = folder+"/"+id.toString();
+		File mediaFile = new File(saveFilePath);
 		// Copy the file over
 		try {
-			InputStream is = new FileInputStream(new File(imageUri.getPath()));
-			OutputStream os = new FileOutputStream(imageFile);
+			InputStream is = new FileInputStream(new File(mediaUri.getPath()));
+			OutputStream os = new FileOutputStream(mediaFile);
 			byte[] buf = new byte[1024];
 			int len;
 			while((len = is.read(buf)) > 0) {
@@ -282,7 +282,7 @@ public class LocalManager implements Serializable, LibraryManager {
 			e.printStackTrace();
 		}
 		// Return the assigned file name
-		return imageFile.getName();
+		return mediaFile.getName();
 	}
 	
 	/**
