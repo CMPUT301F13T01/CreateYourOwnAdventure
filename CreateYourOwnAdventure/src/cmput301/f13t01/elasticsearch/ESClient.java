@@ -5,6 +5,7 @@ package cmput301.f13t01.elasticsearch;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -23,7 +24,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import cmput301.f13t01.createyourownadventure.MediaType;
 import cmput301.f13t01.createyourownadventure.Story;
 import cmput301.f13t01.createyourownadventure.StoryInfo;
 
@@ -106,7 +107,8 @@ public class ESClient {
 
 	// THIS IS NEARLY DUPLICATE CODE TO POSTSTORYINFO
 	// -- WILL NEED REFACTORING
-	public void postStory(UUID id, Story story) {
+	public void postStory(UUID id, Story story) throws IOException,
+			IllegalStateException {
 		HttpPost httpPost = new HttpPost(
 				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Story/"
 						+ id.toString());
@@ -164,7 +166,8 @@ public class ESClient {
 
 	// THIS IS NEARLY DUPLICATE CODE TO POSTSTORYINFO
 	// -- WILL NEED REFACTORING
-	public void postStoryResources(StoryResource storyResource) {
+	public void postStoryResources(StoryResource storyResource)
+			throws IOException, IllegalStateException {
 		HttpPost httpPost = new HttpPost(
 				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryResource/"
 						+ storyResource.getStoryId().toString());
@@ -219,65 +222,74 @@ public class ESClient {
 
 	// THIS IS NEARLY DUPLICATE CODE TO POSTSTORYINFO
 	// -- WILL NEED REFACTORING
-	/*
-	public void postImage(String id, Bitmap bm) {
-		HttpPost httpPost = new HttpPost(
-				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Image/"
-						+ id);
-
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-		byte[] b = baos.toByteArray();
-
-		StringEntity stringentity = null;
-		try {
-			stringentity = new StringEntity(gson.toJson(b));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		httpPost.setHeader("Accept", "application/json");
-
-		httpPost.setEntity(stringentity);
-		HttpResponse response = null;
-
-		try {
-			response = httpclient.execute(httpPost);
+	public void postMedia(String identifier, MediaType type, String data) {
+		// Query for existence
+		// If doesn't exist: Post
+		// If exists: Do nothing
+		HttpGet getRequest = new HttpGet("http://cmput301.softwareprocess.es:8080/cmput301f13t01/"+type.toString()+"/"+identifier);
+		getRequest.setHeader("Accept", "application/json");
+		HttpResponse getResponse = null;
+		try { 
+			getResponse = httpclient.execute(getRequest);
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace(); 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace(); 
 		}
+		
+		int getStatus = -1;
+		if (getResponse != null) {
+			getStatus = getResponse.getStatusLine().getStatusCode();
+		}
+		
+		if (getStatus != 404) {
+			return;
+		}
+		
+		HttpPost httpPost = new HttpPost("http://cmput301.softwareprocess.es:8080/cmput301f13t01/"+type.toString()+"/"+ identifier);
 
-		String status = response.getStatusLine().toString();
-		System.out.println(status);
-		HttpEntity entity = response.getEntity();
-
-		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					entity.getContent()));
+		StringEntity stringentity = null; 
+		try { 
+			stringentity = new StringEntity(gson.toJson(data)); 
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace(); 
+		}
+ 
+		httpPost.setHeader("Accept", "application/json");
+  
+		httpPost.setEntity(stringentity); 
+		HttpResponse postResponse = null;
+ 
+		try { 
+			postResponse = httpclient.execute(httpPost); 
+		} catch (ClientProtocolException e) {
+			e.printStackTrace(); 
+		} catch (IOException e) {
+			e.printStackTrace(); 
+		}
+  
+		String postStatus = postResponse.getStatusLine().toString();
+		System.out.println(postStatus); 
+		HttpEntity entity = postResponse.getEntity();
+ 
+		try { 
+			BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent())); 
 			String output;
-			System.err.println("Output from Server -> ");
-			while ((output = br.readLine()) != null) {
+			System.err.println("Output from Server -> "); 
+			while ((output =br.readLine()) != null) { 
 				System.err.println(output);
 			}
-		} catch (IOException e) {
+		} catch (IOException e) { 
+			e.printStackTrace(); 
+		}
+  
+		try { 
+			entity.consumeContent(); 
+		} catch (IOException e) { 
 			e.printStackTrace();
 		}
-
-		try {
-			entity.consumeContent();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-	*/
-
+	}		
+	
 	/*
 	 * TODO: Modify to have some sort of way of querying the objects based on
 	 * some sort of sorting mechanism. Also need to work on how to not grab
@@ -343,7 +355,6 @@ public class ESClient {
 			HttpGet getRequest = new HttpGet(
 					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Story/"
 							+ id.toString());
-
 			getRequest.setHeader("Accept", "application/json");
 
 			HttpResponse response = httpclient.execute(getRequest);
@@ -422,49 +433,43 @@ public class ESClient {
 
 	// Quite similar to other get methods
 	/*
-	public Bitmap getImage(String id) {
-
-		try {
-			HttpGet getRequest = new HttpGet(
-					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Image/"
-							+ id);
-
-			getRequest.setHeader("Accept", "application/json");
-
-			HttpResponse response = httpclient.execute(getRequest);
-
-			String status = response.getStatusLine().toString();
-			System.out.println(status);
-
-			String json = getEntityContent(response);
-
-			// We have to tell GSON what type we expect
-			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<byte[]>>() {
-			}.getType();
-			// Now we expect to get a StoryInfo response
-			ElasticSearchResponse<byte[]> esResponse = gson.fromJson(json,
-					elasticSearchResponseType);
-			// We get the StoryInfo objects from it!
-			byte[] b = esResponse.getSource();
-
-			response.getEntity().consumeContent();
-
-			Bitmap bm = BitmapFactory.decodeByteArray(b, 0, b.length);
-
-			return bm;
-
-		} catch (ClientProtocolException e) {
-
-			e.printStackTrace();
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-	*/
+	 * public Bitmap getImage(String id) {
+	 * 
+	 * try { HttpGet getRequest = new HttpGet(
+	 * "http://cmput301.softwareprocess.es:8080/cmput301f13t01/Image/" + id);
+	 * 
+	 * getRequest.setHeader("Accept", "application/json");
+	 * 
+	 * HttpResponse response = httpclient.execute(getRequest);
+	 * 
+	 * String status = response.getStatusLine().toString();
+	 * System.out.println(status);
+	 * 
+	 * String json = getEntityContent(response);
+	 * 
+	 * // We have to tell GSON what type we expect Type
+	 * elasticSearchResponseType = new
+	 * TypeToken<ElasticSearchResponse<byte[]>>() { }.getType(); // Now we
+	 * expect to get a StoryInfo response ElasticSearchResponse<byte[]>
+	 * esResponse = gson.fromJson(json, elasticSearchResponseType); // We get
+	 * the StoryInfo objects from it! byte[] b = esResponse.getSource();
+	 * 
+	 * response.getEntity().consumeContent();
+	 * 
+	 * Bitmap bm = BitmapFactory.decodeByteArray(b, 0, b.length);
+	 * 
+	 * return bm;
+	 * 
+	 * } catch (ClientProtocolException e) {
+	 * 
+	 * e.printStackTrace();
+	 * 
+	 * } catch (IOException e) {
+	 * 
+	 * e.printStackTrace(); }
+	 * 
+	 * return null; }
+	 */
 
 	public void deleteStoryInfo(UUID id) throws IOException {
 		HttpDelete httpDelete = new HttpDelete(
@@ -540,7 +545,8 @@ public class ESClient {
 	// This is VERY similar to deleteStoryInfo, will need refactoring!
 	public void deleteImage(String id) throws IOException {
 		HttpDelete httpDelete = new HttpDelete(
-				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Image/"+ id);
+				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Image/"
+						+ id);
 		httpDelete.addHeader("Accept", "application/json");
 
 		HttpResponse response = httpclient.execute(httpDelete);
@@ -643,7 +649,13 @@ public class ESClient {
 
 		UUID testId = UUID.randomUUID();
 
-		client.postStory(testId, client.testStory);
+		try {
+			client.postStory(testId, client.testStory);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		}
 
 		// Guarantee that all info is posted and retrievable
 		try {
