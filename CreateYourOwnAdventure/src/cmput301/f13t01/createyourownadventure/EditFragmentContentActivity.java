@@ -25,17 +25,13 @@ story fragment's content.
 
 package cmput301.f13t01.createyourownadventure;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -72,6 +68,7 @@ public class EditFragmentContentActivity extends Activity implements
 	private int fragmentId;
 	private ReadStoryManager manager;
 	private ArrayList<Uri> imageURIs;
+	private LinearLayout layout;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -80,6 +77,8 @@ public class EditFragmentContentActivity extends Activity implements
 		setContentView(R.layout.activity_edit_fragment_content);
 
 		setupActionBar();
+		
+		layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 
 		// Get the story manager
 		GlobalManager app = (GlobalManager) getApplication();
@@ -110,24 +109,7 @@ public class EditFragmentContentActivity extends Activity implements
 
 		ArrayList<Media> content = storyFragment.getContentList();
 
-		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT);
-
-		// Display the fragment
-		for (Media media : content) {
-			if (media.getClass().equals(Text.class)) {
-				EditText edit = new EditText(getApplication());
-				edit.setTextColor(Color.BLACK);
-				edit.setText(media.getContent().toString());
-				layout.addView(edit, params);
-			} else if (media.getClass().equals(ImageUri.class)) {
-				ImageUri image = (ImageUri) media;
-				addImage(image.getContent());
-			}
-		}
-
+		StoryFragmentViewFactory.ConstructView(layout, content, this);
 	}
 
 	/**
@@ -225,7 +207,6 @@ public class EditFragmentContentActivity extends Activity implements
 	}
 
 	private void onSelectAddText() {
-		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -248,79 +229,6 @@ public class EditFragmentContentActivity extends Activity implements
 		startActivityForResult(intent, SELECT_IMAGE);
 	}
 
-	private void addImage(Uri image) {
-		try {
-
-			LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-					LinearLayout.LayoutParams.MATCH_PARENT,
-					LinearLayout.LayoutParams.WRAP_CONTENT);
-
-			ImageView imageView = new ImageView(this);
-			imageView.setVisibility(View.VISIBLE);
-			imageView.setAdjustViewBounds(true);
-
-			Log.d("oops", "Layout width: " + layout.getWidth() + " height: "
-					+ layout.getHeight());
-
-			Bitmap bitmap = decodeUri(image, 256, 256);
-
-			imageView.setImageBitmap(bitmap);
-
-			layout.addView(imageView, params);
-
-		} catch (FileNotFoundException e) {
-			Log.d("oops", "Couldn't find the file...");
-			e.printStackTrace();
-		}
-	}
-
-	private Bitmap decodeUri(Uri selectedImage, int reqWidth, int reqHeight)
-			throws FileNotFoundException {
-
-		// First decode image size
-		final BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-		BitmapFactory.decodeStream(
-				getContentResolver().openInputStream(selectedImage), null,
-				options);
-
-		// Calculate inSampleSize
-		options.inSampleSize = calculateInSampleSize(options, reqWidth,
-				reqHeight);
-
-		// Decode bitmap with inSampleSize set
-		options.inJustDecodeBounds = false;
-		return BitmapFactory.decodeStream(
-				getContentResolver().openInputStream(selectedImage), null,
-				options);
-
-	}
-
-	public static int calculateInSampleSize(BitmapFactory.Options options,
-			int reqWidth, int reqHeight) {
-		// Raw height and width of image
-		final int height = options.outHeight;
-		final int width = options.outWidth;
-		int inSampleSize = 1;
-
-		if (height > reqHeight || width > reqWidth) {
-
-			final int halfHeight = height / 2;
-			final int halfWidth = width / 2;
-
-			// Calculate the largest inSampleSize value that is a power of 2 and
-			// keeps both
-			// height and width larger than the requested height and width.
-			while ((halfHeight / inSampleSize) > reqHeight
-					&& (halfWidth / inSampleSize) > reqWidth) {
-				inSampleSize *= 2;
-			}
-		}
-
-		return inSampleSize;
-	}
-
 	private void onSelectCancel() {
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.cancel_toast), Toast.LENGTH_SHORT);
@@ -333,7 +241,6 @@ public class EditFragmentContentActivity extends Activity implements
 
 	@Override
 	public void onBackPressed() {
-		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 		storyFragment.removeAllContent();
 
 		for (int i = 0; i < layout.getChildCount(); i++) {
@@ -396,7 +303,7 @@ public class EditFragmentContentActivity extends Activity implements
 			if (resultCode == RESULT_OK) {
 				Uri image = data.getData();
 				imageURIs.add(image);
-				addImage(image);
+				StoryFragmentViewFactory.addImage(image, layout, this);
 			}
 		}
 	}
@@ -466,7 +373,6 @@ public class EditFragmentContentActivity extends Activity implements
 
 	private StoryFragment constructSaveFragmentFromView() {
 
-		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 		StoryFragment fragment = storyFragment;
 		fragment.removeAllContent();
 
