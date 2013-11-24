@@ -58,7 +58,7 @@ public class EditStoryActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_story);
 		getActionBar().setDisplayHomeAsUpEnabled(false);
-
+		
 		final Button button = (Button) findViewById(R.id.edit_set_first_page);
 		button.setOnClickListener(new View.OnClickListener() {
 

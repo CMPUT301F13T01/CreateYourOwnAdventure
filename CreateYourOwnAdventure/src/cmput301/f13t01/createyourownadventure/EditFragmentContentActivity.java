@@ -25,7 +25,6 @@ story fragment's content.
 
 package cmput301.f13t01.createyourownadventure;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -33,8 +32,6 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -70,14 +67,18 @@ public class EditFragmentContentActivity extends Activity implements
 	private StoryFragment storyFragment;
 	private int fragmentId;
 	private ReadStoryManager manager;
+	private ArrayList<Uri> imageURIs;
+	private LinearLayout layout;
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_fragment_content);
 
 		setupActionBar();
+		
+		layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 
 		// Get the story manager
 		GlobalManager app = (GlobalManager) getApplication();
@@ -85,31 +86,30 @@ public class EditFragmentContentActivity extends Activity implements
 
 		Intent intent = getIntent();
 
-		if (intent != null) {
-			fragmentId = (int) intent.getIntExtra(
-					getResources().getString(R.string.fragment_id), -1);
-			storyFragment = (StoryFragment) intent
-					.getSerializableExtra(getResources().getString(
+		if (savedInstanceState != null) {
+			fragmentId = savedInstanceState.getInt(getResources().getString(
+					R.string.fragment_id));
+			storyFragment = (StoryFragment) savedInstanceState
+					.getSerializable(getResources().getString(
 							R.string.story_fragment));
+			imageURIs = (ArrayList<Uri>) savedInstanceState
+					.getSerializable(getResources().getString(
+							R.string.story_URIs));
+		} else {
 
-			ArrayList<Media> content = storyFragment.getContentList();
-
-			LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-					LinearLayout.LayoutParams.MATCH_PARENT,
-					LinearLayout.LayoutParams.WRAP_CONTENT);
-
-			// Display the fragment
-			for (Media media : content) {
-				if (media.getClass().equals(Text.class)) {
-					EditText edit = new EditText(getApplication());
-					edit.setTextColor(Color.BLACK);
-					edit.setText(media.getContent().toString());
-					layout.addView(edit, params);
-				}
+			if (intent != null) {
+				fragmentId = (int) intent.getIntExtra(
+						getResources().getString(R.string.fragment_id), -1);
+				storyFragment = (StoryFragment) intent
+						.getSerializableExtra(getResources().getString(
+								R.string.story_fragment));
 			}
+			imageURIs = new ArrayList<Uri>();
 		}
 
+		ArrayList<Media> content = storyFragment.getContentList();
+
+		StoryFragmentViewFactory.ConstructView(layout, content, this);
 	}
 
 	/**
@@ -154,18 +154,7 @@ public class EditFragmentContentActivity extends Activity implements
 		Intent intent = new Intent(getApplicationContext(),
 				PreviewFragmentActivity.class);
 
-		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
-		StoryFragment previewFragment = storyFragment;
-		previewFragment.removeAllContent();
-
-		for (int i = 0; i < layout.getChildCount(); i++) {
-			View v = layout.getChildAt(i);
-			if (v.getClass().equals(EditText.class)) {
-				EditText text = (EditText) v;
-				SpannableString string = new SpannableString(text.getText());
-				previewFragment.addContent(new Text(string));
-			}
-		}
+		StoryFragment previewFragment = constructTemporaryFragmentFromView();
 
 		intent.putExtra(getResources().getString(R.string.story_fragment),
 				previewFragment);
@@ -218,16 +207,15 @@ public class EditFragmentContentActivity extends Activity implements
 	}
 
 	private void onSelectAddText() {
-		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT);
 		EditText text = new EditText(getApplicationContext());
 		text.setTextColor(Color.BLACK);
 		text.setHint("Your Story Text");
-		
+
 		text.setOnLongClickListener(new EditContentViewListener(layout));
-		
+
 		layout.addView(text, params);
 	}
 
@@ -239,78 +227,6 @@ public class EditFragmentContentActivity extends Activity implements
 		intent.setType("image/*");
 		intent.setAction(Intent.ACTION_GET_CONTENT);
 		startActivityForResult(intent, SELECT_IMAGE);
-	}
-
-	private void addImage(Uri image) {
-		try {
-
-			LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-					LinearLayout.LayoutParams.MATCH_PARENT,
-					LinearLayout.LayoutParams.WRAP_CONTENT);
-
-			ImageView imageView = new ImageView(this);
-			imageView.setVisibility(View.VISIBLE);
-			imageView.setAdjustViewBounds(true);
-			
-			Log.d("oops", "Layout width: " + layout.getWidth() + " height: " + layout.getHeight());
-			
-			Bitmap bitmap = decodeUri(image, 256, 256);
-			
-			imageView.setImageBitmap(bitmap);
-
-			layout.addView(imageView, params);
-
-		} catch (FileNotFoundException e) {
-			Log.d("oops", "Couldn't find the file...");
-			e.printStackTrace();
-		}
-	}
-
-	private Bitmap decodeUri(Uri selectedImage, int reqWidth, int reqHeight)
-			throws FileNotFoundException {
-
-		// First decode image size
-		final BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-		BitmapFactory.decodeStream(
-				getContentResolver().openInputStream(selectedImage), null,
-				options);
-
-		// Calculate inSampleSize
-		options.inSampleSize = calculateInSampleSize(options, reqWidth,
-				reqHeight);
-
-		// Decode bitmap with inSampleSize set
-		options.inJustDecodeBounds = false;
-		return BitmapFactory.decodeStream(
-				getContentResolver().openInputStream(selectedImage), null,
-				options);
-
-	}
-
-	public static int calculateInSampleSize(BitmapFactory.Options options,
-			int reqWidth, int reqHeight) {
-		// Raw height and width of image
-		final int height = options.outHeight;
-		final int width = options.outWidth;
-		int inSampleSize = 1;
-
-		if (height > reqHeight || width > reqWidth) {
-
-			final int halfHeight = height / 2;
-			final int halfWidth = width / 2;
-
-			// Calculate the largest inSampleSize value that is a power of 2 and
-			// keeps both
-			// height and width larger than the requested height and width.
-			while ((halfHeight / inSampleSize) > reqHeight
-					&& (halfWidth / inSampleSize) > reqWidth) {
-				inSampleSize *= 2;
-			}
-		}
-
-		return inSampleSize;
 	}
 
 	private void onSelectCancel() {
@@ -325,7 +241,6 @@ public class EditFragmentContentActivity extends Activity implements
 
 	@Override
 	public void onBackPressed() {
-		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 		storyFragment.removeAllContent();
 
 		for (int i = 0; i < layout.getChildCount(); i++) {
@@ -387,38 +302,40 @@ public class EditFragmentContentActivity extends Activity implements
 		case SELECT_IMAGE:
 			if (resultCode == RESULT_OK) {
 				Uri image = data.getData();
-				addImage(image);
+				imageURIs.add(image);
+				StoryFragmentViewFactory.addImage(image, layout, this);
 			}
 		}
 	}
-	
+
 	class EditContentViewListener implements View.OnLongClickListener {
-		
+
 		private LinearLayout layout;
-		
+
 		public EditContentViewListener(LinearLayout layout) {
 			this.layout = layout;
 		}
-		
+
 		@Override
 		public boolean onLongClick(View v) {
 			PopupMenu popup = new PopupMenu(getApplicationContext(), v);
 			MenuInflater inflater = popup.getMenuInflater();
 			inflater.inflate(R.menu.edit_long_click_menu, popup.getMenu());
 
-			popup.setOnMenuItemClickListener(new SimplePopupListener(v, (ViewGroup) layout));
+			popup.setOnMenuItemClickListener(new SimplePopupListener(v,
+					(ViewGroup) layout));
 
 			popup.show();
-			
+
 			return true;
 		}
 	}
-	
+
 	class SimplePopupListener implements OnMenuItemClickListener {
-		
+
 		View view;
 		ViewGroup group;
-		
+
 		SimplePopupListener(View v, ViewGroup group) {
 			this.view = v;
 			this.group = group;
@@ -426,10 +343,10 @@ public class EditFragmentContentActivity extends Activity implements
 
 		@Override
 		public boolean onMenuItemClick(MenuItem item) {
-			switch(item.getItemId()) {
+			switch (item.getItemId()) {
 			case R.id.action_edit_delete_content:
 				ContextMenuInfo info = item.getMenuInfo();
-				if(info != null) {
+				if (info != null) {
 					Log.d("oops", "Popup Menu Info is not null");
 				} else {
 					Log.d("oops", "Popup Menu Info is null");
@@ -438,6 +355,57 @@ public class EditFragmentContentActivity extends Activity implements
 			}
 			return false;
 		}
-		
+
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(getResources().getString(R.string.fragment_id),
+				fragmentId);
+		StoryFragment savedFragment = constructTemporaryFragmentFromView();
+		outState.putSerializable(
+				getResources().getString(R.string.story_fragment),
+				savedFragment);
+		outState.putSerializable(getResources().getString(R.string.story_URIs),
+				imageURIs);
+	}
+
+	private StoryFragment constructSaveFragmentFromView() {
+
+		StoryFragment fragment = storyFragment;
+		fragment.removeAllContent();
+
+		for (int i = 0; i < layout.getChildCount(); i++) {
+			View v = layout.getChildAt(i);
+			if (v.getClass().equals(EditText.class)) {
+				EditText text = (EditText) v;
+				SpannableString string = new SpannableString(text.getText());
+				fragment.addContent(new Text(string));
+			}
+		}
+
+		return fragment;
+	}
+
+	private StoryFragment constructTemporaryFragmentFromView() {
+		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
+		StoryFragment fragment = storyFragment;
+		fragment.removeAllContent();
+
+		int UriIndex = 0;
+
+		for (int i = 0; i < layout.getChildCount(); i++) {
+			View v = layout.getChildAt(i);
+			if (v.getClass().equals(EditText.class)) {
+				EditText text = (EditText) v;
+				SpannableString string = new SpannableString(text.getText());
+				fragment.addContent(new Text(string));
+			} else if (v.getClass().equals(ImageView.class)) {
+				fragment.addContent(new ImageUri(imageURIs.get(UriIndex)));
+			}
+		}
+
+		return fragment;
 	}
 }

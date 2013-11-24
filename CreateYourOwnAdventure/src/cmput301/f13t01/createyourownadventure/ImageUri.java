@@ -1,6 +1,6 @@
 /*
-Text class for CreateYourOwnAdventure.
-Holds a spannable string which represents its content.
+ImageURI class for CreateYourOwnAdventure.
+Holds a Uri which represents its resource string.
 
      Copyright  �2013 Jesse Huard
     <Contact: jhuard@ualberta.ca>
@@ -27,60 +27,81 @@ package cmput301.f13t01.createyourownadventure;
 import java.io.IOException;
 import java.io.Serializable;
 
+import android.net.Uri;
 import android.text.SpannableString;
 
 /**
- * Class for Text type Media. Uses a SpannableString which represents the Text
- * content.
- * 
- * @author Jesse Huard
+ * Class for Image type Media. Uses a Uri which refers to the resource name.
  */
 @SuppressWarnings("serial")
-public class Text implements Media<SpannableString>, Serializable {
-	public final MediaType type = MediaType.TEXT;
+public class ImageUri implements Media<Uri>, Serializable {
+	public final MediaType type = MediaType.IMAGEURI;
 	
-	private SpannableString content;
+	private Uri content;
 	private MediaInteractionManager manager;
-
-	public Text(SpannableString content) {
+	
+	public ImageUri(Uri content) {
 		this.content = content;
 	}
 
-	public Text() {
-		this.content = new SpannableString("");
-	}
-
+	/**
+	 * Returns the resource identifier Uri.
+	 * 
+	 * @return the resource identifier Uri.
+	 */
 	@Override
-	public SpannableString getContent() {
+	public Uri getContent() {
 		return this.content;
 	}
 
+	/**
+	 * Sets the resource identifier Uri.
+	 * 
+	 * @param content
+	 *            the new resource identifier Uri.
+	 */
 	@Override
-	public void setContent(SpannableString content) {
+	public void setContent(Uri content) {
 		this.content = content;
 	}
 
+	/**
+	 * Gets the <code>MediaInteractionManager</code> for the image.
+	 * 
+	 * @return the image's <code>MediaInteractionManager</code>.
+	 */
 	@Override
 	public MediaInteractionManager getManager() {
 		return this.manager;
 	}
 
+	/**
+	 * Sets the <code>MediaInteractionManager</code> of Image.
+	 * 
+	 * @param manager
+	 *            the <code>MediaInteractionManager</code> to be used with the
+	 *            Image.
+	 */
 	@Override
 	public void setManager(MediaInteractionManager manager) {
 		this.manager = manager;
 	}
 
+	/**
+	 * Return a Uri representation of the content.
+	 * 
+	 * @return the Uri representation of the content.
+	 */
 	public String toString() {
 		return this.content.toString();
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-		out.writeObject(content.toString());
+		out.writeObject(content);
 	}
 
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
-		content = new SpannableString((String) in.readObject());
+		content = (Uri) in.readObject();
 	}
-
 }
