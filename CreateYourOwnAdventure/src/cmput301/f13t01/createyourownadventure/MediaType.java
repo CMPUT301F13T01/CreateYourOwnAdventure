@@ -38,6 +38,6 @@ public enum MediaType {
 
 	@Override
 	public String toString() {
-		return "Media type: " + name();
+		return name();
 	}
 }
