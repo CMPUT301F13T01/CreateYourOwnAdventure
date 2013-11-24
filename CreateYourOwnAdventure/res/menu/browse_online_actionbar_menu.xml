@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!--  new search -->
+    <item android:id="@+id/action_new_search" 
+          android:title="@string/action_new_search"  
+          android:showAsAction="ifRoom" />
+        
+    <!--  search with input strings -->
+    <item android:id="@+id/action_search_online_stories"
+          android:title="@string/action_search_online_stories" 
+          android:icon="@drawable/action_search" 
+          android:showAsAction="ifRoom" />     
+    
+    <!--  get next 20 online stories -->
+    <item android:id="@+id/action_get_next_20" 
+          android:title="@string/action_get_next_20"  
+          android:showAsAction="ifRoom" />
+        
+    <!--  save selected story to device -->
+     <item android:id="@+id/action_save_online_story"
+          android:title="@string/action_save_online_story" 
+          android:icon="@drawable/action_save" 
+          android:showAsAction="ifRoom" />
+             
+    <!--  select random story -->
+    <item android:id="@+id/action_random_story"
+          android:title="@string/action_random_story" 
+          android:showAsAction="never" /> 
+             
+    <!--   help menu -->
+    <item android:id="@+id/action_help"
+          android:title="@string/action_help"
+          android:showAsAction="never" />    
+    
+</menu>
