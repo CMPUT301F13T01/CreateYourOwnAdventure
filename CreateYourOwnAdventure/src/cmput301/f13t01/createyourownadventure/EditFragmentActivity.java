@@ -1,7 +1,7 @@
 /*
 EditFragmentActivity activity for CreateYourOwnAdventure.
 
-     Copyright  ©2013 Jesse Huard
+     Copyright  ï¿½2013 Jesse Huard
     <Contact: jhuard@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
@@ -79,7 +79,7 @@ public class EditFragmentActivity extends FragmentActivity implements
 
 		// Get the story manager
 		GlobalManager app = (GlobalManager) getApplication();
-		manager = app.getStoryManager();
+		manager = GlobalManager.getStoryManager();
 
 		Intent intent = getIntent();
 

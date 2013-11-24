@@ -61,8 +61,7 @@ public class EditFragmentInfoActivity extends Activity {
 		setupActionBar();
 
 		// Get the story manager
-		GlobalManager app = (GlobalManager) getApplication();
-		manager = app.getStoryManager();
+		manager = GlobalManager.getStoryManager();
 
 		Intent intent = getIntent();
 

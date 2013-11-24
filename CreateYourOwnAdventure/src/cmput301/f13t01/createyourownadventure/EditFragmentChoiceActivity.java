@@ -67,8 +67,7 @@ public class EditFragmentChoiceActivity extends Activity implements
 		});
 
 		// Get the story manager
-		GlobalManager app = (GlobalManager) getApplication();
-		manager = app.getStoryManager();
+		manager = GlobalManager.getStoryManager();
 
 		Intent intent = getIntent();
 

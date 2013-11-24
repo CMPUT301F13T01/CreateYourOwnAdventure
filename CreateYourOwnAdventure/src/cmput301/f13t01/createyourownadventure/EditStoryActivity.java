@@ -70,7 +70,7 @@ public class EditStoryActivity extends FragmentActivity implements
 
 		// Get the story manager
 		GlobalManager app = (GlobalManager) getApplication();
-		manager = app.getStoryManager();
+		manager = GlobalManager.getStoryManager();
 
 		if (savedInstanceState != null) {
 			isNew = savedInstanceState.getBoolean(getResources().getString(
@@ -102,7 +102,7 @@ public class EditStoryActivity extends FragmentActivity implements
 				storyId = app.createAndSetStory();
 			}
 		}
-
+		
 		TextView firstPage = (TextView) findViewById(R.id.edit_first_page);
 		StoryFragment firstPageFragment = manager.getFirstPage();
 
@@ -202,8 +202,7 @@ public class EditStoryActivity extends FragmentActivity implements
 
 	private void onSelectCancel() {
 		if (isNew) {
-			GlobalManager app = (GlobalManager) getApplication();
-			app.getLocalManager().removeStory(storyId);
+			GlobalManager.getLocalManager().removeStory(storyId);
 		}
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.cancel_toast), Toast.LENGTH_SHORT);
@@ -212,8 +211,7 @@ public class EditStoryActivity extends FragmentActivity implements
 	}
 
 	private void onSelectDelete() {
-		GlobalManager app = (GlobalManager) getApplication();
-		app.getLocalManager().removeStory(storyId);
+		GlobalManager.getLocalManager().removeStory(storyId);
 
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.story_delete_toast), Toast.LENGTH_SHORT);

@@ -81,8 +81,7 @@ public class EditFragmentContentActivity extends Activity implements
 		layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 
 		// Get the story manager
-		GlobalManager app = (GlobalManager) getApplication();
-		manager = app.getStoryManager();
+		manager = GlobalManager.getStoryManager();
 
 		Intent intent = getIntent();
 
