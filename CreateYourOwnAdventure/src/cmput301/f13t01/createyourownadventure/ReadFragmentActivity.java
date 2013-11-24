@@ -51,6 +51,8 @@ public class ReadFragmentActivity extends FragmentActivity {
 	ReadStoryManager storyManager;
 	UUID storyId;
 	Integer fragmentId;
+	GlobalManager app;
+	LocalManager save;
 
 	/**
 	 * Called when the activity is first created. Receives intent from main
@@ -61,11 +63,9 @@ public class ReadFragmentActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 
 		GlobalManager app = (GlobalManager) getApplication();
+		save = app.getLocalManager();
 
 		setContentView(R.layout.activity_view_fragment);
-
-		// enable the Up button in action bar
-		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		if (savedInstanceState != null) {
 			storyId = (UUID) savedInstanceState.getSerializable(getResources()
@@ -108,6 +108,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 						Toast.LENGTH_LONG).show();
 				finish();
 			}
+
 		}
 
 		commitFragment(fragmentId);
@@ -151,11 +152,6 @@ public class ReadFragmentActivity extends FragmentActivity {
 	@Override
 	public void onStop() {
 		super.onStop();
-		// Save the history
-		storyManager.pushToStack(fragmentId);
-		GlobalManager glob = (GlobalManager) getApplication();
-		LocalManager save = glob.getLocalManager();
-		save.saveStory(this.storyId, this.storyManager.getStory());
 	}
 
 	/**
@@ -167,6 +163,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 		// get the fragment id of the story's first page
 		Integer destinationId = storyManager.getFirstPageId();
 		storyManager.clearHistory();
+		save.saveStory(this.storyId, this.storyManager.getStory());
 
 		// read the next story fragment
 		commitFragment(destinationId);
@@ -180,6 +177,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 
 		// go back to previous, adjusting history stack properly
 		Integer destinationId = storyManager.goBack();
+		save.saveStory(this.storyId, this.storyManager.getStory());
 
 		if (destinationId != null) {
 			// read the next story fragment if there is a previous fragment in
@@ -202,11 +200,11 @@ public class ReadFragmentActivity extends FragmentActivity {
 	 *            the id of the fragment to be displayed next
 	 */
 	public void onFragmentListClick(View v, Integer fragmentId) {
+
 		// Save the history
 		storyManager.pushToStack(fragmentId);
-		GlobalManager glob = (GlobalManager) getApplication();
-		LocalManager save = glob.getLocalManager();
 		save.saveStory(this.storyId, this.storyManager.getStory());
+
 		// fetch the destinationId of the next fragment to show
 		int selectedChoice = v.getId() - 1;
 
@@ -240,6 +238,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 		if (fragmentId == null) {
 			return;
 		}
+
 		this.fragmentId = fragmentId;
 		// prepare for the fragment
 		FragmentManager fragmentManager = getFragmentManager();

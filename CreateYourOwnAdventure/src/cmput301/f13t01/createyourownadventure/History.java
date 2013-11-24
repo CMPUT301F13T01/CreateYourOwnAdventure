@@ -77,10 +77,11 @@ public class History implements Serializable {
 		
 		int size = historyStack.size();
 		
-		if (size >= 1) {
+		if (size > 0) {
 			int lastIndex = size - 1;
+			int lastFragment = historyStack.get(lastIndex);
 			historyStack.remove(lastIndex);
-			return historyStack.get(lastIndex - 1);
+			return lastFragment;
 		}
 		//If stack is empty
 		else {
