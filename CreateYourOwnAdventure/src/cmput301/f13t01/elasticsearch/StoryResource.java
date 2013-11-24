@@ -35,4 +35,15 @@ public class StoryResource {
 		return;
 	}
 	
+	public boolean contains(MediaResource resource) {
+
+		for (MediaResource mediaResource : resources) {
+			if (mediaResource.getIdentifier().equals(resource.getIdentifier())) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 }

@@ -14,5 +14,10 @@
          android:icon="@drawable/ic_action_back"
         android:showAsAction="ifRoom"
         android:title="@string/action_return_to_previous_page"/>
+    
+    <!-- help function -->
+    <item android:id="@+id/action_read"
+          android:title="@string/action_help" 
+          android:showAsAction="never" /> 
 
 </menu>

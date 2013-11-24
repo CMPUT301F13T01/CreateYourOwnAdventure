@@ -47,29 +47,12 @@ public interface LibraryManager {
 	public Story getStory(UUID storyId);
 	
 	/**
-	 * Method that returns the StoryInfo object of a
-	 * given Story, by ID.
-	 * 
-	 * @param storyId the ID of the request StoryInfo
-	 * @return the StoryInfo for the StoryID
-	 */
-	public StoryInfo getStoryInfo(UUID storyId);
-	
-	/**
 	 * Method to return an ArrayList of all StoryInfo
 	 * that can be requested.
 	 * 
 	 * @return an ArrayList of all StoryInfo
 	 */
 	public ArrayList<StoryInfo> getStoryInfoList();
-	
-	/**
-	 * Method to add a new Story into storage.
-	 * 
-	 * @param story the Story to add into the collection
-	 * @return the ID assigned to the Story
-	 */
-	public UUID addStory(Story story);
 	
 	/**
 	 * Method to remove/delete a Story from storage.

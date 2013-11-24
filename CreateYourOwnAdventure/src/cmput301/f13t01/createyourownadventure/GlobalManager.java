@@ -53,7 +53,7 @@ public class GlobalManager extends Application {
 	 * 
 	 * @return the Application's LocalManager.
 	 */
-	public LocalManager getLocalManager() {
+	public static LocalManager getLocalManager() {
 		return localManager;
 	}
 
@@ -62,7 +62,7 @@ public class GlobalManager extends Application {
 	 * 
 	 * @return the Application's ReadStoryManager.
 	 */
-	public ReadStoryManager getStoryManager() {
+	public static ReadStoryManager getStoryManager() {
 		return readManager;
 	}
 
