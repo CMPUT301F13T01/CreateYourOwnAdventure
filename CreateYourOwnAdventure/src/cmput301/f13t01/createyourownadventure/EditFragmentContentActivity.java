@@ -27,6 +27,7 @@ package cmput301.f13t01.createyourownadventure;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -70,8 +71,9 @@ public class EditFragmentContentActivity extends Activity implements
 	private StoryFragment storyFragment;
 	private int fragmentId;
 	private ReadStoryManager manager;
+	private ArrayList<Uri> imageURIs;
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -85,28 +87,44 @@ public class EditFragmentContentActivity extends Activity implements
 
 		Intent intent = getIntent();
 
-		if (intent != null) {
-			fragmentId = (int) intent.getIntExtra(
-					getResources().getString(R.string.fragment_id), -1);
-			storyFragment = (StoryFragment) intent
-					.getSerializableExtra(getResources().getString(
+		if (savedInstanceState != null) {
+			fragmentId = savedInstanceState.getInt(getResources().getString(
+					R.string.fragment_id));
+			storyFragment = (StoryFragment) savedInstanceState
+					.getSerializable(getResources().getString(
 							R.string.story_fragment));
+			imageURIs = (ArrayList<Uri>) savedInstanceState
+					.getSerializable(getResources().getString(
+							R.string.story_URIs));
+		} else {
 
-			ArrayList<Media> content = storyFragment.getContentList();
+			if (intent != null) {
+				fragmentId = (int) intent.getIntExtra(
+						getResources().getString(R.string.fragment_id), -1);
+				storyFragment = (StoryFragment) intent
+						.getSerializableExtra(getResources().getString(
+								R.string.story_fragment));
+			}
+			imageURIs = new ArrayList<Uri>();
+		}
 
-			LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-					LinearLayout.LayoutParams.MATCH_PARENT,
-					LinearLayout.LayoutParams.WRAP_CONTENT);
+		ArrayList<Media> content = storyFragment.getContentList();
 
-			// Display the fragment
-			for (Media media : content) {
-				if (media.getClass().equals(Text.class)) {
-					EditText edit = new EditText(getApplication());
-					edit.setTextColor(Color.BLACK);
-					edit.setText(media.getContent().toString());
-					layout.addView(edit, params);
-				}
+		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.MATCH_PARENT,
+				LinearLayout.LayoutParams.WRAP_CONTENT);
+
+		// Display the fragment
+		for (Media media : content) {
+			if (media.getClass().equals(Text.class)) {
+				EditText edit = new EditText(getApplication());
+				edit.setTextColor(Color.BLACK);
+				edit.setText(media.getContent().toString());
+				layout.addView(edit, params);
+			} else if (media.getClass().equals(ImageUri.class)) {
+				ImageUri image = (ImageUri) media;
+				addImage(image.getContent());
 			}
 		}
 
@@ -154,18 +172,7 @@ public class EditFragmentContentActivity extends Activity implements
 		Intent intent = new Intent(getApplicationContext(),
 				PreviewFragmentActivity.class);
 
-		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
-		StoryFragment previewFragment = storyFragment;
-		previewFragment.removeAllContent();
-
-		for (int i = 0; i < layout.getChildCount(); i++) {
-			View v = layout.getChildAt(i);
-			if (v.getClass().equals(EditText.class)) {
-				EditText text = (EditText) v;
-				SpannableString string = new SpannableString(text.getText());
-				previewFragment.addContent(new Text(string));
-			}
-		}
+		StoryFragment previewFragment = constructTemporaryFragmentFromView();
 
 		intent.putExtra(getResources().getString(R.string.story_fragment),
 				previewFragment);
@@ -225,9 +232,9 @@ public class EditFragmentContentActivity extends Activity implements
 		EditText text = new EditText(getApplicationContext());
 		text.setTextColor(Color.BLACK);
 		text.setHint("Your Story Text");
-		
+
 		text.setOnLongClickListener(new EditContentViewListener(layout));
-		
+
 		layout.addView(text, params);
 	}
 
@@ -252,11 +259,12 @@ public class EditFragmentContentActivity extends Activity implements
 			ImageView imageView = new ImageView(this);
 			imageView.setVisibility(View.VISIBLE);
 			imageView.setAdjustViewBounds(true);
-			
-			Log.d("oops", "Layout width: " + layout.getWidth() + " height: " + layout.getHeight());
-			
+
+			Log.d("oops", "Layout width: " + layout.getWidth() + " height: "
+					+ layout.getHeight());
+
 			Bitmap bitmap = decodeUri(image, 256, 256);
-			
+
 			imageView.setImageBitmap(bitmap);
 
 			layout.addView(imageView, params);
@@ -387,38 +395,40 @@ public class EditFragmentContentActivity extends Activity implements
 		case SELECT_IMAGE:
 			if (resultCode == RESULT_OK) {
 				Uri image = data.getData();
+				imageURIs.add(image);
 				addImage(image);
 			}
 		}
 	}
-	
+
 	class EditContentViewListener implements View.OnLongClickListener {
-		
+
 		private LinearLayout layout;
-		
+
 		public EditContentViewListener(LinearLayout layout) {
 			this.layout = layout;
 		}
-		
+
 		@Override
 		public boolean onLongClick(View v) {
 			PopupMenu popup = new PopupMenu(getApplicationContext(), v);
 			MenuInflater inflater = popup.getMenuInflater();
 			inflater.inflate(R.menu.edit_long_click_menu, popup.getMenu());
 
-			popup.setOnMenuItemClickListener(new SimplePopupListener(v, (ViewGroup) layout));
+			popup.setOnMenuItemClickListener(new SimplePopupListener(v,
+					(ViewGroup) layout));
 
 			popup.show();
-			
+
 			return true;
 		}
 	}
-	
+
 	class SimplePopupListener implements OnMenuItemClickListener {
-		
+
 		View view;
 		ViewGroup group;
-		
+
 		SimplePopupListener(View v, ViewGroup group) {
 			this.view = v;
 			this.group = group;
@@ -426,10 +436,10 @@ public class EditFragmentContentActivity extends Activity implements
 
 		@Override
 		public boolean onMenuItemClick(MenuItem item) {
-			switch(item.getItemId()) {
+			switch (item.getItemId()) {
 			case R.id.action_edit_delete_content:
 				ContextMenuInfo info = item.getMenuInfo();
-				if(info != null) {
+				if (info != null) {
 					Log.d("oops", "Popup Menu Info is not null");
 				} else {
 					Log.d("oops", "Popup Menu Info is null");
@@ -438,6 +448,58 @@ public class EditFragmentContentActivity extends Activity implements
 			}
 			return false;
 		}
-		
+
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(getResources().getString(R.string.fragment_id),
+				fragmentId);
+		StoryFragment savedFragment = constructTemporaryFragmentFromView();
+		outState.putSerializable(
+				getResources().getString(R.string.story_fragment),
+				savedFragment);
+		outState.putSerializable(getResources().getString(R.string.story_URIs),
+				imageURIs);
+	}
+
+	private StoryFragment constructSaveFragmentFromView() {
+
+		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
+		StoryFragment fragment = storyFragment;
+		fragment.removeAllContent();
+
+		for (int i = 0; i < layout.getChildCount(); i++) {
+			View v = layout.getChildAt(i);
+			if (v.getClass().equals(EditText.class)) {
+				EditText text = (EditText) v;
+				SpannableString string = new SpannableString(text.getText());
+				fragment.addContent(new Text(string));
+			}
+		}
+
+		return fragment;
+	}
+
+	private StoryFragment constructTemporaryFragmentFromView() {
+		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
+		StoryFragment fragment = storyFragment;
+		fragment.removeAllContent();
+
+		int UriIndex = 0;
+
+		for (int i = 0; i < layout.getChildCount(); i++) {
+			View v = layout.getChildAt(i);
+			if (v.getClass().equals(EditText.class)) {
+				EditText text = (EditText) v;
+				SpannableString string = new SpannableString(text.getText());
+				fragment.addContent(new Text(string));
+			} else if (v.getClass().equals(ImageView.class)) {
+				fragment.addContent(new ImageUri(imageURIs.get(UriIndex)));
+			}
+		}
+
+		return fragment;
 	}
 }
