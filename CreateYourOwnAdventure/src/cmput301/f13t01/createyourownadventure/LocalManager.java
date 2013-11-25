@@ -246,9 +246,9 @@ public class LocalManager implements Serializable, LibraryManager {
 	}
 	
 	/**
-	 * Saves a given image by URI and returns the URI assigned.
+	 * Saves a given media by URI and returns the URI assigned.
 	 * 
-	 * @param image the image to save's URI
+	 * @param mediaUri the media to save's URI
 	 * @return the URI that the image was saved with
 	 */
 	public String saveMedia(Uri mediaUri, MediaType mediaType) {
@@ -283,6 +283,19 @@ public class LocalManager implements Serializable, LibraryManager {
 		}
 		// Return the assigned file name
 		return mediaFile.getName();
+	}
+	
+	/**
+	 * 
+	 * @param identifier
+	 * @param type
+	 * @param data
+	 * @return
+	 */
+	public boolean saveMediaFromBase64(String identifier, MediaType type, String data) {
+		// TODO: Convert/save back into appropriate media
+		// Refer to saveMedia above for the save path we will use
+		return false;
 	}
 	
 	/**
