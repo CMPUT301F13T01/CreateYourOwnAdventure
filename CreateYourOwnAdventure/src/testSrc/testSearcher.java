@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import cmput301.f13t01.createyourownadventure.Searcher;
+import cmput301.f13t01.elasticsearch.Searcher;
 
 public class testSearcher extends TestCase{
 

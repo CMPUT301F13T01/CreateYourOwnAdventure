@@ -226,70 +226,75 @@ public class ESClient {
 		// Query for existence
 		// If doesn't exist: Post
 		// If exists: Do nothing
-		HttpGet getRequest = new HttpGet("http://cmput301.softwareprocess.es:8080/cmput301f13t01/"+type.toString()+"/"+identifier);
+		HttpGet getRequest = new HttpGet(
+				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/"
+						+ type.toString() + "/" + identifier);
 		getRequest.setHeader("Accept", "application/json");
 		HttpResponse getResponse = null;
-		try { 
+		try {
 			getResponse = httpclient.execute(getRequest);
 		} catch (ClientProtocolException e) {
-			e.printStackTrace(); 
+			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace(); 
+			e.printStackTrace();
 		}
-		
+
 		int getStatus = -1;
 		if (getResponse != null) {
 			getStatus = getResponse.getStatusLine().getStatusCode();
 		}
-		
+
 		if (getStatus != 404) {
 			return;
 		}
-		
-		HttpPost httpPost = new HttpPost("http://cmput301.softwareprocess.es:8080/cmput301f13t01/"+type.toString()+"/"+ identifier);
 
-		StringEntity stringentity = null; 
-		try { 
-			stringentity = new StringEntity(gson.toJson(data)); 
+		HttpPost httpPost = new HttpPost(
+				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/"
+						+ type.toString() + "/" + identifier);
+
+		StringEntity stringentity = null;
+		try {
+			stringentity = new StringEntity(gson.toJson(data));
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace(); 
-		}
- 
-		httpPost.setHeader("Accept", "application/json");
-  
-		httpPost.setEntity(stringentity); 
-		HttpResponse postResponse = null;
- 
-		try { 
-			postResponse = httpclient.execute(httpPost); 
-		} catch (ClientProtocolException e) {
-			e.printStackTrace(); 
-		} catch (IOException e) {
-			e.printStackTrace(); 
-		}
-  
-		String postStatus = postResponse.getStatusLine().toString();
-		System.out.println(postStatus); 
-		HttpEntity entity = postResponse.getEntity();
- 
-		try { 
-			BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent())); 
-			String output;
-			System.err.println("Output from Server -> "); 
-			while ((output =br.readLine()) != null) { 
-				System.err.println(output);
-			}
-		} catch (IOException e) { 
-			e.printStackTrace(); 
-		}
-  
-		try { 
-			entity.consumeContent(); 
-		} catch (IOException e) { 
 			e.printStackTrace();
 		}
-	}		
-	
+
+		httpPost.setHeader("Accept", "application/json");
+
+		httpPost.setEntity(stringentity);
+		HttpResponse postResponse = null;
+
+		try {
+			postResponse = httpclient.execute(httpPost);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		String postStatus = postResponse.getStatusLine().toString();
+		System.out.println(postStatus);
+		HttpEntity entity = postResponse.getEntity();
+
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					entity.getContent()));
+			String output;
+			System.err.println("Output from Server -> ");
+			while ((output = br.readLine()) != null) {
+				System.err.println(output);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			entity.consumeContent();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/*
 	 * TODO: Modify to have some sort of way of querying the objects based on
 	 * some sort of sorting mechanism. Also need to work on how to not grab
@@ -376,6 +381,46 @@ public class ESClient {
 			response.getEntity().consumeContent();
 
 			return story;
+
+		} catch (ClientProtocolException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	// Similar to getStoryInfo, but different enough to
+	// warrant its own method
+	public String getMedia(String identifier, MediaType type) {
+
+		try {
+			HttpGet getRequest = new HttpGet(
+					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/"+type.toString()+"/"+identifier);
+			getRequest.setHeader("Accept", "application/json");
+
+			HttpResponse response = httpclient.execute(getRequest);
+
+			String status = response.getStatusLine().toString();
+			System.out.println(status);
+
+			String json = getEntityContent(response);
+
+			// We have to tell GSON what type we expect
+			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<String>>(){}.getType();
+			// Now we expect to get a String response
+			ElasticSearchResponse<String> esResponse = gson.fromJson(json,
+					elasticSearchResponseType);
+			// We get the String object from it!
+			String media = esResponse.getSource();
+
+			response.getEntity().consumeContent();
+
+			return media;
 
 		} catch (ClientProtocolException e) {
 

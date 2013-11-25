@@ -60,13 +60,29 @@ public class ESManager implements LibraryManager {
 	}
 
 	/**
-	 * Method that returns a requested Story by ID.
+	 * Method that returns a requested Story by ID and fetches all
+	 * associated resources.
 	 * 
 	 * @param storyId
 	 *            the ID of the requested Story
 	 * @return the requested story
 	 */
 	public Story getStory(UUID storyId) {
+		
+		Story story = client.getStory(storyId);
+
+		// Grabs the associated StoryResource object
+		StoryResource storyResource = client.getStoryResources(storyId);
+		ArrayList<MediaResource> resources = storyResource.getMediaResources();
+		
+		for (MediaResource resource : resources) {
+			// Grabs base64 string
+			String identifier = resource.getIdentifier();
+			MediaType type = resource.getType();
+			String media = client.getMedia(identifier, type);
+			localManager.saveMediaFromBase64(identifier, type, media);
+		}
+		
 		return client.getStory(storyId);
 	}
 
@@ -187,12 +203,8 @@ public class ESManager implements LibraryManager {
 		for (MediaResource resource : mediaList) {
 			String identifier = resource.getIdentifier();
 			MediaType type = resource.getType();
-			File media = new File(context.getFilesDir().getAbsolutePath() + "/"
-					+ type.toString() + "/" + identifier);
-			// Convert to base64
-			// TODO: Create base64 string from File object
-			String encodedMedia = "";
-			client.postMedia(identifier, type, encodedMedia);
+			String base64Media = mediaToBase64(identifier, type);
+			client.postMedia(identifier, type, base64Media);
 		}
 
 		return true;
@@ -233,6 +245,14 @@ public class ESManager implements LibraryManager {
 			}
 		}
 		return resourceList;
+	}
+	
+	private String mediaToBase64(String identifier, MediaType type) {
+		File media = new File(context.getFilesDir().getAbsolutePath() + "/"
+				+ type.toString() + "/" + identifier);
+		// TODO: Write the conversion (load and encode)
+		String base64Media = "";
+		return base64Media;
 	}
 
 }
