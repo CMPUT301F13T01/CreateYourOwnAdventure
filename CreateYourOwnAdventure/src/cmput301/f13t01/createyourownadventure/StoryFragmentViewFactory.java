@@ -46,7 +46,7 @@ public class StoryFragmentViewFactory {
 				Uri imageUri = Uri.parse(context.getFilesDir()
 						.getAbsolutePath()
 						+ "/"
-						+ image.type.toString()
+						+ image.getType().toString()
 						+ "/"
 						+ image.getContent());
 				addImage(imageUri, layout, context);
