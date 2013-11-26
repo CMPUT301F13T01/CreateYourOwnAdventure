@@ -2,6 +2,8 @@ package cmput301.f13t01.createyourownadventure;
 
 import java.util.UUID;
 
+import cmput301.f13t01.elasticsearch.ESClient;
+
 import android.app.Application;
 import android.content.Context;
 
@@ -34,6 +36,11 @@ public class GlobalManager extends Application {
 	 * @see #setLocalManager()
 	 */
 	private static LocalManager localManager;
+	
+	/**
+	 * The Application's Elastic Search Client.
+	 */
+	private static ESClient ESClient;
 
 	private static Context context;
 
@@ -42,6 +49,7 @@ public class GlobalManager extends Application {
 		context = getApplicationContext();
 		readManager = new ReadStoryManager();
 		localManager = new LocalManager(context);
+		ESClient = new ESClient();
 	}
 
 	public static Context getAppContext() {
@@ -64,6 +72,15 @@ public class GlobalManager extends Application {
 	 */
 	public static ReadStoryManager getStoryManager() {
 		return readManager;
+	}
+	
+	/**
+	 * Get the Application's Elastic Search client.
+	 * 
+	 * @return the Application's Elastic Search client.
+	 */
+	public static ESClient getESClient() {
+		return ESClient;
 	}
 
 	/**
