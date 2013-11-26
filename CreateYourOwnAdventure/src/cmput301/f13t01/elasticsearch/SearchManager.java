@@ -1,6 +1,12 @@
 package cmput301.f13t01.elasticsearch;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.UUID;
+
 import cmput301.f13t01.createyourownadventure.GlobalManager;
+import cmput301.f13t01.createyourownadventure.Story;
+import cmput301.f13t01.createyourownadventure.StoryInfo;
 
 /**
  * Composes the query to be sent to ESClient
@@ -16,42 +22,59 @@ public class SearchManager {
 		client = GlobalManager.getESClient();
 	}
 	
-	public String createQuery(String title, String author, String description) {
-		String query = "{\"query\" : {\"bool\" : {\"must\" : [";
+	public static String createQuery(String title, String author, String description) {
+		// Not using first open brace since this will be appended with
+		// number of items to front
+		String query = "\"query\" : {\"bool\" : {\"must\" : [";
 		
 		query = query + searchTitle(title);
+		if (!title.isEmpty() && (!author.isEmpty() || !description.isEmpty())) {
+			query = query + ",";
+		}
 		query = query + searchAuthor(author);
+		if (!author.isEmpty() && !description.isEmpty()) {
+			query = query + ",";
+		}
 		query = query + searchDescription(description);
 		
-		query = query + "} } }";
+		query = query + "] } }";
 		
 		return query;
 	}
 	
 	// Appends the title search query to overall query
-	private String searchTitle(String title) {
+	private static String searchTitle(String title) {
 		
-		String titleQuery = "{\"term\" : {\"title\" : \"" + parseSearch(title) + "\" } },";
+		if (!title.isEmpty()) {
+			//return "{\"term\" : {\"title\" : \"" + parseSearch(title) + "\" } }";
+			return "{\"field\" : {\"title\" : \"" + parseSearch(title) + "\"}}";
+		}
 		
-		return titleQuery;
+		return "";
 	}
 	
-	private String searchAuthor(String author) {
+	private static String searchAuthor(String author) {
 	
-		String authorQuery = "{\"term\" : {\"author\" : \"" + parseSearch(author) + "\" } },";
+		if (!author.isEmpty()){
+			// return "{\"term\" : {\"author\" : \"" + parseSearch(author) + "\" } }";
+			return "{\"field\" : {\"author\" : \"" + parseSearch(author) + "\"}}";
+		}
 		
-		return authorQuery;
+		return "";
 	}
 
-	private String searchDescription(String description) {
+	private static String searchDescription(String description) {
 		
-		String descriptionQuery = "{\"term\" : {\"description\" : \"" + parseSearch(description) + "\" } } ]";
+		if (!description.isEmpty()) {
+			// return "{\"term\" : {\"description\" : \"" + parseSearch(description) + "\" } }";
+			return "{\"field\" : {\"description\" : \"" + parseSearch(description) + "\"}}";
+		}
 		
-		return descriptionQuery;
+		return "";
 	}
 	
 	// Parses string to use ElasticSearch 'AND' between all searched words
-	private String parseSearch(String searchInput) {
+	private static String parseSearch(String searchInput) {
 		
 		String parsedString = "";
 		
@@ -62,6 +85,9 @@ public class SearchManager {
 			parsedString = parsedString + str;
 		}
 		
+		System.out.println(parsedString);
+		
 		return parsedString;
 	}
+	
 }

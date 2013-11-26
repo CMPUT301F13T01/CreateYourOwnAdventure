@@ -4,8 +4,6 @@
 package cmput301.f13t01.elasticsearch;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -23,7 +21,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.graphics.Bitmap;
 import cmput301.f13t01.createyourownadventure.MediaType;
 import cmput301.f13t01.createyourownadventure.Story;
 import cmput301.f13t01.createyourownadventure.StoryInfo;
@@ -223,13 +220,13 @@ public class ESClient {
 	// THIS IS NEARLY DUPLICATE CODE TO POSTSTORYINFO
 	// -- WILL NEED REFACTORING
 	public void postMedia(String identifier, MediaType type, String data) {
-		// Query for existence
-		// If doesn't exist: Post
-		// If exists: Do nothing
+		
+		// Queries if media already exists on server
 		HttpGet getRequest = new HttpGet(
 				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/"
 						+ type.toString() + "/" + identifier);
 		getRequest.setHeader("Accept", "application/json");
+		
 		HttpResponse getResponse = null;
 		try {
 			getResponse = httpclient.execute(getRequest);
@@ -244,10 +241,12 @@ public class ESClient {
 			getStatus = getResponse.getStatusLine().getStatusCode();
 		}
 
+		// If get 404, request succeeded but returned nothing
 		if (getStatus != 404) {
 			return;
 		}
 
+		// Media not found, post to server
 		HttpPost httpPost = new HttpPost(
 				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/"
 						+ type.toString() + "/" + identifier);
@@ -295,11 +294,6 @@ public class ESClient {
 		}
 	}
 
-	/*
-	 * TODO: Modify to have some sort of way of querying the objects based on
-	 * some sort of sorting mechanism. Also need to work on how to not grab
-	 * every object into the response.
-	 */
 	public ArrayList<StoryInfo> getStoryInfos(int from, int num) {
 
 		// Make sure a positive number is passed
@@ -350,6 +344,63 @@ public class ESClient {
 		}
 
 		return infos;
+	}
+	
+	public ArrayList<StoryInfo> getStoryInfosByQuery(String query, int from, int num) {
+		
+		// Make sure a positive number is passed
+		if (num <= 0 || from < 0) {
+			return null;
+		}
+		
+		ArrayList<StoryInfo> infos = new ArrayList<StoryInfo>();
+
+		try {
+			HttpPost getRequest = new HttpPost(
+					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryInfo/_search?pretty=1");
+			query = "{\"from\" : " + from + ", \"size\" : " + num + ", " + query + "}";
+			//query = "{" + query + "}";
+			//query = "{\"query\" : {\"query_string\" : {\"default_field\" : \"title\",\"query\" : \"" + "a AND h" + "\"}}}";
+			//query = "{\"query\" : [{\"field\" : {\"title\" : \"" + "d AND f" + "\"}, {\"field\" : {\"author\" : \"" + "h AND j" + "\"}}, {\"field\" : {\"description\" : \"" + "f" + "\"}}";
+			//query = "{\"query\" : {\"query_string\" : {\"title\" : \"" + "d AND f" + "\"}}}";
+			//query = "{\"query\" : {\"bool\" : {\"must\" : [{\"field\" : {\"title\" : \"c AND h\"}}, {\"field\" : {\"author\" : \"i\"}}, {\"field\" : {\"description\" : \"f\"}}]}}}";
+			StringEntity stringentity = new StringEntity(query);
+
+			getRequest.setHeader("Accept", "application/json");
+			getRequest.setEntity(stringentity);
+
+			HttpResponse response = httpclient.execute(getRequest);
+
+			String status = response.getStatusLine().toString();
+			System.out.println(status);
+
+			String json = getEntityContent(response);
+
+			// We have to tell GSON what type we expect
+			Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<StoryInfo>>() {
+			}.getType();
+			// Now we expect to get a StoryInfo response
+			ElasticSearchSearchResponse<StoryInfo> esResponse = gson.fromJson(
+					json, elasticSearchSearchResponseType);
+			// We get the StoryInfo objects from it!
+			for (ElasticSearchResponse<StoryInfo> r : esResponse.getHits()) {
+				StoryInfo info = r.getSource();
+				infos.add(info);
+			}
+
+			response.getEntity().consumeContent();
+
+		} catch (ClientProtocolException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+		return infos;
+		
 	}
 
 	// Similar to getStoryInfo, but different enough to
@@ -475,46 +526,6 @@ public class ESClient {
 
 		return null;
 	}
-
-	// Quite similar to other get methods
-	/*
-	 * public Bitmap getImage(String id) {
-	 * 
-	 * try { HttpGet getRequest = new HttpGet(
-	 * "http://cmput301.softwareprocess.es:8080/cmput301f13t01/Image/" + id);
-	 * 
-	 * getRequest.setHeader("Accept", "application/json");
-	 * 
-	 * HttpResponse response = httpclient.execute(getRequest);
-	 * 
-	 * String status = response.getStatusLine().toString();
-	 * System.out.println(status);
-	 * 
-	 * String json = getEntityContent(response);
-	 * 
-	 * // We have to tell GSON what type we expect Type
-	 * elasticSearchResponseType = new
-	 * TypeToken<ElasticSearchResponse<byte[]>>() { }.getType(); // Now we
-	 * expect to get a StoryInfo response ElasticSearchResponse<byte[]>
-	 * esResponse = gson.fromJson(json, elasticSearchResponseType); // We get
-	 * the StoryInfo objects from it! byte[] b = esResponse.getSource();
-	 * 
-	 * response.getEntity().consumeContent();
-	 * 
-	 * Bitmap bm = BitmapFactory.decodeByteArray(b, 0, b.length);
-	 * 
-	 * return bm;
-	 * 
-	 * } catch (ClientProtocolException e) {
-	 * 
-	 * e.printStackTrace();
-	 * 
-	 * } catch (IOException e) {
-	 * 
-	 * e.printStackTrace(); }
-	 * 
-	 * return null; }
-	 */
 
 	public void deleteStoryInfo(UUID id) throws IOException {
 		HttpDelete httpDelete = new HttpDelete(
@@ -741,7 +752,71 @@ public class ESClient {
 		// testStoryInfo(client);
 
 		// Test posting, getting or deleting of Story objects
-		testStory(client);
+		// testStory(client);
+		
+		//Story story1 = new Story();
+		//Story story2 = new Story();
+		//Story story3 = new Story();
+		
+		//story1.setTitle("a b c d e f g");
+		//story2.setTitle("e f g h i j");
+		//story3.setTitle("x y z");
+		
+		//story1.setAuthor("g h i j k l m");
+		//story2.setAuthor("n o p q r s t u v");
+		//story3.setAuthor("l m n o p q");
+		
+		//story1.setDescription("f f f f f f f");
+		//story2.setDescription("a b c d e f g");
+		//story3.setDescription("");
+		
+		//StoryInfo storyInfo1 = new StoryInfo(UUID.randomUUID(), story1);
+		//StoryInfo storyInfo2 = new StoryInfo(UUID.randomUUID(), story2);
+		//StoryInfo storyInfo3 = new StoryInfo(UUID.randomUUID(), story3);
+		
+		//try {
+			//client.postStoryInfo(storyInfo1);
+		//} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//}
+		
+		//try {
+			//client.postStoryInfo(storyInfo2);
+		//} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//}
+		
+		//try {
+			//client.postStoryInfo(storyInfo3);
+		//} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//}
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		// Expect 1 StoryInfo object from this query
+		String query = SearchManager.createQuery("f g", "", "f");
+		
+		ArrayList<StoryInfo> infos = client.getStoryInfosByQuery(query, 0, 1);
+		//ArrayList<StoryInfo> infos = client.getStoryInfos(0, 20);
+		
+		System.out.println("Size of array is: "+infos.size());
 
 	}
 
