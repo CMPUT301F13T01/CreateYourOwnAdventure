@@ -52,6 +52,8 @@ public class ESManager implements LibraryManager {
 	private ESClient client;
 	private LocalManager localManager;
 	private Context context;
+	
+	private int resultSize = 20;
 
 	public ESManager(Context context) {
 		this.client = new ESClient();
@@ -87,26 +89,26 @@ public class ESManager implements LibraryManager {
 	}
 
 	/**
-	 * Method to return an ArrayList of first 20 StoryInfo objects
+	 * Method to return an ArrayList of first batch of StoryInfo objects
 	 * 
 	 * @return an ArrayList of all StoryInfo
 	 */
 	public ArrayList<StoryInfo> getStoryInfoList() {
-		return client.getStoryInfos(0, 20);
+		return client.getStoryInfos(0, resultSize);
 	}
 
 	/**
-	 * Fetches 20 StoryInfos starting from the index start. Call this if want 20
-	 * new StoryInfo objects.
+	 * Fetches first batch of StoryInfos starting from the index start. 
+	 * Call this if want new batch of StoryInfo objects.
 	 * 
 	 * @param start
 	 *            The start index of which StoryInfos to fetch (equal to current
 	 *            total number of StoryInfos)
-	 * @return The ArrayList of StoryInfos of size 20 (or less if no more on
+	 * @return The ArrayList of StoryInfos of size resultSize (or less if no more on
 	 *         server)
 	 */
 	public ArrayList<StoryInfo> getStoryInfoList(int start) {
-		return client.getStoryInfos(start, 20);
+		return client.getStoryInfos(start, resultSize);
 	}
 
 	/**
@@ -208,6 +210,23 @@ public class ESManager implements LibraryManager {
 		}
 
 		return true;
+	}
+	
+	/**
+	 * Returns an ArrayList of StoryInfo objects that match the results
+	 * of what was desired to be searched from the Browse Online Stories activity
+	 * 
+	 * @param title   The input text of the title field
+	 * @param author   The input text of the author field
+	 * @param description   The input text of the description field
+	 * @param start   The index to start searching for the objects
+	 * @return   The ArrayList of fetched StoryInfo objects
+	 */
+	public ArrayList<StoryInfo> searchOnlineStories(String title,
+			String author, String description, int start) {
+		String query = SearchManager.createQuery(title, author, description);
+		ArrayList<StoryInfo> infos = client.getStoryInfosByQuery(query, start, resultSize);
+		return infos;
 	}
 
 	private StoryResource compileMediaResources(UUID id, Story story) {

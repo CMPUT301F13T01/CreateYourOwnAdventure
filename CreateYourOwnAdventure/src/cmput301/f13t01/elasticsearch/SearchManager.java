@@ -16,10 +16,8 @@ import cmput301.f13t01.createyourownadventure.StoryInfo;
 
 public class SearchManager {
 	
-	ESClient client;
-	
 	public SearchManager() {
-		client = GlobalManager.getESClient();
+		
 	}
 	
 	public static String createQuery(String title, String author, String description) {
