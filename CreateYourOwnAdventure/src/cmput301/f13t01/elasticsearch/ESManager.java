@@ -3,7 +3,7 @@ ESManager Class for CreateYourOwnAdventure.
 This deals with the management of stories on ElasticSearch.
 All saving & loading is handled here, along with deletion.
 
-     Copyright  ©2013 Jesse Chu
+     Copyright  ï¿½2013 Jesse Chu
     <Contact: jhchu@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
@@ -235,7 +235,7 @@ public class ESManager implements LibraryManager {
 		// Check all media in given list
 		for (Media media : mediaList) {
 			// Type check the media
-			if (media.type != MediaType.TEXT) {
+			if (media.getType() != MediaType.TEXT) {
 				// Media is not text, generate a MediaResource object
 				MediaResource resource = new MediaResource(media);
 				// Add to resource list if not already in it

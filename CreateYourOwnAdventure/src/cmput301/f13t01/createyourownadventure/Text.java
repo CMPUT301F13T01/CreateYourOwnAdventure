@@ -37,7 +37,7 @@ import android.text.SpannableString;
  */
 @SuppressWarnings("serial")
 public class Text implements Media<SpannableString>, Serializable {
-	public final MediaType type = MediaType.TEXT;
+	private final MediaType type = MediaType.TEXT;
 	
 	private SpannableString content;
 	private MediaInteractionManager manager;
@@ -81,6 +81,11 @@ public class Text implements Media<SpannableString>, Serializable {
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
 		content = new SpannableString((String) in.readObject());
+	}
+	
+	@Override
+	public MediaType getType() {
+		return this.type;
 	}
 
 }

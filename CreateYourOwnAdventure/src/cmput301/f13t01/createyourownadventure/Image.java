@@ -32,7 +32,7 @@ import java.io.Serializable;
  */
 @SuppressWarnings("serial")
 public class Image implements Media<String>, Serializable {
-	public final MediaType type = MediaType.IMAGE;
+	private final MediaType type = MediaType.IMAGE;
 	
 	private String content;
 	private MediaInteractionManager manager;
@@ -96,5 +96,10 @@ public class Image implements Media<String>, Serializable {
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
 		content = (String) in.readObject();
+	}
+
+	@Override
+	public MediaType getType() {
+		return this.type;
 	}
 }

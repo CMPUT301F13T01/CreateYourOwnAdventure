@@ -12,6 +12,13 @@ package cmput301.f13t01.createyourownadventure;
 
 public interface Media<T> {
 	/**
+	 * Returns the media's MediaType.
+	 * 
+	 * @return the type of the media.
+	 */
+	public MediaType getType();
+	
+	/**
 	 * Returns the content of the media type.
 	 * 
 	 * @return the media type's content.

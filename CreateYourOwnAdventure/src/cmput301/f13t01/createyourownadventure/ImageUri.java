@@ -34,7 +34,7 @@ import android.net.Uri;
  */
 @SuppressWarnings("serial")
 public class ImageUri implements Media<Uri>, Serializable {
-	public final MediaType type = MediaType.IMAGEURI;
+	private final MediaType type = MediaType.IMAGEURI;
 	
 	private Uri content;
 	private MediaInteractionManager manager;
@@ -102,5 +102,10 @@ public class ImageUri implements Media<Uri>, Serializable {
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
 		content = Uri.parse((String) in.readObject());
+	}
+	
+	@Override
+	public MediaType getType() {
+		return this.type;
 	}
 }

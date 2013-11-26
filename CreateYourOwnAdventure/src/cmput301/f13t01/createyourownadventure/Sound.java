@@ -32,7 +32,7 @@ import java.io.Serializable;
  */
 @SuppressWarnings("serial")
 public class Sound implements Media<String>, Serializable {
-	public final MediaType type = MediaType.SOUND;
+	private final MediaType type = MediaType.SOUND;
 	
 	private String content;
 	private MediaInteractionManager manager;
@@ -96,5 +96,10 @@ public class Sound implements Media<String>, Serializable {
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
 		content = (String) in.readObject();
+	}
+	
+	@Override
+	public MediaType getType() {
+		return this.type;
 	}
 }
