@@ -25,12 +25,18 @@ All saving & loading is handled here, along with deletion.
 package cmput301.f13t01.elasticsearch;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
 import android.content.Context;
+import android.net.Uri;
+import android.util.Base64;
+import android.util.Log;
 import cmput301.f13t01.createyourownadventure.GlobalManager;
 import cmput301.f13t01.createyourownadventure.LibraryManager;
 import cmput301.f13t01.createyourownadventure.LocalManager;
@@ -53,7 +59,7 @@ public class ESManager implements LibraryManager {
 	private ESClient client;
 	private LocalManager localManager;
 	private Context context;
-	
+
 	private int resultSize = 20;
 
 	public ESManager(Context context) {
@@ -63,19 +69,19 @@ public class ESManager implements LibraryManager {
 	}
 
 	/**
-	 * Method that returns a requested Story by ID and fetches all
-	 * associated resources.
+	 * Method that returns a requested Story by ID and fetches all associated
+	 * resources.
 	 * 
 	 * @param storyId
 	 *            the ID of the requested Story
 	 * @return the requested story
 	 */
 	public Story getStory(UUID storyId) {
-		
+
 		// Grabs the associated StoryResource object
 		StoryResource storyResource = client.getStoryResources(storyId);
 		ArrayList<MediaResource> resources = storyResource.getMediaResources();
-		
+
 		for (MediaResource resource : resources) {
 			// Grabs base64 string
 			String identifier = resource.getIdentifier();
@@ -83,11 +89,11 @@ public class ESManager implements LibraryManager {
 			String media = client.getMedia(identifier, type);
 			localManager.saveMediaFromBase64(identifier, type, media);
 		}
-		
+
 		return client.getStory(storyId);
 	}
-	
-	public Story getRandomOnlineStory(){
+
+	public Story getRandomOnlineStory() {
 		// Get count of total number of stories online
 		Integer totalOnlineStories = client.getStoryCount();
 		// Randomly selects an index within the total number
@@ -108,14 +114,14 @@ public class ESManager implements LibraryManager {
 	}
 
 	/**
-	 * Fetches first batch of StoryInfos starting from the index start. 
-	 * Call this if want new batch of StoryInfo objects.
+	 * Fetches first batch of StoryInfos starting from the index start. Call
+	 * this if want new batch of StoryInfo objects.
 	 * 
 	 * @param start
 	 *            The start index of which StoryInfos to fetch (equal to current
 	 *            total number of StoryInfos)
-	 * @return The ArrayList of StoryInfos of size resultSize (or less if no more on
-	 *         server)
+	 * @return The ArrayList of StoryInfos of size resultSize (or less if no
+	 *         more on server)
 	 */
 	public ArrayList<StoryInfo> getStoryInfoList(int start) {
 		return client.getStoryInfos(start, resultSize);
@@ -227,21 +233,26 @@ public class ESManager implements LibraryManager {
 
 		return true;
 	}
-	
+
 	/**
-	 * Returns an ArrayList of StoryInfo objects that match the results
-	 * of what was desired to be searched from the Browse Online Stories activity
+	 * Returns an ArrayList of StoryInfo objects that match the results of what
+	 * was desired to be searched from the Browse Online Stories activity
 	 * 
-	 * @param title   The input text of the title field
-	 * @param author   The input text of the author field
-	 * @param description   The input text of the description field
-	 * @param start   The index to start searching for the objects
-	 * @return   The ArrayList of fetched StoryInfo objects
+	 * @param title
+	 *            The input text of the title field
+	 * @param author
+	 *            The input text of the author field
+	 * @param description
+	 *            The input text of the description field
+	 * @param start
+	 *            The index to start searching for the objects
+	 * @return The ArrayList of fetched StoryInfo objects
 	 */
 	public ArrayList<StoryInfo> searchOnlineStories(String title,
 			String author, String description, int start) {
 		String query = SearchManager.createQuery(title, author, description);
-		ArrayList<StoryInfo> infos = client.getStoryInfosByQuery(query, start, resultSize);
+		ArrayList<StoryInfo> infos = client.getStoryInfosByQuery(query, start,
+				resultSize);
 		return infos;
 	}
 
@@ -281,13 +292,37 @@ public class ESManager implements LibraryManager {
 		}
 		return resourceList;
 	}
-	
+
 	private String mediaToBase64(String identifier, MediaType type) {
 		File media = new File(context.getFilesDir().getAbsolutePath() + "/"
 				+ type.toString() + "/" + identifier);
-		// TODO: Write the conversion (load and encode)
-		String base64Media = "";
+
+		String base64Media = new String();
+
+		// We are assuming that all media files are already compressed by the
+		// time that we try to upload them onto the server. Therefore, encoding
+		// into one string from the file shouldn't be a problem. If we extend
+		// support to larger files, we'll need to rewrite this portion of the
+		// function.
+		try {
+			InputStream in = new FileInputStream(media.getAbsolutePath());
+			byte[] buf = new byte[1024];
+
+			int len = 0;
+			len = in.read(buf);
+			while (len > 0) {
+				base64Media += Base64.encodeToString(buf, Base64.NO_WRAP
+						| Base64.NO_PADDING);
+				len = in.read(buf);
+			}
+			in.close();
+		} catch (FileNotFoundException e) {
+			Log.d("Base64", "File not found for loading encoded media");
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		return base64Media;
 	}
-
 }
