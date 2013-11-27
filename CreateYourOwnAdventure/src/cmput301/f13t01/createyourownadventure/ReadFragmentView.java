@@ -80,43 +80,7 @@ public class ReadFragmentView extends Fragment {
 
 		ArrayList<Media> mediaList = storyManager.getMediaList(fragmentId);
 
-		// cycle through the media list
-		for (int i = 0; i < mediaList.size(); i++) {
-			@SuppressWarnings("rawtypes")
-			Media media = mediaList.get(i);
-
-			// get media file's type and do class comparisons
-
-			// for Text type of media
-			if (media.getClass().equals(Text.class)) {
-				Text text = (Text) media;
-
-				// get media content's SpannableString as s
-				SpannableString s = text.getContent();
-				TextView tv = new TextView(getActivity());
-				tv.setTextColor(Color.BLACK);
-				tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-				tv.setText(s, BufferType.SPANNABLE);
-				layout.addView(tv);
-			}
-
-			// the rest are implemented later for iteration 3/4
-
-			// for Image type of media
-			if (media.getClass().equals(Image.class)) {
-				// TO-DO
-			}
-
-			// for Sound type of media
-			if (media.getClass().equals(Sound.class)) {
-				// TO-DO
-			}
-
-			// for Video type of media
-			if (media.getClass().equals(Video.class)) {
-				// TO-DO
-			}
-		}
+		StoryFragmentViewFactory.ConstructView(layout, mediaList, getActivity(), false);
 
 		// shows the annotations for the fragment, if any
 		ArrayList<Media> annotateList = storyManager
