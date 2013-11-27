@@ -15,4 +15,8 @@ public class Hits<T> {
 		return (super.toString() + "," + total + "," + max_score + "," + hits);
 	}
 	
+	public int getTotal() {
+		return total;
+	}
+	
 }

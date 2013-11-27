@@ -26,4 +26,8 @@ public class ElasticSearchSearchResponse<T> {
 		return (super.toString() + ":" + took + "," + _shards + "," + exists + "," + hits);
 	}
 	
+	public int getTotal() {
+		return hits.getTotal();
+	}
+	
 }
