@@ -11,7 +11,7 @@ import cmput301.f13t01.createyourownadventure.StoryInfo;
 /**
  * Composes the query to be sent to ESClient
  * 
- * @author Jesse Chu, Reginald Miller
+ * @author Reginald Miller, Jesse Chu
  */
 
 public class SearchManager {

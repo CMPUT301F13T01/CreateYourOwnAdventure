@@ -2,7 +2,6 @@ package cmput301.f13t01.createyourownadventure.test;
 
 import java.util.UUID;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.SpannableString;
