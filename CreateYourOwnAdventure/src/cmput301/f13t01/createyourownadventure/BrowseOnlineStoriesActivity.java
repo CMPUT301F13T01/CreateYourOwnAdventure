@@ -19,17 +19,17 @@
 package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.UUID;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import cmput301.f13t01.elasticsearch.ESManager;
+import cmput301.f13t01.elasticsearch.SearchManager;
 
 /**
  * Sets up and handles browse online ui that allows user to search for and display
@@ -43,12 +43,14 @@ import android.widget.Toast;
 public class BrowseOnlineStoriesActivity extends Activity{
 	// local manager object to handle local story saving
 	private LocalManager objLibrary;
+	// ES Manager object to handle online story interactions
+	private ESManager esLibrary;
 	//story list view object
 	private ListView lsvStories = null;
 	//story info array list object
 	private ArrayList<StoryInfo> storyInfoList;
 	// adapter for story info array list
-	private StoryInfoListAdapter objStoryAdapter;	
+	private StoryInfoListAdapter objStoryAdapter;
 
 	/**
 	 * Create Browse Online Story Screen
@@ -67,6 +69,9 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		//grab the local manager
 		GlobalManager app = (GlobalManager) getApplication();
 		objLibrary = app.getLocalManager();
+		
+		// Grab the ES Manager
+		esLibrary = app.getESManager();
 	}
 	
 	/**
@@ -145,6 +150,14 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.action_save_online_story), Toast.LENGTH_SHORT);
 		toast.show();
+		
+		// Jesse's Additions past this point
+
+		// This function needs to be called on a specific story...
+		// It shouldn't be an action bar button
+		// This call will save the story from the server locally
+		// It returns the UUID of the story saved
+		// localId = esLibrary.downloadStory(id)
 	}
 	/**
 	 * clears input boxes for new search
@@ -155,6 +168,16 @@ public class BrowseOnlineStoriesActivity extends Activity{
 				.getString(R.string.action_new_search), Toast.LENGTH_SHORT);
 		toast.show();
 		//implement edit box entry wipeout
+		
+		// Jesse's Additions past this point
+		// Grabbing the EditText Views locally
+		// Not sure if you want actual instance variables to refer to them, Gerald
+		EditText searchTitle = (EditText) findViewById(R.id.search_title);
+		EditText searchAuthor = (EditText) findViewById(R.id.search_author);
+		EditText searchDesc = (EditText) findViewById(R.id.search_description);
+		searchTitle.setText("");
+		searchAuthor.setText("");
+		searchDesc.setText("");
 	}
 	
 	/**
@@ -164,7 +187,23 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		//feedback to user, echoing menu text
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.action_search_online_stories), Toast.LENGTH_SHORT);
-		toast.show();		
+		toast.show();
+		
+		// Jesse's Additions past this point
+		// Grabbing the EditText Views locally
+		// Not sure if you want actual instance variables to refer to them, Gerald
+		EditText searchTitle = (EditText) findViewById(R.id.search_title);
+		EditText searchAuthor = (EditText) findViewById(R.id.search_author);
+		EditText searchDesc = (EditText) findViewById(R.id.search_description);
+		// Grab the search parameters
+		String title = searchTitle.getText().toString();
+		String author = searchAuthor.getText().toString();
+		String desc = searchDesc.getText().toString();
+		// Search for stories, 0 is just a default we leave there, it's needed
+		ArrayList<StoryInfo> results = esLibrary.searchOnlineStories(title, author, desc, 0);
+		
+		// You now have an ArrayList of StoryInfo, do what you will 
+		
 	}
 	
 	/**
@@ -175,6 +214,13 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.action_get_next_20), Toast.LENGTH_SHORT);
 		toast.show();
+		
+		// Jesse/Reggie's Additions past this point
+		// Index to start new query at (based on size of storyInfoList)
+		Integer index = storyInfoList.size();
+		ArrayList<StoryInfo> next20 = esLibrary.getStoryInfoList(index);
+		
+		// You now have the next 20 StoryInfo objects in an ArrayList
 	}
 	/**
 	 * displays screen specific help
@@ -198,6 +244,11 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.action_random_story), Toast.LENGTH_SHORT);
 		toast.show();
+		
+		// Jesse's additions below
+		// A random story object. We can play with the returns later if you want
+		Story randomStory = esLibrary.getRandomOnlineStory();
+		
 		
 		/*
 		//get the story info list from manager and the size of list

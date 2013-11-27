@@ -2,10 +2,10 @@ package cmput301.f13t01.createyourownadventure;
 
 import java.util.UUID;
 
-import cmput301.f13t01.elasticsearch.ESClient;
-
 import android.app.Application;
 import android.content.Context;
+import cmput301.f13t01.elasticsearch.ESClient;
+import cmput301.f13t01.elasticsearch.ESManager;
 
 /**
  * The GlobalManager class is a class used to hold global story access managers.
@@ -37,10 +37,13 @@ public class GlobalManager extends Application {
 	 */
 	private static LocalManager localManager;
 	
+	
+	private static ESManager esManager;
+	
 	/**
 	 * The Application's Elastic Search Client.
 	 */
-	private static ESClient ESClient;
+	private static ESClient esClient;
 
 	private static Context context;
 
@@ -49,7 +52,8 @@ public class GlobalManager extends Application {
 		context = getApplicationContext();
 		readManager = new ReadStoryManager();
 		localManager = new LocalManager(context);
-		ESClient = new ESClient();
+		esClient = new ESClient();
+		esManager = new ESManager(context);
 	}
 
 	public static Context getAppContext() {
@@ -75,12 +79,21 @@ public class GlobalManager extends Application {
 	}
 	
 	/**
+	 * Get the Application's Elastic Search Manager.
+	 * 
+	 * @return the Application's LocalManager.
+	 */
+	public static ESManager getESManager(){
+		return esManager;
+	}
+	
+	/**
 	 * Get the Application's Elastic Search client.
 	 * 
 	 * @return the Application's Elastic Search client.
 	 */
 	public static ESClient getESClient() {
-		return ESClient;
+		return esClient;
 	}
 
 	/**
