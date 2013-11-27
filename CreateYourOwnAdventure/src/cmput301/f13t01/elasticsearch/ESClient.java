@@ -444,6 +444,17 @@ public class ESClient {
 
 		return null;
 	}
+	
+	public Integer getStoryCount() {
+		return 0;
+	}
+	
+	public Story getStoryByIndex(Integer index) {
+		ArrayList<StoryInfo> infos = this.getStoryInfos(index, 1);
+		UUID id = infos.get(0).getId();
+		Story story = this.getStory(id);
+		return story;
+	}
 
 	// Similar to getStoryInfo, but different enough to
 	// warrant its own method
