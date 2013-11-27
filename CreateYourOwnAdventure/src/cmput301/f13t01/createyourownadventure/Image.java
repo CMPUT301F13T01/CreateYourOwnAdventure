@@ -27,15 +27,23 @@ package cmput301.f13t01.createyourownadventure;
 import java.io.IOException;
 import java.io.Serializable;
 
+import android.net.Uri;
+
 /**
  * Class for Image type Media. Uses a String which refers to the resource name.
  */
 @SuppressWarnings("serial")
 public class Image implements Media<String>, Serializable {
-	private final MediaType type = MediaType.IMAGE;
+	private static final MediaType type = MediaType.IMAGE;
 	
 	private String content;
 	private MediaInteractionManager manager;
+	
+	public Image(String content) {
+		this.content = content;
+	}
+	
+	public Image() { }
 
 	/**
 	 * Returns the resource identifier string.
@@ -100,6 +108,6 @@ public class Image implements Media<String>, Serializable {
 
 	@Override
 	public MediaType getType() {
-		return this.type;
+		return Image.type;
 	}
 }

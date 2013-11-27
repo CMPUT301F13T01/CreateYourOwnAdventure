@@ -102,5 +102,8 @@
     <string name="action_help">Help</string>
     
     <string name="story_URIs">URIs</string>
+    <string name="action_edit_from_camera">Camera</string>
+    <string name="action_edit_from_gallery">Gallery</string>
+    <string name="action_edit_from_internal">Story Images</string>
 
 </resources>

@@ -25,6 +25,7 @@ story fragment's content.
 
 package cmput301.f13t01.createyourownadventure;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -35,9 +36,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.util.Log;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -63,12 +65,13 @@ public class EditFragmentContentActivity extends Activity implements
 
 	private static final int EDIT_CHOICE = 0;
 	private static final int SELECT_IMAGE = 1;
+	private static final int CAPTURE_IMAGE = 2;
 
 	private StoryFragment storyFragment;
 	private int fragmentId;
-	private ReadStoryManager manager;
 	private ArrayList<Uri> imageURIs;
 	private LinearLayout layout;
+	private Uri cameraUri;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -77,11 +80,8 @@ public class EditFragmentContentActivity extends Activity implements
 		setContentView(R.layout.activity_edit_fragment_content);
 
 		setupActionBar();
-		
-		layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 
-		// Get the story manager
-		manager = GlobalManager.getStoryManager();
+		layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 
 		Intent intent = getIntent();
 
@@ -104,12 +104,33 @@ public class EditFragmentContentActivity extends Activity implements
 								R.string.story_fragment));
 			}
 			imageURIs = new ArrayList<Uri>();
+			ArrayList<Media> media = storyFragment.getContentList();
+			for (Media next : media) {
+				if (next.getType() == MediaType.IMAGE) {
+					imageURIs.add(Uri.fromFile(new File(getFilesDir()
+							.getAbsolutePath()
+							+ "/"
+							+ next.getType().toString()
+							+ "/"
+							+ next.getContent())));
+				}
+			}
 		}
 
 		ArrayList<Media> content = storyFragment.getContentList();
 
-		StoryFragmentViewFactory.ConstructView(layout, content, this, true);
+		StoryFragmentViewFactory.ConstructView(layout, content,
+				getApplicationContext(), true);
 	}
+
+//	@Override
+//	protected void onDestroy() {
+//		super.onDestroy();
+//		for (File child : tempFolder.listFiles()) {
+//			child.delete();
+//		}
+//		tempFolder.delete();
+//	}
 
 	/**
 	 * Set up the {@link android.app.ActionBar}.
@@ -197,12 +218,54 @@ public class EditFragmentContentActivity extends Activity implements
 			onSelectAddImage();
 			return true;
 		case R.id.action_edit_add_sound:
+			onSelectAddSound();
 			return true;
 		case R.id.action_edit_add_video:
+			onSelectAddVideo();
 			return true;
+		case R.id.action_edit_from_camera:
+			onSelectCamera();
+			return true;
+		case R.id.action_edit_from_gallery:
+			onSelectGallery();
 		default:
 			return false;
 		}
+	}
+
+	private void onSelectGallery() {
+		String externalFolderPath = Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/StoryTime/";
+		File externalFile = new File(externalFolderPath);	
+		Log.d("oops", "external file path: " + externalFile.getAbsolutePath());
+		
+		Intent intent = new Intent();
+	    Uri external = Uri.fromFile(externalFile);
+	    //intent.setData(external);
+		intent.setDataAndType(external, "image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		startActivityForResult(intent, SELECT_IMAGE);
+	}
+
+	private void onSelectCamera() {
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+		String cameraTempDir = GlobalManager.getTempDirectory().getAbsolutePath() + "/" + "tmp"
+				+ imageURIs.size();
+		File imageFile = new File(cameraTempDir);
+		cameraUri = Uri.fromFile(imageFile);
+
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
+		startActivityForResult(intent, CAPTURE_IMAGE);
+
+	}
+
+	private void onSelectAddSound() {
+		// TODO: Implement this.
+	}
+
+	private void onSelectAddVideo() {
+		// TODO: Implement this.
 	}
 
 	private void onSelectAddText() {
@@ -219,13 +282,15 @@ public class EditFragmentContentActivity extends Activity implements
 	}
 
 	private void onSelectAddImage() {
-		// TODO: Give an option to use camera, select from story photos, or
-		// select from gallery.
+		View v = findViewById(R.id.action_edit_add_content);
 
-		Intent intent = new Intent();
-		intent.setType("image/*");
-		intent.setAction(Intent.ACTION_GET_CONTENT);
-		startActivityForResult(intent, SELECT_IMAGE);
+		PopupMenu popup = new PopupMenu(this, v);
+		MenuInflater inflater = popup.getMenuInflater();
+		inflater.inflate(R.menu.add_image_menu, popup.getMenu());
+
+		popup.setOnMenuItemClickListener(this);
+
+		popup.show();
 	}
 
 	private void onSelectCancel() {
@@ -240,21 +305,12 @@ public class EditFragmentContentActivity extends Activity implements
 
 	@Override
 	public void onBackPressed() {
-		storyFragment.removeAllContent();
-
-		for (int i = 0; i < layout.getChildCount(); i++) {
-			View v = layout.getChildAt(i);
-			if (v.getClass().equals(EditText.class)) {
-				EditText text = (EditText) v;
-				SpannableString string = new SpannableString(text.getText());
-				storyFragment.addContent(new Text(string));
-			}
-		}
+		StoryFragment saveFragment = constructSaveFragmentFromView();
 
 		Intent intent = new Intent();
 
 		intent.putExtra(getResources().getString(R.string.story_fragment),
-				storyFragment);
+				saveFragment);
 
 		if (getParent() != null)
 			getParent().setResult(RESULT_OK, intent);
@@ -298,11 +354,18 @@ public class EditFragmentContentActivity extends Activity implements
 			if (resultCode == RESULT_OK) {
 				// Don't need to do anything right now.
 			}
+			break;
 		case SELECT_IMAGE:
 			if (resultCode == RESULT_OK) {
 				Uri image = data.getData();
 				imageURIs.add(image);
 				StoryFragmentViewFactory.addImage(image, layout, this);
+			}
+			break;
+		case CAPTURE_IMAGE:
+			if (resultCode == RESULT_OK) {
+				imageURIs.add(cameraUri);
+				StoryFragmentViewFactory.addImage(cameraUri, layout, this);
 			}
 		}
 	}
@@ -344,12 +407,6 @@ public class EditFragmentContentActivity extends Activity implements
 		public boolean onMenuItemClick(MenuItem item) {
 			switch (item.getItemId()) {
 			case R.id.action_edit_delete_content:
-				ContextMenuInfo info = item.getMenuInfo();
-				if (info != null) {
-					Log.d("oops", "Popup Menu Info is not null");
-				} else {
-					Log.d("oops", "Popup Menu Info is null");
-				}
 				group.removeView(view);
 			}
 			return false;
@@ -371,9 +428,11 @@ public class EditFragmentContentActivity extends Activity implements
 	}
 
 	private StoryFragment constructSaveFragmentFromView() {
-
 		StoryFragment fragment = storyFragment;
 		fragment.removeAllContent();
+
+		int imageIndex = 0;
+		Log.d("ImageSaveDebug", "count: " + layout.getChildCount());
 
 		for (int i = 0; i < layout.getChildCount(); i++) {
 			View v = layout.getChildAt(i);
@@ -381,6 +440,11 @@ public class EditFragmentContentActivity extends Activity implements
 				EditText text = (EditText) v;
 				SpannableString string = new SpannableString(text.getText());
 				fragment.addContent(new Text(string));
+			} else if (v.getClass().equals(ImageView.class)) {
+				String imageName = GlobalManager.getLocalManager().saveMedia(
+						imageURIs.get(imageIndex), MediaType.IMAGE);
+				fragment.addContent(new Image(imageName));
+				imageIndex++;
 			}
 		}
 

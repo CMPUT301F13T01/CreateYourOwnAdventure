@@ -1,8 +1,11 @@
 package cmput301.f13t01.createyourownadventure;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
+import android.R.dimen;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,7 +20,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class StoryFragmentViewFactory {
+	private static final int horizontalPadding = cmput301.f13t01.createyourownadventure.R.dimen.activity_horizontal_margin;
+	private static final int verticalPadding = cmput301.f13t01.createyourownadventure.R.dimen.activity_vertical_margin;
 
+	// TODO: Make padding work correctly.
 	@SuppressWarnings("rawtypes")
 	public static void ConstructView(LinearLayout layout,
 			ArrayList<Media> content, Context context, Boolean forEdit) {
@@ -33,22 +39,26 @@ public class StoryFragmentViewFactory {
 					EditText edit = new EditText(context);
 					edit.setTextColor(Color.BLACK);
 					edit.setText(media.getContent().toString());
+//					edit.setPadding(horizontalPadding, verticalPadding,
+//							horizontalPadding, verticalPadding);
 					layout.addView(edit, params);
 				} else {
 					TextView text = new TextView(context);
 					text.setTextColor(Color.BLACK);
 					text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 					text.setText((CharSequence) media.getContent());
+//					text.setPadding(horizontalPadding, verticalPadding,
+//							horizontalPadding, verticalPadding);
 					layout.addView(text, params);
 				}
 			} else if (media.getClass().equals(Image.class)) {
 				Image image = (Image) media;
-				Uri imageUri = Uri.parse(context.getFilesDir()
+
+				Uri imageUri = Uri.fromFile(new File(context.getFilesDir()
 						.getAbsolutePath()
 						+ "/"
 						+ image.getType().toString()
-						+ "/"
-						+ image.getContent());
+						+ "/" + image.getContent()));
 				addImage(imageUri, layout, context);
 			} else if (media.getClass().equals(ImageUri.class)) {
 				ImageUri image = (ImageUri) media;
@@ -71,14 +81,18 @@ public class StoryFragmentViewFactory {
 			Log.d("oops", "Layout width: " + layout.getWidth() + " height: "
 					+ layout.getHeight());
 
+			Log.d("ImageDebug", "addImage path: " + image.getPath());
+
 			Bitmap bitmap = decodeUri(image, 256, 256, context);
 
 			imageView.setImageBitmap(bitmap);
+//			imageView.setPadding(horizontalPadding, verticalPadding,
+//					horizontalPadding, verticalPadding);
 
 			layout.addView(imageView, params);
 
 		} catch (FileNotFoundException e) {
-			Log.d("oops", "Couldn't find the file...");
+			Log.d("ImageDebug", "Couldn't find the file...");
 			e.printStackTrace();
 		}
 	}
@@ -86,11 +100,16 @@ public class StoryFragmentViewFactory {
 	public static Bitmap decodeUri(Uri selectedImage, int reqWidth,
 			int reqHeight, Context context) throws FileNotFoundException {
 
+		Log.d("ImageSaveDebug", "selected: " + selectedImage.toString());
+		Log.d("ImageSaveDebug",
+				"Size: " + (new File(selectedImage.getPath())).length());
+
 		// First decode image size
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
-		BitmapFactory.decodeStream(context.getContentResolver()
-				.openInputStream(selectedImage), null, options);
+		InputStream is = context.getContentResolver().openInputStream(
+				selectedImage);
+		BitmapFactory.decodeStream(is, null, options);
 
 		// Calculate inSampleSize
 		options.inSampleSize = calculateInSampleSize(options, reqWidth,
@@ -100,7 +119,6 @@ public class StoryFragmentViewFactory {
 		options.inJustDecodeBounds = false;
 		return BitmapFactory.decodeStream(context.getContentResolver()
 				.openInputStream(selectedImage), null, options);
-
 	}
 
 	public static int calculateInSampleSize(BitmapFactory.Options options,

@@ -1,11 +1,12 @@
 package cmput301.f13t01.createyourownadventure;
 
+import java.io.File;
 import java.util.UUID;
-
-import cmput301.f13t01.elasticsearch.ESClient;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Environment;
+import cmput301.f13t01.elasticsearch.ESClient;
 
 /**
  * The GlobalManager class is a class used to hold global story access managers.
@@ -36,13 +37,22 @@ public class GlobalManager extends Application {
 	 * @see #setLocalManager()
 	 */
 	private static LocalManager localManager;
-	
+
 	/**
 	 * The Application's Elastic Search Client.
 	 */
 	private static ESClient ESClient;
 
+	/**
+	 * Application context for the Global Manager.
+	 */
 	private static Context context;
+
+	/**
+	 * Temporary directory used by the application for storing in transit
+	 * images.
+	 */
+	private static File tempDirectory;
 
 	public void onCreate() {
 		super.onCreate();
@@ -50,6 +60,24 @@ public class GlobalManager extends Application {
 		readManager = new ReadStoryManager();
 		localManager = new LocalManager(context);
 		ESClient = new ESClient();
+		
+		String tempFolderPath = Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/tmp";
+		tempDirectory = new File(tempFolderPath);
+		if (!tempDirectory.exists()) {
+			tempDirectory.mkdir();
+		}
+	}
+	
+	/**
+	 * Get the application's temporary directory.
+	 * @return the application's temporary directory.
+	 */
+	public static File getTempDirectory() {
+		if (!tempDirectory.exists()) {
+			tempDirectory.mkdir();
+		}
+		return tempDirectory;
 	}
 
 	public static Context getAppContext() {
@@ -73,7 +101,7 @@ public class GlobalManager extends Application {
 	public static ReadStoryManager getStoryManager() {
 		return readManager;
 	}
-	
+
 	/**
 	 * Get the Application's Elastic Search client.
 	 * 
