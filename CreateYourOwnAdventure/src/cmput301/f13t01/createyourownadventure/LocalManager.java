@@ -34,6 +34,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectStreamException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,6 +46,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 
 /**
@@ -369,7 +371,39 @@ public class LocalManager implements Serializable, LibraryManager {
 			String data) {
 		// TODO: Convert/save back into appropriate media
 		// Refer to saveMedia above for the save path we will use
-		return false;
+		byte[] decodedData = Base64.decode(data, Base64.DEFAULT);
+		
+		if(decodedData == null) {
+			Log.d("Base64", "Decoded data is null");
+			return false;
+		}
+		
+		// Determines path to save images
+		String internalFolderPath = context.getFilesDir().getAbsolutePath()
+				+ "/" + type.toString();
+		File internalFolder = new File(internalFolderPath);
+		// Ensures folder exists
+		if (!internalFolder.exists()) {
+			internalFolder.mkdir();
+		}
+		
+		String saveFilePath = internalFolder + "/" + identifier;
+		File mediaFile = new File(saveFilePath);
+		
+		try {
+			OutputStream os = new FileOutputStream(mediaFile);
+			os.write(decodedData);
+			os.close();
+		} catch (FileNotFoundException e) {
+			Log.d("Base64", "File not found for saving decoded data");
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
 	}
 
 	/**
