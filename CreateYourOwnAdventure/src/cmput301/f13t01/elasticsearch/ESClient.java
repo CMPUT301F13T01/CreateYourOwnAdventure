@@ -758,17 +758,17 @@ public class ESClient {
 		//Story story2 = new Story();
 		//Story story3 = new Story();
 		
-		//story1.setTitle("a b c d e f g");
-		//story2.setTitle("e f g h i j");
-		//story3.setTitle("x y z");
+		//story1.setTitle("w x y z");
+		//story2.setTitle("e f g");
+		//story3.setTitle("v w x y z");
 		
-		//story1.setAuthor("g h i j k l m");
-		//story2.setAuthor("n o p q r s t u v");
-		//story3.setAuthor("l m n o p q");
+		//story1.setAuthor("a b c");
+		//story2.setAuthor("d e f");
+		//story3.setAuthor("g h i");
 		
-		//story1.setDescription("f f f f f f f");
-		//story2.setDescription("a b c d e f g");
-		//story3.setDescription("");
+		//story1.setDescription("f");
+		//story2.setDescription("f");
+		//story3.setDescription("f");
 		
 		//StoryInfo storyInfo1 = new StoryInfo(UUID.randomUUID(), story1);
 		//StoryInfo storyInfo2 = new StoryInfo(UUID.randomUUID(), story2);
@@ -811,9 +811,9 @@ public class ESClient {
 		}
 		
 		// Expect 1 StoryInfo object from this query
-		String query = SearchManager.createQuery("f g", "", "f");
+		String query = SearchManager.createQuery("x", "", "");
 		
-		ArrayList<StoryInfo> infos = client.getStoryInfosByQuery(query, 0, 1);
+		ArrayList<StoryInfo> infos = client.getStoryInfosByQuery(query, 2, 5);
 		//ArrayList<StoryInfo> infos = client.getStoryInfos(0, 20);
 		
 		System.out.println("Size of array is: "+infos.size());
