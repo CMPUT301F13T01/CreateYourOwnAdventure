@@ -5,21 +5,21 @@
     android:orientation="vertical">
     
     <EditText
-        android:id="@+id/edit_story_title"
+        android:id="@+id/search_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/story_title_hint"
         android:inputType="text" />
 
     <EditText
-        android:id="@+id/edit_story_author"
+        android:id="@+id/search_author"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/story_author_hint"
         android:inputType="text" />
 
     <EditText
-        android:id="@+id/edit_story_description"
+        android:id="@+id/search_description"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/story_description_hint"

@@ -32,7 +32,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -67,7 +69,16 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.main_activity);
 		//set list view and register view for on long click contextual menu
 		lsvStories = (ListView) findViewById(R.id.main_activity_listview);
-		registerForContextMenu(lsvStories);		
+		registerForContextMenu(lsvStories);
+		// Set default click behaviour to continue
+		lsvStories.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				StoryInfo selectedStory =storyInfoList.get(position); 
+				UUID clickId = selectedStory.getId();
+				startContinueStory(clickId);
+			}
+		}); 
 		
 		//grab the local manager
 		GlobalManager app = (GlobalManager) getApplication();
