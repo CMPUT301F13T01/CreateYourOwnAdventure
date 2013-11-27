@@ -24,7 +24,6 @@ import java.util.Random;
 import java.util.UUID;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
-import cmput301.f13t01.createyourownadventure.GlobalManager;
 import cmput301.f13t01.createyourownadventure.LocalManager;
 import cmput301.f13t01.createyourownadventure.MainActivity;
 import cmput301.f13t01.createyourownadventure.R;
@@ -94,10 +93,12 @@ public class TestCreateYourOwnAdventure extends ActivityInstrumentationTestCase2
 		//new random object and story list size
 	 	Random r = new Random();
 	 	int listSize = storyInfoList.size();
-		//get next integer random number in range 0 to listSize - 1		 	
-		int randStory = r.nextInt(listSize);
-		assertTrue(randStory > -1);
-		assertTrue(randStory < 5 );
+	 	ArrayList<Integer> randInts = new ArrayList<Integer>();
+	 	//loop until we get all the random numbers from 0 to 4 into list
+	 	while (randInts.size() != 5){
+	 		randInts.add(Integer.valueOf(r.nextInt(listSize)));
+	 	}
+	 	assertTrue(randInts.size() == 5);		
 	}
 	
 	/*
