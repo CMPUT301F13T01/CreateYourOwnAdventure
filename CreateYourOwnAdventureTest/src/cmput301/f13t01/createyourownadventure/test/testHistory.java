@@ -1,4 +1,4 @@
-package testSrc;
+package cmput301.f13t01.createyourownadventure.test;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,15 +22,15 @@ public class testHistory extends TestCase {
 		history.pushToStack(2);
 		history.pushToStack(3);
 		assertTrue(history.getMostRecent() == 3);
+		assertTrue(history.goBack() == 3);
 		assertTrue(history.goBack() == 2);
-		assertTrue(history.goBack() == 1);
 	}
 	
 	@Test
 	public void testGoBack() {
 		assertTrue(history.goBack() == null);
 		history.pushToStack(0);
-		assertTrue(history.goBack() == null);
+		assertTrue(history.goBack() == 0);
 		assertTrue(history.getMostRecent() == null);
 		history.pushToStack(0);
 		history.pushToStack(1);

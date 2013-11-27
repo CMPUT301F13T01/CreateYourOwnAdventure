@@ -60,7 +60,7 @@ public class History implements Serializable {
 			int lastIndex = size - 1;
 			return historyStack.get(lastIndex);
 		}
-		//Returns -1 if stack is empty
+		//Returns null if stack is empty
 		return null;
 	}
 	

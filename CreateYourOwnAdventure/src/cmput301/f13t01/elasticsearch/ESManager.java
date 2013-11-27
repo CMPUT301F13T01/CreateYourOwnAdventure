@@ -72,8 +72,6 @@ public class ESManager implements LibraryManager {
 	 */
 	public Story getStory(UUID storyId) {
 		
-		Story story = client.getStory(storyId);
-
 		// Grabs the associated StoryResource object
 		StoryResource storyResource = client.getStoryResources(storyId);
 		ArrayList<MediaResource> resources = storyResource.getMediaResources();
@@ -218,7 +216,13 @@ public class ESManager implements LibraryManager {
 			String identifier = resource.getIdentifier();
 			MediaType type = resource.getType();
 			String base64Media = mediaToBase64(identifier, type);
-			client.postMedia(identifier, type, base64Media);
+			try {
+				client.postMedia(identifier, type, base64Media);
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return true;
