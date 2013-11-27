@@ -27,6 +27,7 @@ package cmput301.f13t01.elasticsearch;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 import android.content.Context;
@@ -86,6 +87,17 @@ public class ESManager implements LibraryManager {
 		}
 		
 		return client.getStory(storyId);
+	}
+	
+	public Story getRandomOnlineStory(){
+		// Get count of total number of stories online
+		Integer totalOnlineStories = client.getStoryCount();
+		// Randomly selects an index within the total number
+		Random randSelect = new Random();
+		Integer index = randSelect.nextInt(totalOnlineStories);
+		// Grabs the story using the client
+		Story randomStory = client.getStoryByIndex(index);
+		return randomStory;
 	}
 
 	/**
