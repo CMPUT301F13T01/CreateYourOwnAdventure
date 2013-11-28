@@ -21,6 +21,11 @@ public class SearchManager {
 	}
 	
 	public static String createQuery(String title, String author, String description) {
+		
+		if (title.isEmpty() && author.isEmpty() && description.isEmpty()) {
+			return "";
+		}
+		
 		// Not using first open brace since this will be appended with
 		// number of items to front
 		String query = "\"query\" : {\"bool\" : {\"must\" : [";

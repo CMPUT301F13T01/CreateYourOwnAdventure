@@ -148,7 +148,11 @@ public class ESClient {
 		try {
 			HttpPost getRequest = new HttpPost(
 					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryInfo/_search?pretty=1");
-			query = "{\"from\" : " + from + ", \"size\" : " + num + ", " + query + "}";
+			String comma = ",";
+			if (query.isEmpty()) {
+				comma = "";
+			}
+			query = "{\"from\" : " + from + ", \"size\" : " + num + comma + query + "}";
 			//query = "{" + query + "}";
 			//query = "{\"query\" : {\"query_string\" : {\"default_field\" : \"title\",\"query\" : \"" + "a AND h" + "\"}}}";
 			//query = "{\"query\" : [{\"field\" : {\"title\" : \"" + "d AND f" + "\"}, {\"field\" : {\"author\" : \"" + "h AND j" + "\"}}, {\"field\" : {\"description\" : \"" + "f" + "\"}}";
@@ -440,6 +444,91 @@ public class ESClient {
 		response.getEntity().consumeContent();
 		
 		return infos;
+	}
+	
+	// For testing purposes only
+	public static void main(String[] args) {
+
+		ESClient client = new ESClient();
+
+		// Test posting, getting or deleting of StoryInfo objects
+		// testStoryInfo(client);
+		
+		// Test posting, getting or deleting of Story objects
+		// testStory(client);
+		
+		//Story story1 = new Story();
+		//Story story2 = new Story();
+		//Story story3 = new Story();
+		
+		//story1.setTitle("w x y z");
+		//story2.setTitle("e f g");
+		//story3.setTitle("v w x y z");
+		
+		//story1.setAuthor("a b c");
+		//story2.setAuthor("d e f");
+		//story3.setAuthor("g h i");
+		
+		//story1.setDescription("f");
+		//story2.setDescription("f");
+		//story3.setDescription("f");
+		
+		//StoryInfo storyInfo1 = new StoryInfo(UUID.randomUUID(), story1);
+		//StoryInfo storyInfo2 = new StoryInfo(UUID.randomUUID(), story2);
+		//StoryInfo storyInfo3 = new StoryInfo(UUID.randomUUID(), story3);
+		
+		//try {
+			//client.postStoryInfo(storyInfo1);
+		//} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//}
+		
+		//try {
+			//client.postStoryInfo(storyInfo2);
+		//} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//}
+		
+		//try {
+			//client.postStoryInfo(storyInfo3);
+		//} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//}
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		// Expect 1 StoryInfo object from this query
+		String query = SearchManager.createQuery("", "", "");
+		
+		ArrayList<StoryInfo> infos = client.getStoryInfosByQuery(query, 2, 3);
+		//ArrayList<StoryInfo> infos = client.getStoryInfos(0, 20);
+		
+		System.out.println(client.getStoryCount());
+		
+		System.out.println("Size of array is: "+infos.size());
+		
+		System.out.println("Size of full array is : " + client.getStoryInfos(0,20).size());
+		
+		for (StoryInfo info : infos) {
+			System.out.println(info.getTitle());
+		}
+	
 	}
 
 }
