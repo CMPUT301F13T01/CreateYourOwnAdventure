@@ -43,14 +43,17 @@ import cmput301.f13t01.elasticsearch.SearchManager;
 public class BrowseOnlineStoriesActivity extends Activity{
 	// local manager object to handle local story saving
 	private LocalManager objLibrary;
-	// ES Manager object to handle online story interactions
-	private ESManager esLibrary;
 	//story list view object
 	private ListView lsvStories = null;
 	//story info array list object
-	private ArrayList<StoryInfo> storyInfoList;
+	//private ArrayList<StoryInfo> storyInfoList;
 	// adapter for story info array list
 	private StoryInfoListAdapter objStoryAdapter;
+	
+	//new objects for online browsing
+	// ES Manager object to handle online story interactions
+	private ESManager esLibrary;	
+	private ArrayList<StoryInfo> results;
 
 	/**
 	 * Create Browse Online Story Screen
@@ -79,12 +82,14 @@ public class BrowseOnlineStoriesActivity extends Activity{
 	 */
 	protected void onResume() {
 		super.onResume();
-		//get the story info list from Local manager for the story list adapter
-		storyInfoList = objLibrary.getStoryInfoList();
+		//clear the search input boxes
+		clearInputBoxes();	
+		//get the story info list from  es manager for the story list adapter
+		//results = esLibrary.searchOnlineStories("", "", "", 0);
 		//initialize adapter and update the view
-		objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, storyInfoList);
-		lsvStories.setAdapter(objStoryAdapter);
-		objStoryAdapter.notifyDataSetChanged();
+		//objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, results);
+		//lsvStories.setAdapter(objStoryAdapter);
+		//objStoryAdapter.notifyDataSetChanged();				
 	}
 	
 	
@@ -199,11 +204,18 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		String title = searchTitle.getText().toString();
 		String author = searchAuthor.getText().toString();
 		String desc = searchDesc.getText().toString();
+		
+		
+		// !!! THIS DOES NOT WORK !!! not sure if it's access to inet problem or es problem
 		// Search for stories, 0 is just a default we leave there, it's needed
-		ArrayList<StoryInfo> results = esLibrary.searchOnlineStories(title, author, desc, 0);
+		//results = esLibrary.searchOnlineStories(title, author, desc, 0);
+		//THIS DOES WORK, but it's getting a local saved story
+		results = objLibrary.getStoryInfoList();
 		
-		// You now have an ArrayList of StoryInfo, do what you will 
-		
+		//initialize adapter and update the view
+		objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, results);
+		lsvStories.setAdapter(objStoryAdapter);
+		objStoryAdapter.notifyDataSetChanged();
 	}
 	
 	/**
@@ -217,10 +229,13 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		
 		// Jesse/Reggie's Additions past this point
 		// Index to start new query at (based on size of storyInfoList)
-		Integer index = storyInfoList.size();
+		Integer index = results.size();
 		ArrayList<StoryInfo> next20 = esLibrary.getStoryInfoList(index);
 		
 		// You now have the next 20 StoryInfo objects in an ArrayList
+		//add them to list and update data set
+		results.addAll(next20);
+		objStoryAdapter.notifyDataSetChanged();		
 	}
 	/**
 	 * displays screen specific help
