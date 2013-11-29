@@ -15,13 +15,7 @@
     <item android:id="@+id/action_get_next_20" 
           android:title="@string/action_get_next_20"  
           android:showAsAction="ifRoom" />
-        
-    <!--  save selected story to device -->
-     <item android:id="@+id/action_save_online_story"
-          android:title="@string/action_save_online_story" 
-          android:icon="@drawable/action_save" 
-          android:showAsAction="ifRoom" />
-             
+               
     <!--  select random story -->
     <item android:id="@+id/action_random_story"
           android:title="@string/action_random_story" 

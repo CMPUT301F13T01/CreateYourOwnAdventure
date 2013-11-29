@@ -19,17 +19,24 @@
 package cmput301.f13t01.createyourownadventure;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 import cmput301.f13t01.elasticsearch.ESManager;
-import cmput301.f13t01.elasticsearch.SearchManager;
 
 /**
  * Sets up and handles browse online ui that allows user to search for and display
@@ -67,7 +74,18 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		setContentView(R.layout.browse_online_activity);
 		//set list view and register view for on long click contextual menu
 		lsvStories = (ListView) findViewById(R.id.browse_online_activity_listview);
-		registerForContextMenu(lsvStories);		
+		registerForContextMenu(lsvStories);
+		// Set default click behaviour to continue
+		lsvStories.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				StoryInfo selectedStory = results.get(position); 
+				UUID clickId = selectedStory.getId();
+				//save to local
+				saveToLocal();
+				startAtBeginning(clickId);
+			}
+		}); 		
 		
 		//grab the local manager
 		GlobalManager app = (GlobalManager) getApplication();
@@ -78,13 +96,16 @@ public class BrowseOnlineStoriesActivity extends Activity{
 	}
 	
 	/**
-	 * Resume activity updates the story list view
+	 * Resume activity clears the search input boxes
 	 */
 	protected void onResume() {
 		super.onResume();
 		//clear the search input boxes
-		clearInputBoxes();	
-		//get the story info list from  es manager for the story list adapter
+		clearInputBoxes();
+		
+		//user is supposed to know what they want to search for, so no
+		//stories either local or online in list
+		//get all the storys info list from  es manager for the story list adapter
 		//results = esLibrary.searchOnlineStories("", "", "", 0);
 		//initialize adapter and update the view
 		//objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, results);
@@ -130,10 +151,6 @@ public class BrowseOnlineStoriesActivity extends Activity{
 	        case R.id.action_get_next_20:
 	            getNextTwenty();
 	            return true;
-	        //user wants to save  SELECTED STORY TO LOCAL DEVICE
-	        case R.id.action_save_online_story:
-	        	saveToLocal();
-	        	return true;
 	        //user wants a random story
 	        case R.id.action_random_story:       	
 	        	startRandomStory();
@@ -146,6 +163,54 @@ public class BrowseOnlineStoriesActivity extends Activity{
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
+	
+	/**
+	 * Create contextual menu on long click of story item in story list view
+	 * 
+	 * @param menu        The menu xml resource to inflate into contextual menu
+	 * @param v           The view in which create the contextual menu
+	 * @param menuInfo    The additional info about item selected
+	 */
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo){
+		super.onCreateContextMenu(menu, v, menuInfo);
+		//inflate menu specified in xml resource
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.browse_online_story_menu, menu);
+	}
+	
+	/**
+	 * Handle user selection of an on long click contextual menu item
+	 * 
+     * @param item        The menu item resource selected by user
+	 * @return boolean    Returns true for successful handling of menu item selection, false otherwise (from superclass)	
+    */
+	@SuppressWarnings("unused")
+	@Override
+	public boolean onContextItemSelected (MenuItem item) {
+		//get the menu item info
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		//now get the story info for the the selected story in list view
+		StoryInfo storyPicked = objStoryAdapter.getItem(info.position);
+	    switch (item.getItemId()) {
+	    
+        //user wants start reading story
+        case R.id.action_beginning:   
+             //save story locally and then read it from beginning
+             saveToLocal();
+        	//get the story uuid and pass it to start reading at begininng
+        	startAtBeginning(storyPicked.getId());
+        	return true;
+        //user wants save story without reading immediately
+        case R.id.action_save_online_story:
+        	//save the story
+        	saveToLocal();
+        	return true;       	
+        default:
+            return super.onOptionsItemSelected(item);
+	    }		
+
+	}	
 	
 	/**
 	 * save online story to local device
@@ -208,9 +273,9 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		
 		// !!! THIS DOES NOT WORK !!! not sure if it's access to inet problem or es problem
 		// Search for stories, 0 is just a default we leave there, it's needed
-		//results = esLibrary.searchOnlineStories(title, author, desc, 0);
+		results = esLibrary.searchOnlineStories(title, author, desc, 0);
 		//THIS DOES WORK, but it's getting a local saved story
-		results = objLibrary.getStoryInfoList();
+		//results = objLibrary.getStoryInfoList();
 		
 		//initialize adapter and update the view
 		objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, results);
@@ -229,13 +294,13 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		
 		// Jesse/Reggie's Additions past this point
 		// Index to start new query at (based on size of storyInfoList)
-		Integer index = results.size();
-		ArrayList<StoryInfo> next20 = esLibrary.getStoryInfoList(index);
+		//Integer index = results.size();
+		//ArrayList<StoryInfo> next20 = esLibrary.getStoryInfoList(index);
 		
 		// You now have the next 20 StoryInfo objects in an ArrayList
 		//add them to list and update data set
-		results.addAll(next20);
-		objStoryAdapter.notifyDataSetChanged();		
+		//results.addAll(next20);
+		//objStoryAdapter.notifyDataSetChanged();		
 	}
 	/**
 	 * displays screen specific help
@@ -252,6 +317,22 @@ public class BrowseOnlineStoriesActivity extends Activity{
 	}
 	
 	/**
+	 * Starts reading story at beginning child activity
+	 * 
+	 * @param storyId    UUID of story selected by user
+	 */
+	private void startAtBeginning(UUID storyId) {
+		Toast toast = Toast.makeText(getApplicationContext(), getResources()
+				.getString(R.string.action_beginning), Toast.LENGTH_SHORT);
+		toast.show();   
+		//create the intent to launch read story activity
+	    Intent intent = new Intent(this, ReadFragmentActivity.class);
+	    intent.putExtra(getResources().getString(R.string.story_continue), true);
+		intent.putExtra(getResources().getString(R.string.story_id), storyId);
+        startActivity(intent);		
+	}
+	
+	/**
 	 * select random story and opens it for reading from beginning
 	 */
 	private void startRandomStory() {
@@ -262,7 +343,7 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		
 		// Jesse's additions below
 		// A random story object. We can play with the returns later if you want
-		Story randomStory = esLibrary.getRandomOnlineStory();
+		//Story randomStory = esLibrary.getRandomOnlineStory();
 		
 		
 		/*

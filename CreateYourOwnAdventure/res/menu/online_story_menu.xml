@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!--  browse online story listview on long click contextual menu -->
+    
+    <!--  read from beginning -->
+    <item android:id="@+id/action_beginning"
+          android:title="@string/action_beginning" /> 
+           
+    <!--  save without reading -->
+    <item android:id="@+id/action_save_online_story" 
+          android:title="@string/action_save_online_story" />       
+
+</menu>
