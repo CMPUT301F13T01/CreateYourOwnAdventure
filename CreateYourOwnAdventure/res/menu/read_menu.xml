@@ -16,7 +16,7 @@
         android:title="@string/action_return_to_previous_page"/>
     
     <!-- help function -->
-    <item android:id="@+id/action_read"
+    <item android:id="@+id/action_help"
           android:title="@string/action_help" 
           android:showAsAction="never" /> 
 
