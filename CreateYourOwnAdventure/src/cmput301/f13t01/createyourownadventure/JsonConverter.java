@@ -4,6 +4,7 @@ package cmput301.f13t01.createyourownadventure;
  * Converts objects to/from JSON form.
  * 
  * @author Jesse
+ * @deprecated
  */
 
 public class JsonConverter {

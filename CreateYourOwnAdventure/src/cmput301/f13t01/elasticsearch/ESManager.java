@@ -62,6 +62,11 @@ public class ESManager implements LibraryManager {
 
 	private int resultSize = 20;
 
+	/**
+	 * Initializes the ESClient and gets the LocalManager.
+	 * 
+	 * @param context   The context to be used for saving purposes.
+	 */
 	public ESManager(Context context) {
 		this.client = new ESClient();
 		this.localManager = GlobalManager.getLocalManager();

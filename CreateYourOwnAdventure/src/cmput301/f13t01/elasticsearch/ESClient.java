@@ -85,6 +85,10 @@ public class ESClient {
 	private HttpClient httpclient = new DefaultHttpClient();
 	private Gson gson = new Gson();
 
+	
+	/**
+	 * Empty constructor.
+	 */
 	public ESClient() {
 		
 	}
