@@ -450,8 +450,7 @@ public class LocalManager implements Serializable, LibraryManager {
 	/**
 	 * Writes the Serializable StoryList object to a file.
 	 * 
-	 * @param out
-	 *            ObjectOutputStream to write with
+	 * @param out ObjectOutputStream to write with
 	 * @throws IOException
 	 */
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
@@ -462,8 +461,7 @@ public class LocalManager implements Serializable, LibraryManager {
 	/**
 	 * Reads the Serializable StoryList object from a file.
 	 * 
-	 * @param in
-	 *            ObjectInputStream to read with
+	 * @param in ObjectInputStream to read with
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
