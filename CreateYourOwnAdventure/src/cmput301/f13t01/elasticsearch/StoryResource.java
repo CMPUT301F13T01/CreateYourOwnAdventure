@@ -43,24 +43,52 @@ public class StoryResource {
 	private UUID id;
 	private ArrayList<MediaResource> resources;
 	
+	/**
+	 * Constructor needs the UUID of the story it is associated with.
+	 * Initializes the MediaResource ArrayList.
+	 * 
+	 * @param id   UUID of the story it is associated with.
+	 */
 	public StoryResource(UUID id) {
 		this.id = id;
 		this.resources = new ArrayList<MediaResource>();
 	}
 	
+	/**
+	 * Getter for the story's ID.
+	 * 
+	 * @return   The UUID of the story.
+	 */
 	public UUID getStoryId() {
 		return this.id;
 	}
 	
+	/**
+	 * Getter for the MediaResource ArrayList.
+	 * 
+	 * @return   The ArrayList of MediaResources.
+	 */
 	public ArrayList<MediaResource> getMediaResources() {
 		return resources;
 	}
 	
+	/**
+	 * Adds a MediaResource object to the list.
+	 *  
+	 * @param resource   The resource to add to the list.
+	 */
 	public void addMediaResource(MediaResource resource) {
 		resources.add(resource);
 		return;
 	}
 	
+	/**
+	 * Simple method to determine if the resource already exists within
+	 * the list.
+	 * 
+	 * @param resource   The resource being checked against.
+	 * @return   Returns true if the resource already exists in the list, false otherwise.
+	 */
 	public boolean contains(MediaResource resource) {
 
 		for (MediaResource mediaResource : resources) {

@@ -53,11 +53,11 @@ public class BrowseOnlineStoriesActivity extends Activity{
 	//manager objects for local and online
 	private LocalManager objLibrary;
 	private ESManager esLibrary;
-	//objects for list view
-	private ListView lsvStories = null;
+	//arraylist and its adapter
 	private ArrayList<StoryInfo> results;
 	private StoryInfoListAdapter objStoryAdapter;
-
+	//widgets objects
+	private ListView lsvStories = null;
 	private EditText searchTitle;
 	private EditText searchAuthor;
 	private EditText searchDesc;
@@ -198,8 +198,8 @@ public class BrowseOnlineStoriesActivity extends Activity{
 			switch (item.getItemId()) {
 	        //user wants start reading story
 	        case R.id.action_beginning:   
-	             //save story locally and then read it from beginning
-	             UUID localId = esLibrary.downloadStory(storyPicked.getId());
+	            //save story locally and then read it from beginning
+	            UUID localId = esLibrary.downloadStory(storyPicked.getId());
 	        	startAtBeginning(localId);
 	        	return true;
 	        //user wants save story without reading immediately
