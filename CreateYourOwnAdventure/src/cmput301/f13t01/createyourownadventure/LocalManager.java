@@ -2,9 +2,10 @@
 LocalManager class for CreateYourOwnAdventure.
 This deals with the management of stories on disk.
 All saving & loading is handled here, along with deletion.
+This class is used as a singleton by GlobalManager, from the Application.
 
      Copyright  �2013 Reginald Miller, Jesse Chu
-    <Contact: rmiller3@ualberta.ca, jhchu@ualberta.ca>
+    <Contact: rmiller3@ualberta.ca, jhchu@ualberta.ca, jhuard@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
     <http://gnu.org/licenses/gpl.html>.
@@ -30,7 +31,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectStreamException;
@@ -53,7 +53,9 @@ import android.util.Log;
  * This class is designed to maintain all of the stories that are stored locally
  * on the user's device. Saving, Loading, and Deleting are handled.
  * 
- * @author Reginald Miller, Jesse Chu
+ * This class is used as a singleton by GlobalManager, from the Application.
+ * 
+ * @author Reginald Miller, Jesse Chu, Jesse Huard
  * 
  */
 
@@ -70,21 +72,25 @@ public class LocalManager implements Serializable, LibraryManager {
 	 *            Context to allow for saving/loading
 	 */
 	public LocalManager(Context context) {
+		// Save context for File IO
 		this.context = context;
+		// Load in the list of locally saved stories
 		this.loadStoryInfoList();
 	}
 
 	/**
-	 * Gets the story with a given ID.
+	 * Gets the story with a given ID locally.
 	 * 
 	 * @param storyId
 	 *            ID of the story
 	 * @return Returns the story with that ID
 	 */
 	public Story getStory(UUID storyId) {
+		// Return story if it exists
 		if (this.storyInfoList.keySet().contains(storyId)) {
 			return loadStory(storyId);
 		} else {
+			// Return null if story does not exist
 			return null;
 		}
 	}
@@ -113,7 +119,7 @@ public class LocalManager implements Serializable, LibraryManager {
 	public ArrayList<StoryInfo> getStoryInfoList() {
 		ArrayList<StoryInfo> fetchList = new ArrayList<StoryInfo>(
 				this.storyInfoList.values());
-		// TODO: Sort the list consistently before return
+		// Sort the list consistently before return
 		Collections.sort(fetchList, new Comparator<StoryInfo>() {
 			@Override
 			public int compare(final StoryInfo s1, final StoryInfo s2) {
@@ -124,10 +130,10 @@ public class LocalManager implements Serializable, LibraryManager {
 	}
 
 	/**
-	 * Takes a story and adds it to the list
+	 * Takes a story and adds it to the local library.
+	 * Assigns it a new UUID.
 	 * 
-	 * @param story
-	 *            The Story object to add to the Library
+	 * @param story The Story object to add to the Library
 	 */
 	public UUID addStory(Story story) {
 		// ID assigned is a randomUUID... Shouldn't collide
@@ -142,10 +148,9 @@ public class LocalManager implements Serializable, LibraryManager {
 	}
 
 	/**
-	 * Deletes the story according to its ID.
+	 * Deletes the story according to its ID from the local library.
 	 * 
-	 * @param storyId
-	 *            ID of story to remove
+	 * @param storyId ID of story to remove
 	 */
 	public boolean removeStory(UUID storyId) {
 		// Story exists, removed
@@ -166,8 +171,7 @@ public class LocalManager implements Serializable, LibraryManager {
 	/**
 	 * Removes multiple stories at once from the storyList.
 	 * 
-	 * @param ArrayList
-	 *            of story IDs to be removed
+	 * @param stories ArrayList of story IDs to be removed
 	 */
 	public void removeMultipleStories(ArrayList<UUID> stories) {
 		for (UUID storyId : stories) {
@@ -175,26 +179,11 @@ public class LocalManager implements Serializable, LibraryManager {
 		}
 	}
 
-	@Deprecated
-	/**
-	 * Puts a new or updated story into the list of stories
-	 * with the ID
-	 * 
-	 * @param storyId   ID of story to update
-	 * @param story   Story that has been updated
-	 */
-	public void updateStory(UUID id, Story story) {
-		// Save given story
-		this.saveStory(id, story);
-	}
-
 	/**
 	 * Save a Story into a file.
 	 * 
-	 * @param id
-	 *            The ID of the Story to save
-	 * @param story
-	 *            The story to save to file
+	 * @param id The ID of the Story to save
+	 * @param story The story to save to file
 	 * 
 	 * @return true if save is successful, false otherwise
 	 */
@@ -229,8 +218,7 @@ public class LocalManager implements Serializable, LibraryManager {
 	/**
 	 * Load a Story from a file.
 	 * 
-	 * @param id
-	 *            The ID of the Story to save
+	 * @param id The ID of the Story to save
 	 */
 	public Story loadStory(UUID id) {
 		// Generate the save file name
@@ -259,8 +247,7 @@ public class LocalManager implements Serializable, LibraryManager {
 	/**
 	 * Saves a given media by URI and returns the URI assigned.
 	 * 
-	 * @param mediaUri
-	 *            the media to save's URI
+	 * @param mediaUri the media to save's URI
 	 * @return the URI that the image was saved with
 	 */
 	public String saveMedia(Uri mediaUri, MediaType mediaType) {
@@ -361,23 +348,23 @@ public class LocalManager implements Serializable, LibraryManager {
 	}
 
 	/**
+	 * Takes in a piece of media as a Base64 string, and converts it back into
+	 * a Java object.
 	 * 
-	 * @param identifier
-	 * @param type
-	 * @param data
-	 * @return
+	 * @param identifier UUID to reference the Media
+	 * @param type The type of the media to convert to
+	 * @param data The Base64 string representing the Media Data
+	 * @return true if save successful, false otherwise
 	 */
 	public boolean saveMediaFromBase64(String identifier, MediaType type,
 			String data) {
-		// TODO: Convert/save back into appropriate media
-		// Refer to saveMedia above for the save path we will use
+		// Byte array to decode data
 		byte[] decodedData = Base64.decode(data, Base64.DEFAULT);
-		
+		// Null data passed in
 		if(decodedData == null) {
 			Log.d("Base64", "Decoded data is null");
 			return false;
 		}
-		
 		// Determines path to save images
 		String internalFolderPath = context.getFilesDir().getAbsolutePath()
 				+ "/" + type.toString();
@@ -386,10 +373,10 @@ public class LocalManager implements Serializable, LibraryManager {
 		if (!internalFolder.exists()) {
 			internalFolder.mkdir();
 		}
-		
+		// Set specific file path
 		String saveFilePath = internalFolder + "/" + identifier;
 		File mediaFile = new File(saveFilePath);
-		
+		// Write out the object to file
 		try {
 			OutputStream os = new FileOutputStream(mediaFile);
 			os.write(decodedData);
@@ -402,7 +389,7 @@ public class LocalManager implements Serializable, LibraryManager {
 			e.printStackTrace();
 			return false;
 		}
-		
+		// Successful write
 		return true;
 	}
 
