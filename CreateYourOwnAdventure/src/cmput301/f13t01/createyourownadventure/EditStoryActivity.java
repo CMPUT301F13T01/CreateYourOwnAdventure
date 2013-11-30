@@ -120,6 +120,9 @@ public class EditStoryActivity extends FragmentActivity implements
 	}
 
 	@Override
+	/**
+	 * Override onCreateOptionsMenu
+	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_edit_story_actionbar, menu);
@@ -127,6 +130,9 @@ public class EditStoryActivity extends FragmentActivity implements
 	}
 
 	@Override
+	/**
+	 * Behaviour for selecting a Story Fragment
+	 */
 	public void onStoryFragmentSelected(int fragmentId) {
 		if (buttonPressed) {
 			manager.setFirstPage(fragmentId);
@@ -149,6 +155,9 @@ public class EditStoryActivity extends FragmentActivity implements
 	}
 
 	@Override
+	/**
+	 * Override onOptionsItemSelected
+	 */
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
@@ -219,6 +228,9 @@ public class EditStoryActivity extends FragmentActivity implements
 		finish();
 	}
 
+	/**
+	 * Define Back behaviour
+	 */
 	public void onBackPressed() {
 
 		EditText title = (EditText) findViewById(R.id.edit_story_title);
@@ -239,6 +251,9 @@ public class EditStoryActivity extends FragmentActivity implements
 		finish();
 	}
 
+	/**
+	 * Display selection of fragment
+	 */
 	public void showFragmentSelection() {
 		android.app.FragmentTransaction ft = getFragmentManager()
 				.beginTransaction();
@@ -255,6 +270,9 @@ public class EditStoryActivity extends FragmentActivity implements
 	}
 
 	@Override
+	/**
+	 * Generate instance state
+	 */
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putBoolean(getResources().getString(R.string.story_is_new),

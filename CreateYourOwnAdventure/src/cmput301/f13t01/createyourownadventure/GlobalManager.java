@@ -1,3 +1,29 @@
+/*
+The GlobalManager class is a class used to hold global story access managers.
+These managers can be used to load stories that are then accessed across
+multiple activities without the need to pass the story data around from
+activity to activity. This class extends the default Android Application to
+provide global state persistence.
+
+     Copyright  �2013 Jesse Huard
+    <Contact: jhuard@ualberta.ca>
+    
+    License GPLv3: GNU GPL Version 3
+    <http://gnu.org/licenses/gpl.html>.
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package cmput301.f13t01.createyourownadventure;
 
 import java.io.File;
@@ -57,6 +83,10 @@ public class GlobalManager extends Application {
 	 */
 	private static File tempDirectory;
 
+	@Override
+	/**
+	 * Override onCreate
+	 */
 	public void onCreate() {
 		super.onCreate();
 		context = getApplicationContext();
@@ -84,6 +114,11 @@ public class GlobalManager extends Application {
 
 	}
 
+	/**
+	 * Returns the application context
+	 * 
+	 * @return the Context of the Global Manager
+	 */
 	public static Context getAppContext() {
 		return context;
 	}
@@ -160,6 +195,11 @@ public class GlobalManager extends Application {
 		localManager.saveStory(storyId, story);
 	}
 
+	/**
+	 * Sets the currently loaded Story in Story Manager
+	 * 
+	 * @param story the story to set
+	 */
 	public void setStoryManager(Story story) {
 		readManager.setStory(story);
 	}
