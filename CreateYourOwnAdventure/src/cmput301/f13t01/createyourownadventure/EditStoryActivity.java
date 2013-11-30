@@ -26,11 +26,15 @@ jump to a fragment, etc.
 
 package cmput301.f13t01.createyourownadventure;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.SpannableString;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -120,6 +124,9 @@ public class EditStoryActivity extends FragmentActivity implements
 	}
 
 	@Override
+	/**
+	 * Override onCreateOptionsMenu
+	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_edit_story_actionbar, menu);
@@ -127,6 +134,9 @@ public class EditStoryActivity extends FragmentActivity implements
 	}
 
 	@Override
+	/**
+	 * Behaviour for selecting a Story Fragment
+	 */
 	public void onStoryFragmentSelected(int fragmentId) {
 		if (buttonPressed) {
 			manager.setFirstPage(fragmentId);
@@ -149,6 +159,9 @@ public class EditStoryActivity extends FragmentActivity implements
 	}
 
 	@Override
+	/**
+	 * Override onOptionsItemSelected
+	 */
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
@@ -184,11 +197,30 @@ public class EditStoryActivity extends FragmentActivity implements
 		manager.setTitle(title.getText().toString());
 		manager.setAuthor(author.getText().toString());
 		manager.setDescription(desc.getText().toString());
-
-		GlobalManager.saveStory(storyId);
-		Story story = GlobalManager.getStoryManager().getStory();
 		
-		GlobalManager.getESManager().saveStory(storyId, story);
+		StoryFragment frag = new StoryFragment();
+		frag.addContent(new Text(new SpannableString("blbububub")));
+		
+		ArrayList<Media> med = frag.getContentList();
+		for(Media media : med) {
+			Log.d("oops", "content: " + media.getContent());
+			Log.d("oops", "Type: " + media.getType());
+		}
+		
+		new PublishStoryTask().execute(storyId);
+	}
+	
+	private class PublishStoryTask extends AsyncTask<UUID, Integer, Integer> {
+
+		@Override
+		protected Integer doInBackground(UUID... arg0) {
+			GlobalManager.saveStory(storyId);
+			Story story = GlobalManager.getStoryManager().getStory();
+			
+			GlobalManager.getESManager().saveStory(storyId, story);
+			return 1;
+		}
+		
 	}
 
 	private void onSelectHelp() {
@@ -236,6 +268,9 @@ public class EditStoryActivity extends FragmentActivity implements
 		finish();
 	}
 
+	/**
+	 * Define Back behaviour
+	 */
 	public void onBackPressed() {
 
 		EditText title = (EditText) findViewById(R.id.edit_story_title);
@@ -254,6 +289,9 @@ public class EditStoryActivity extends FragmentActivity implements
 		finish();
 	}
 
+	/**
+	 * Display selection of fragment
+	 */
 	public void showFragmentSelection() {
 		android.app.FragmentTransaction ft = getFragmentManager()
 				.beginTransaction();
@@ -270,6 +308,9 @@ public class EditStoryActivity extends FragmentActivity implements
 	}
 
 	@Override
+	/**
+	 * Generate instance state
+	 */
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putBoolean(getResources().getString(R.string.story_is_new),

@@ -31,10 +31,13 @@ import android.net.Uri;
 
 /**
  * Class for Image type Media. Uses a Uri which refers to the resource name.
+ * 
+ * @author Jesse Huard
+ * @version 1.0, 29/10/13
  */
 @SuppressWarnings("serial")
 public class ImageUri implements Media<Uri>, Serializable {
-	private final MediaType type = MediaType.IMAGEURI;
+	private final String type = MediaType.IMAGEURI.toString();
 	
 	private Uri content;
 	private MediaInteractionManager manager;
@@ -110,7 +113,7 @@ public class ImageUri implements Media<Uri>, Serializable {
 	}
 	
 	@Override
-	public MediaType getType() {
+	public String getType() {
 		return this.type;
 	}
 }

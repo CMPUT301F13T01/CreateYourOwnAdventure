@@ -166,7 +166,7 @@ public class ESClient {
 	 * @throws IOException
 	 * @throws IllegalStateException
 	 */
-	public void postMedia(String identifier, MediaType type, String data)
+	public void postMedia(String identifier, String type, String data)
 			throws IOException, IllegalStateException {
 		
 		// Queries if media already exists on server
@@ -383,7 +383,7 @@ public class ESClient {
 	 * @param type   The type of the Media object that is being fetched.
 	 * @return   The base64 String encoding of the Media object.
 	 */
-	public String getMedia(String identifier, MediaType type) {
+	public String getMedia(String identifier, String type) {
 
 		try {
 			HttpGet getRequest = new HttpGet(

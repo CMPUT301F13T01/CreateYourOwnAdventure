@@ -63,10 +63,12 @@ import android.widget.Toast;
 public class EditFragmentContentActivity extends Activity implements
 		ChoiceListListener, OnMenuItemClickListener {
 
+	// Intent Codes
 	private static final int EDIT_CHOICE = 0;
 	private static final int SELECT_IMAGE = 1;
 	private static final int CAPTURE_IMAGE = 2;
 
+	// Activity variables
 	private StoryFragment storyFragment;
 	private int fragmentId;
 	private ArrayList<Uri> imageURIs;
@@ -75,16 +77,18 @@ public class EditFragmentContentActivity extends Activity implements
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
+	/**
+	 * Override onCreate
+	 */
 	protected void onCreate(Bundle savedInstanceState) {
+		// Call super-class onCreate
 		super.onCreate(savedInstanceState);
+		// Set-up display
 		setContentView(R.layout.activity_edit_fragment_content);
-
 		setupActionBar();
-
 		layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
-
+		// Process intent
 		Intent intent = getIntent();
-
 		if (savedInstanceState != null) {
 			fragmentId = savedInstanceState.getInt(getResources().getString(
 					R.string.fragment_id));
@@ -95,7 +99,6 @@ public class EditFragmentContentActivity extends Activity implements
 					.getSerializable(getResources().getString(
 							R.string.story_URIs));
 		} else {
-
 			if (intent != null) {
 				fragmentId = (int) intent.getIntExtra(
 						getResources().getString(R.string.fragment_id), -1);
@@ -106,7 +109,7 @@ public class EditFragmentContentActivity extends Activity implements
 			imageURIs = new ArrayList<Uri>();
 			ArrayList<Media> media = storyFragment.getContentList();
 			for (Media next : media) {
-				if (next.getType() == MediaType.IMAGE) {
+				if (next.getType() == MediaType.IMAGE.toString()) {
 					imageURIs.add(Uri.fromFile(new File(getFilesDir()
 							.getAbsolutePath()
 							+ "/"
@@ -116,9 +119,8 @@ public class EditFragmentContentActivity extends Activity implements
 				}
 			}
 		}
-
+		// Display contents
 		ArrayList<Media> content = storyFragment.getContentList();
-
 		StoryFragmentViewFactory.ConstructView(layout, content,
 				getApplicationContext(), true);
 	}
@@ -136,12 +138,13 @@ public class EditFragmentContentActivity extends Activity implements
 	 * Set up the {@link android.app.ActionBar}.
 	 */
 	private void setupActionBar() {
-
 		getActionBar().setDisplayHomeAsUpEnabled(false);
-
 	}
 
 	@Override
+	/**
+	 * Override onCreateOptionsMenu
+	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.edit_fragment_content, menu);
@@ -149,6 +152,9 @@ public class EditFragmentContentActivity extends Activity implements
 	}
 
 	@Override
+	/**
+	 * onOptionsItemSelected
+	 */
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_edit_preview:
@@ -209,6 +215,9 @@ public class EditFragmentContentActivity extends Activity implements
 	}
 
 	@Override
+	/**
+	 * Override onMenuItemClick
+	 */
 	public boolean onMenuItemClick(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_edit_add_text:
@@ -304,6 +313,9 @@ public class EditFragmentContentActivity extends Activity implements
 	}
 
 	@Override
+	/**
+	 * Define Back behaviour
+	 */
 	public void onBackPressed() {
 		StoryFragment saveFragment = constructSaveFragmentFromView();
 
@@ -320,6 +332,9 @@ public class EditFragmentContentActivity extends Activity implements
 	}
 
 	@Override
+	/**
+	 * Define Choice selection behaviour
+	 */
 	public void onChoiceSelected(Choice choice, int position) {
 		Intent intent = new Intent(getApplicationContext(),
 				EditFragmentChoiceActivity.class);
@@ -346,6 +361,9 @@ public class EditFragmentContentActivity extends Activity implements
 	}
 
 	@Override
+	/**
+	 * Override onActivityResult
+	 */
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 

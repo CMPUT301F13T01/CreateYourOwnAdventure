@@ -356,7 +356,7 @@ public class LocalManager implements Serializable, LibraryManager {
 	 * @param data The Base64 string representing the Media Data
 	 * @return true if save successful, false otherwise
 	 */
-	public boolean saveMediaFromBase64(String identifier, MediaType type,
+	public boolean saveMediaFromBase64(String identifier, String type,
 			String data) {
 		// Byte array to decode data
 		byte[] decodedData = Base64.decode(data, Base64.DEFAULT);

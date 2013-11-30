@@ -16,7 +16,7 @@ public interface Media<T> {
 	 * 
 	 * @return the type of the media.
 	 */
-	public MediaType getType();
+	public String getType();
 	
 	/**
 	 * Returns the content of the media type.

@@ -32,6 +32,16 @@ and to allow access to those messages in a consistent manner.
 
 package cmput301.f13t01.createyourownadventure;
 
+/**
+ * The HelpMessage class contains the help strings for each activity in an enum
+ * 
+ * @author Jesse Huard
+ * @version 1.0, 29/10/13
+ * @see android.app.Application
+ * 
+ */
+
+// Enum of Help Strings
 public enum HelpMessage {
 	EDIT_STORY(
 			"You can edit the basic story information here. To set the first page, press the set button. "

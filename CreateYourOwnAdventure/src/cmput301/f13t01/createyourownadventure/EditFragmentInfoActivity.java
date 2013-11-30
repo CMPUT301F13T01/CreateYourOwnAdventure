@@ -46,25 +46,30 @@ import android.widget.Toast;
  */
 
 public class EditFragmentInfoActivity extends Activity {
-
+	
+	// Intent code
 	static final int EDIT_FRAGMENT = 0;
 
+	// Activity variables
 	private StoryFragment storyFragment;
 	private boolean isNew;
 	private int fragmentId;
 	private ReadStoryManager manager;
 
 	@Override
+	/**
+	 * Override onCreate
+	 */
 	protected void onCreate(Bundle savedInstanceState) {
+		// Call super-class onCreate
 		super.onCreate(savedInstanceState);
+		// Set-up display
 		setContentView(R.layout.activity_edit_fragment_info);
 		setupActionBar();
-
 		// Get the story manager
 		manager = GlobalManager.getStoryManager();
-
+		// Process intent
 		Intent intent = getIntent();
-
 		if (intent != null) {
 			isNew = (boolean) intent.getBooleanExtra(
 					getResources().getString(R.string.fragment_is_new), false);
@@ -97,6 +102,9 @@ public class EditFragmentInfoActivity extends Activity {
 	}
 
 	@Override
+	/**
+	 * Override onCreateOptionsMenu
+	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.edit_fragment_info, menu);
@@ -104,6 +112,9 @@ public class EditFragmentInfoActivity extends Activity {
 	}
 
 	@Override
+	/**
+	 * Override onOptionsItemSelected
+	 */
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_edit_edit_content:
@@ -149,16 +160,19 @@ public class EditFragmentInfoActivity extends Activity {
 	}
 
 	@Override
+	/**
+	 * Define Back behaviour
+	 */
 	public void onBackPressed() {
-
+		// Get Views
 		EditText title = (EditText) findViewById(R.id.fragment_title);
 		EditText desc = (EditText) findViewById(R.id.fragment_description);
-
+		// Set the fragment info
 		storyFragment.setTitle(title.getText().toString());
 		storyFragment.setDescription(desc.getText().toString());
-
+		// Update the fragment
 		manager.updateFragment(fragmentId, storyFragment);
-
+		// Toast notification
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.fragment_save_toast), Toast.LENGTH_SHORT);
 		toast.show();
@@ -167,19 +181,15 @@ public class EditFragmentInfoActivity extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
 		if (resultCode == RESULT_OK) {
-
 			if (data != null) {
 				storyFragment = (StoryFragment) data
 						.getSerializableExtra(getResources().getString(
 								R.string.story_fragment));
 			}
-
 		} else if (resultCode == RESULT_CANCELED) {
 			// Do Nothing
 		}
-
 	}
 
 }
