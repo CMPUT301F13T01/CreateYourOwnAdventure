@@ -46,6 +46,7 @@ import cmput301.f13t01.createyourownadventure.Story;
 import cmput301.f13t01.createyourownadventure.StoryFragment;
 import cmput301.f13t01.createyourownadventure.StoryFragmentInfo;
 import cmput301.f13t01.createyourownadventure.StoryInfo;
+import cmput301.f13t01.createyourownadventure.Text;
 
 /**
  * This class is designed to interact with stored stories on ElasticSearch.
@@ -85,7 +86,7 @@ public class ESManager implements LibraryManager {
 		for (MediaResource resource : resources) {
 			// Grabs base64 string
 			String identifier = resource.getIdentifier();
-			MediaType type = resource.getType();
+			String type = resource.getType();
 			String media = client.getMedia(identifier, type);
 			localManager.saveMediaFromBase64(identifier, type, media);
 		}
@@ -226,7 +227,7 @@ public class ESManager implements LibraryManager {
 		ArrayList<MediaResource> mediaList = storyResource.getMediaResources();
 		for (MediaResource resource : mediaList) {
 			String identifier = resource.getIdentifier();
-			MediaType type = resource.getType();
+			String type = resource.getType();
 			String base64Media = mediaToBase64(identifier, type);
 			try {
 				client.postMedia(identifier, type, base64Media);
@@ -287,7 +288,11 @@ public class ESManager implements LibraryManager {
 		// Check all media in given list
 		for (Media media : mediaList) {
 			// Type check the media
-			if (media.getType() != MediaType.TEXT) {
+			Log.d("oops", "media content " + media.getContent());
+			Log.d("oops", "media type: " + media.getType());
+			Log.d("oops", "media class: " + media.getClass());
+			if (!media.getClass().equals(Text.class)) {
+				Log.d("oops", "Adding a new media: " + media.getResource());
 				// Media is not text, generate a MediaResource object
 				MediaResource resource = new MediaResource(media);
 				// Add to resource list if not already in it
@@ -299,9 +304,9 @@ public class ESManager implements LibraryManager {
 		return resourceList;
 	}
 
-	private String mediaToBase64(String identifier, MediaType type) {
+	private String mediaToBase64(String identifier, String type) {
 		File media = new File(context.getFilesDir().getAbsolutePath() + "/"
-				+ type.toString() + "/" + identifier);
+				+ type + "/" + identifier);
 
 		String base64Media = new String();
 

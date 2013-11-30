@@ -34,7 +34,7 @@ import android.net.Uri;
  */
 @SuppressWarnings("serial")
 public class Image implements Media<String>, Serializable {
-	private static final MediaType type = MediaType.IMAGE;
+	private static final String type = MediaType.IMAGE.toString();
 	
 	private String content;
 	private MediaInteractionManager manager;
@@ -112,7 +112,7 @@ public class Image implements Media<String>, Serializable {
 	}
 
 	@Override
-	public MediaType getType() {
+	public String getType() {
 		return Image.type;
 	}
 }

@@ -41,7 +41,7 @@ import cmput301.f13t01.createyourownadventure.MediaType;
 public class MediaResource {
 	
 	private String identifier;
-	private MediaType type;
+	private String type;
 	
 	public MediaResource(Media media) {
 		this.identifier = media.getResource();
@@ -52,7 +52,7 @@ public class MediaResource {
 		return identifier;
 	}
 	
-	public MediaType getType() {
+	public String getType() {
 		return type;
 	}
 }

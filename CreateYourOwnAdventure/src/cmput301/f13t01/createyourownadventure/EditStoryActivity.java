@@ -26,11 +26,15 @@ jump to a fragment, etc.
 
 package cmput301.f13t01.createyourownadventure;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.SpannableString;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -184,11 +188,30 @@ public class EditStoryActivity extends FragmentActivity implements
 		manager.setTitle(title.getText().toString());
 		manager.setAuthor(author.getText().toString());
 		manager.setDescription(desc.getText().toString());
-
-		GlobalManager.saveStory(storyId);
-		Story story = GlobalManager.getStoryManager().getStory();
 		
-		GlobalManager.getESManager().saveStory(storyId, story);
+		StoryFragment frag = new StoryFragment();
+		frag.addContent(new Text(new SpannableString("blbububub")));
+		
+		ArrayList<Media> med = frag.getContentList();
+		for(Media media : med) {
+			Log.d("oops", "content: " + media.getContent());
+			Log.d("oops", "Type: " + media.getType());
+		}
+		
+		new PublishStoryTask().execute(storyId);
+	}
+	
+	private class PublishStoryTask extends AsyncTask<UUID, Integer, Integer> {
+
+		@Override
+		protected Integer doInBackground(UUID... arg0) {
+			GlobalManager.saveStory(storyId);
+			Story story = GlobalManager.getStoryManager().getStory();
+			
+			GlobalManager.getESManager().saveStory(storyId, story);
+			return 1;
+		}
+		
 	}
 
 	private void onSelectHelp() {

@@ -34,7 +34,7 @@ import android.text.SpannableString;
  */
 @SuppressWarnings("serial")
 public class Video implements Media<String>, Serializable {
-	private final MediaType type = MediaType.VIDEO;
+	private final String type = MediaType.VIDEO.toString();
 
 	private String content;
 	private MediaInteractionManager manager;
@@ -106,7 +106,7 @@ public class Video implements Media<String>, Serializable {
 	}
 	
 	@Override
-	public MediaType getType() {
+	public String getType() {
 		return this.type;
 	}
 }

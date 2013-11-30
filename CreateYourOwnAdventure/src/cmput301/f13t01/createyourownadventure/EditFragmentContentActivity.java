@@ -106,7 +106,7 @@ public class EditFragmentContentActivity extends Activity implements
 			imageURIs = new ArrayList<Uri>();
 			ArrayList<Media> media = storyFragment.getContentList();
 			for (Media next : media) {
-				if (next.getType() == MediaType.IMAGE) {
+				if (next.getType() == MediaType.IMAGE.toString()) {
 					imageURIs.add(Uri.fromFile(new File(getFilesDir()
 							.getAbsolutePath()
 							+ "/"
