@@ -147,7 +147,7 @@ public class ESManager implements LibraryManager {
 	 *            The story to be posted.
 	 */
 	public UUID downloadStory(UUID id) {
-		Story story = client.getStory(id);
+		Story story = getStory(id);
 		UUID newId = localManager.addStory(story);
 		return newId;
 	}
