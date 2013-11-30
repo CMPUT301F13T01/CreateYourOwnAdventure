@@ -155,7 +155,7 @@ public class GlobalManager extends Application {
 	 * @param storyId
 	 *            ID of the story to update
 	 */
-	public void saveStory(UUID storyId) {
+	public static void saveStory(UUID storyId) {
 		Story story = readManager.getStory();
 		localManager.saveStory(storyId, story);
 	}
