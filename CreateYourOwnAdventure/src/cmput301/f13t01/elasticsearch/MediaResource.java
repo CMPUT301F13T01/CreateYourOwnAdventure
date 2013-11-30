@@ -43,15 +43,30 @@ public class MediaResource {
 	private String identifier;
 	private MediaType type;
 	
+	/**
+	 * Constructor gets the media's type and identifier.
+	 * 
+	 * @param media   The media object to be stored on the server.
+	 */
 	public MediaResource(Media media) {
 		this.identifier = media.getResource();
 		this.type = media.getType();
 	}
 	
+	/**
+	 * Getter for the MediaResource's identifier.
+	 * 
+	 * @return   A String of the identifier.
+	 */
 	public String getIdentifier() {
 		return identifier;
 	}
 	
+	/**
+	 * Getter for the MediaResource's type.
+	 * 
+	 * @return   Returns the MediaType of the MediaResource.
+	 */
 	public MediaType getType() {
 		return type;
 	}

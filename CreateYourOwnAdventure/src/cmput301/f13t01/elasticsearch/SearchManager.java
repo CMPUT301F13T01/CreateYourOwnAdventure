@@ -42,6 +42,9 @@ import cmput301.f13t01.createyourownadventure.StoryInfo;
 
 public class SearchManager {
 	
+	/**
+	 * Empty constructor
+	 */
 	public SearchManager() {
 		
 	}
