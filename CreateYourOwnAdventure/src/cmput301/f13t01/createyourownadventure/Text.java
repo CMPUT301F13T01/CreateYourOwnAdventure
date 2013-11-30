@@ -69,6 +69,11 @@ public class Text implements Media<SpannableString>, Serializable {
 	public void setManager(MediaInteractionManager manager) {
 		this.manager = manager;
 	}
+	
+	@Override
+	public String getResource() {
+		return new String();
+	}
 
 	public String toString() {
 		return this.content.toString();
