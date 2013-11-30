@@ -44,8 +44,8 @@ public class MediaResource {
 	private MediaType type;
 	
 	public MediaResource(Media media) {
-		// this.identifier = media.getResource();
-		// this.type = media.type;
+		this.identifier = media.getResource();
+		this.type = media.getType();
 	}
 	
 	public String getIdentifier() {
