@@ -126,8 +126,12 @@ public class StoryFragment implements Serializable {
 	 * @return true if successful, false otherwise
 	 */
 	public boolean addContent(Media content) {
-		contentList.add(content);
-		return true;
+		if (!(content == null)){
+			contentList.add(content);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -159,8 +163,12 @@ public class StoryFragment implements Serializable {
 	 * @return true if successful, false otherwise
 	 */
 	public boolean addAnnotation(Media annotation) {
-		annotationList.add(annotation);
-		return true;
+		if (!(annotation == null)) {
+			annotationList.add(annotation);
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
