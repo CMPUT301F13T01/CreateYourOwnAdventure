@@ -50,45 +50,65 @@ import android.view.Window;
 
 public class ChoiceListFragment extends DialogFragment {
 
+	// Fragment variables
 	private ChoiceListListener listener;
 	private ChoiceListAdapter adapter;
 	private static final String idString = "id";
 
+	/**
+	 * Constructor, static.
+	 * 
+	 * @param fragmentId 
+	 * @return the ChoiceListFragment
+	 */
 	static ChoiceListFragment newInstance(int fragmentId) {
-		ChoiceListFragment f = new ChoiceListFragment();
-
+		// Instantiate a new fragment
+		ChoiceListFragment fragment = new ChoiceListFragment();
 		// Supply id input as an argument.
 		Bundle args = new Bundle();
 		args.putInt(idString, fragmentId);
-		f.setArguments(args);
+		fragment.setArguments(args);
 
-		return f;
+		return fragment;
 	}
 
 	@Override
+	/**
+	 * Attaches to an activity.
+	 * 
+	 * @param activity Activity to attach to
+	 */
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		try {
+			// Try to set the listener
 			this.listener = (ChoiceListListener) activity;
 		} catch (final ClassCastException e) {
+			// Exception
 			throw new ClassCastException(activity.toString()
 					+ " must implement ChoiceListListener");
 		}
 	}
 
 	@Override
+	/**
+	 * Override onCreateDialog method for the Dialog.
+	 * 
+	 * @param savedInstanceState
+	 */
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		// Call onCreate of super-class
 		super.onCreate(savedInstanceState);
-
+		// Get the fragment ID
 		int fragmentId = getArguments().getInt(idString);
-
+		// Get Story Manager from the GlobalManager
 		GlobalManager app = (GlobalManager) getActivity().getApplication();
 		ArrayList<Choice> choices = app.getStoryManager()
 				.getChoices(fragmentId);
-
+		// Get and set adapter
 		ChoiceListAdapter adapt = new ChoiceListAdapter(getActivity(), choices);
 		this.adapter = adapt;
-
+		// Set up builder/adapter
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.pick_choice);
 		builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
@@ -101,33 +121,41 @@ public class ChoiceListFragment extends DialogFragment {
 	}
 
 	@Override
+	/**
+	 * Override onCreateView method for a View
+	 */
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 //		Dialog dialog = getDialog();
 //		Window window = dialog.getWindow();
 //		window.setGravity(Gravity.TOP);
-
+		
+		// Get Fragment ID
 		int fragmentId = getArguments().getInt(idString);
-
+		// Get the StoryManager
 		GlobalManager app = (GlobalManager) getActivity().getApplication();
 		ArrayList<Choice> choices = app.getStoryManager()
 				.getChoices(fragmentId);
-
+		// Instantiate Adapter
 		this.adapter = new ChoiceListAdapter(getActivity(), choices);
-
+		// Inflate the View
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 
 	@Override
+	/**
+	 * Override onCreate method
+	 */
 	public void onCreate(Bundle savedInstanceState) {
+		// Call super-class onCreate
 		super.onCreate(savedInstanceState);
-
+		// Get Fragment ID
 		int fragmentId = getArguments().getInt(idString);
-
+		// Get Story Manager
 		GlobalManager app = (GlobalManager) getActivity().getApplication();
 		ArrayList<Choice> choices = app.getStoryManager()
 				.getChoices(fragmentId);
-
+		// Instantiate Adapter
 		this.adapter = new ChoiceListAdapter(getActivity(), choices);
 	}
 }
