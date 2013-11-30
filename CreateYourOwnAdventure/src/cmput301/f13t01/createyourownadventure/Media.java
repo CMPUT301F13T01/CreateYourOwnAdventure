@@ -48,4 +48,6 @@ public interface Media<T> {
 	 *            media type.
 	 */
 	public void setManager(MediaInteractionManager manager);
+	
+	public String getResource();
 }

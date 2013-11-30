@@ -50,19 +50,17 @@ import cmput301.f13t01.elasticsearch.SearchManager;
  *
  */
 public class BrowseOnlineStoriesActivity extends Activity{
-	// local manager object to handle local story saving
+	//manager objects for local and online
 	private LocalManager objLibrary;
-	//story list view object
+	private ESManager esLibrary;
+	//objects for list view
 	private ListView lsvStories = null;
-	//story info array list object
-	//private ArrayList<StoryInfo> storyInfoList;
-	// adapter for story info array list
-	private StoryInfoListAdapter objStoryAdapter;
-	
-	//new objects for online browsing
-	// ES Manager object to handle online story interactions
-	private ESManager esLibrary;	
 	private ArrayList<StoryInfo> results;
+	private StoryInfoListAdapter objStoryAdapter;
+
+	private EditText searchTitle;
+	private EditText searchAuthor;
+	private EditText searchDesc;
 
 	/**
 	 * Create Browse Online Story Screen
@@ -73,11 +71,17 @@ public class BrowseOnlineStoriesActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		//get last instance state and set view to main screen
 		super.onCreate(savedInstanceState);
+		//get view, set list view and, register it for contextual menu
 		setContentView(R.layout.browse_online_activity);
-		//set list view and register view for on long click contextual menu
 		lsvStories = (ListView) findViewById(R.id.browse_online_activity_listview);
-		registerForContextMenu(lsvStories);
-		// Set default click behaviour to continue
+		registerForContextMenu(lsvStories);		
+		//set up text input boxes
+		searchTitle = (EditText) findViewById(R.id.search_title);
+		searchAuthor = (EditText) findViewById(R.id.search_author);
+		searchDesc = (EditText) findViewById(R.id.search_description);
+		
+		/*
+		//Set default click behaviour to read story from continue point
 		lsvStories.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -87,13 +91,12 @@ public class BrowseOnlineStoriesActivity extends Activity{
 				saveToLocal();
 				startAtBeginning(clickId);
 			}
-		}); 		
+		});
+		*/
 		
-		//grab the local manager
+		//grab the managers
 		GlobalManager app = (GlobalManager) getApplication();
 		objLibrary = app.getLocalManager();
-		
-		// Grab the ES Manager
 		esLibrary = app.getESManager();
 	}
 	
@@ -104,8 +107,9 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		super.onResume();
 		//clear the search input boxes
 		clearInputBoxes();
-		//get all the story info list from  es manager for the story list adapter
-		results = esLibrary.searchOnlineStories("", "", "", 0);
+		//get all the story infos list from  es manager for the story list adapter
+		results = esLibrary.getStoryInfoList(0);
+		//results = esLibrary.searchOnlineStories("", "", "", 0);
 		//initialize adapter and update the view
 		objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, results);
 		lsvStories.setAdapter(objStoryAdapter);
@@ -191,24 +195,21 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		//now get the story info for the the selected story in list view
 		StoryInfo storyPicked = objStoryAdapter.getItem(info.position);
-	    switch (item.getItemId()) {
-	    
-        //user wants start reading story
-        case R.id.action_beginning:   
-             //save story locally and then read it from beginning
-             saveToLocal();
-        	//get the story uuid and pass it to start reading at begininng
-        	startAtBeginning(storyPicked.getId());
-        	return true;
-        //user wants save story without reading immediately
-        case R.id.action_save_online_story:
-        	//save the story
-        	saveToLocal();
-        	return true;       	
-        default:
-            return super.onOptionsItemSelected(item);
+			switch (item.getItemId()) {
+	        //user wants start reading story
+	        case R.id.action_beginning:   
+	             //save story locally and then read it from beginning
+	             UUID localId = esLibrary.downloadStory(storyPicked.getId());
+	        	startAtBeginning(localId);
+	        	return true;
+	        //user wants save story without reading immediately
+	        case R.id.action_save_online_story:
+	        	//save the story
+	        	esLibrary.downloadStory(storyPicked.getId());
+	        	return true;       	
+	        default:
+	            return super.onOptionsItemSelected(item);
 	    }		
-
 	}	
 	
 	/**
@@ -236,14 +237,7 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.action_new_search), Toast.LENGTH_SHORT);
 		toast.show();
-		//implement edit box entry wipeout
-		
-		// Jesse's Additions past this point
-		// Grabbing the EditText Views locally
-		// Not sure if you want actual instance variables to refer to them, Gerald
-		EditText searchTitle = (EditText) findViewById(R.id.search_title);
-		EditText searchAuthor = (EditText) findViewById(R.id.search_author);
-		EditText searchDesc = (EditText) findViewById(R.id.search_description);
+		//clear the text inputs
 		searchTitle.setText("");
 		searchAuthor.setText("");
 		searchDesc.setText("");
@@ -256,29 +250,16 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		//feedback to user, echoing menu text
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.action_search_online_stories), Toast.LENGTH_SHORT);
-		toast.show();
-		
-		// Jesse's Additions past this point
-		// Grabbing the EditText Views locally
-		// Not sure if you want actual instance variables to refer to them, Gerald
-		EditText searchTitle = (EditText) findViewById(R.id.search_title);
-		EditText searchAuthor = (EditText) findViewById(R.id.search_author);
-		EditText searchDesc = (EditText) findViewById(R.id.search_description);
+		toast.show();		
 		// Grab the search parameters
 		String title = searchTitle.getText().toString();
 		String author = searchAuthor.getText().toString();
 		String desc = searchDesc.getText().toString();
 		
-		
-		// !!! THIS DOES NOT WORK !!! not sure if it's access to inet problem or es problem
 		// Search for stories, 0 is just a default we leave there, it's needed
 		//results = esLibrary.searchOnlineStories(title, author, desc, 0);
-		
 		//this is test so I don'thave to type input
-		//results = esLibrary.searchOnlineStories("w x y z", "a b c", "f", 0);
-		
-		//THIS DOES WORK, but it's getting a local saved story
-		results = objLibrary.getStoryInfoList();
+		results = esLibrary.searchOnlineStories("w x y z", "a b c", "f", 0);
 		
 		//initialize adapter and update the view
 		objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, results);
@@ -295,16 +276,16 @@ public class BrowseOnlineStoriesActivity extends Activity{
 				.getString(R.string.action_get_next_20), Toast.LENGTH_SHORT);
 		toast.show();
 		
-		// Jesse/Reggie's Additions past this point
 		// Index to start new query at (based on size of storyInfoList)
-		//Integer index = results.size();
-		//ArrayList<StoryInfo> next20 = esLibrary.getStoryInfoList(index);
+		Integer index = results.size();
+		ArrayList<StoryInfo> next20 = esLibrary.getStoryInfoList(index);
 		
 		// You now have the next 20 StoryInfo objects in an ArrayList
 		//add them to list and update data set
-		//results.addAll(next20);
-		//objStoryAdapter.notifyDataSetChanged();		
+		results.addAll(next20);
+		objStoryAdapter.notifyDataSetChanged();		
 	}
+	
 	/**
 	 * displays screen specific help
 	 */

@@ -88,6 +88,11 @@ public class ImageUri implements Media<Uri>, Serializable {
 	public void setManager(MediaInteractionManager manager) {
 		this.manager = manager;
 	}
+	
+	@Override
+	public String getResource() {
+		return getContent().getLastPathSegment();
+	}
 
 	/**
 	 * Return a Uri representation of the content.

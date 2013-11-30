@@ -1,10 +1,10 @@
 /*
 ESManager Class for CreateYourOwnAdventure.
-This deals with the management of stories on ElasticSearch.
+This deals with the organization and management of stories interacting with the server.
 All saving & loading is handled here, along with deletion.
 
-     Copyright  �2013 Jesse Chu
-    <Contact: jhchu@ualberta.ca>
+     Copyright  �2013 Jesse Chu, Reginald Miller, Jesse Huard
+    <Contact: rmiller3@ualberta.ca, jhchu@ualberta.ca, jhuard@ualberta.ca>
     
     License GPLv3: GNU GPL Version 3
     <http://gnu.org/licenses/gpl.html>.
@@ -51,7 +51,7 @@ import cmput301.f13t01.createyourownadventure.StoryInfo;
  * This class is designed to interact with stored stories on ElasticSearch.
  * Saving, Loading, and Deleting are handled.
  * 
- * @author Jesse Chu, Reginald Miller
+ * @author Jesse Chu, Reginald Miller, Jesse Huard
  */
 
 public class ESManager implements LibraryManager {
@@ -93,6 +93,12 @@ public class ESManager implements LibraryManager {
 		return client.getStory(storyId);
 	}
 
+	/**
+	 * When this method is called, it handles the process of fetching a random story
+	 * amongst all stories available on the server.
+	 * 
+	 * @return   Returns the random Story object.
+	 */
 	public Story getRandomOnlineStory() {
 		// Get count of total number of stories online
 		Integer totalOnlineStories = client.getStoryCount();

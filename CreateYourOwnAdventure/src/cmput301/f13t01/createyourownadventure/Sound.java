@@ -79,6 +79,11 @@ public class Sound implements Media<String>, Serializable {
 	public void setManager(MediaInteractionManager manager) {
 		this.manager = manager;
 	}
+	
+	@Override
+	public String getResource() {
+		return getContent();
+	}
 
 	/**
 	 * Return a string representation of the content.

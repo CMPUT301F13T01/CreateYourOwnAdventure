@@ -74,6 +74,11 @@ public class Image implements Media<String>, Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	
+	@Override
+	public String getResource() {
+		return getContent();
+	}
 
 	/**
 	 * Gets the <code>MediaInteractionManager</code> for the image.
