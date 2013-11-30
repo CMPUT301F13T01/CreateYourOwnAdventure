@@ -174,6 +174,7 @@ public class EditStoryActivity extends FragmentActivity implements
 			onEditFragment();
 			return true;
 		case R.id.action_publish:
+			onSelectPublish();
 			return true;
 		case R.id.action_help:
 			onSelectHelp();
@@ -181,6 +182,22 @@ public class EditStoryActivity extends FragmentActivity implements
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+	
+	private void onSelectPublish() {
+		
+		EditText title = (EditText) findViewById(R.id.edit_story_title);
+		EditText author = (EditText) findViewById(R.id.edit_story_author);
+		EditText desc = (EditText) findViewById(R.id.edit_story_description);
+
+		manager.setTitle(title.getText().toString());
+		manager.setAuthor(author.getText().toString());
+		manager.setDescription(desc.getText().toString());
+
+		GlobalManager.saveStory(storyId);
+		Story story = GlobalManager.getStoryManager().getStory();
+		
+		GlobalManager.getESManager().saveStory(storyId, story);
 	}
 
 	private void onSelectHelp() {
@@ -241,9 +258,7 @@ public class EditStoryActivity extends FragmentActivity implements
 		manager.setAuthor(author.getText().toString());
 		manager.setDescription(desc.getText().toString());
 
-		GlobalManager app = (GlobalManager) getApplication();
-
-		app.saveStory(storyId);
+		GlobalManager.saveStory(storyId);
 
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.story_save_toast), Toast.LENGTH_SHORT);
