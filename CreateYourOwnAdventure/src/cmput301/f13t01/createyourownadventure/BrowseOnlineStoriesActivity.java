@@ -36,7 +36,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import cmput301.f13t01.elasticsearch.ESClient;
 import cmput301.f13t01.elasticsearch.ESManager;
+import cmput301.f13t01.elasticsearch.SearchManager;
 
 /**
  * Sets up and handles browse online ui that allows user to search for and display
@@ -102,15 +104,12 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		super.onResume();
 		//clear the search input boxes
 		clearInputBoxes();
-		
-		//user is supposed to know what they want to search for, so no
-		//stories either local or online in list
-		//get all the storys info list from  es manager for the story list adapter
-		//results = esLibrary.searchOnlineStories("", "", "", 0);
+		//get all the story info list from  es manager for the story list adapter
+		results = esLibrary.searchOnlineStories("", "", "", 0);
 		//initialize adapter and update the view
-		//objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, results);
-		//lsvStories.setAdapter(objStoryAdapter);
-		//objStoryAdapter.notifyDataSetChanged();				
+		objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, results);
+		lsvStories.setAdapter(objStoryAdapter);
+		objStoryAdapter.notifyDataSetChanged();	
 	}
 	
 	
@@ -273,9 +272,13 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		
 		// !!! THIS DOES NOT WORK !!! not sure if it's access to inet problem or es problem
 		// Search for stories, 0 is just a default we leave there, it's needed
-		results = esLibrary.searchOnlineStories(title, author, desc, 0);
+		//results = esLibrary.searchOnlineStories(title, author, desc, 0);
+		
+		//this is test so I don'thave to type input
+		//results = esLibrary.searchOnlineStories("w x y z", "a b c", "f", 0);
+		
 		//THIS DOES WORK, but it's getting a local saved story
-		//results = objLibrary.getStoryInfoList();
+		results = objLibrary.getStoryInfoList();
 		
 		//initialize adapter and update the view
 		objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, results);
@@ -332,9 +335,11 @@ public class BrowseOnlineStoriesActivity extends Activity{
         startActivity(intent);		
 	}
 	
+	/*
 	/**
 	 * select random story and opens it for reading from beginning
 	 */
+	
 	private void startRandomStory() {
 		//feedback to user, echoing menu text
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
@@ -344,31 +349,9 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		// Jesse's additions below
 		// A random story object. We can play with the returns later if you want
 		//Story randomStory = esLibrary.getRandomOnlineStory();
+		//now we need to save this story to local device, getting a new UUID for it
 		
-		
-		/*
-		//get the story info list from manager and the size of list
-		ArrayList<StoryInfo> randStorySource = objLibrary.getStoryInfoList();
-		//if list size zero or less, no stories to select
-		if (randStorySource.size() <= 0){
-			return;
-		}
-		else
-		{
-			//new random object and story list size
-		 	Random r = new Random();
-		 	int listSize = randStorySource.size();
-			//get next integer random number in range 0 to listSize - 1		 	
-			int randStory = r.nextInt(listSize);
-			//get the uuid of the randomly selected story
-		    UUID randStoryId = randStorySource.get(randStory).getId();
-			//create the intent and launch read story activity from beginning
-		    Intent intent = new Intent(this, ReadFragmentActivity.class);
-		    intent.putExtra(getResources().getString(R.string.story_continue), true);
-			intent.putExtra(getResources().getString(R.string.story_id), randStoryId);
-	        startActivity(intent);	
-		}
-		*/
+		//then we open the locally save story for local reading with the new UUID
+		//startAtBeginning(newUuid);
 	}	
-
 }
