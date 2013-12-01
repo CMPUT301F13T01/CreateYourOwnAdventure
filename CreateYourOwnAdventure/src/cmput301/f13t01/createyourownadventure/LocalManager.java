@@ -418,6 +418,24 @@ public class LocalManager implements Serializable, LibraryManager {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Mirrors a given Story by ID.
+	 * Creates a local copy of a given story.
+	 * 
+	 * @param storyId the ID of the Story to mirror
+	 * @return the ID of the new Story
+	 */
+	public UUID mirrorStory(UUID storyId) {
+		// Grab the story
+		Story targetStory = loadStory(storyId);
+		String title = targetStory.getTitle();
+		// Add " (Mirror)" to the title
+		title = title + " (Mirror)";
+		// Add the mirror into the library
+		UUID newId = addStory(targetStory);
+		return newId;
+	}
 
 	/**
 	 * Loads the storyInfoList of the Library from file.
