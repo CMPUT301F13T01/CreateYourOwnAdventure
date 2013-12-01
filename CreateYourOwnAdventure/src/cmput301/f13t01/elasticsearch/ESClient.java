@@ -86,10 +86,6 @@ public class ESClient {
 
 	private HttpClient httpclient = new DefaultHttpClient();
 	private Gson gson;
-	private Gson mediaStringGson = new GsonBuilder().registerTypeAdapter(Media.class, 
-			new InterfaceAdapter<Media<String>>()).create();
-	private Gson mediaSpannableGson = new GsonBuilder().registerTypeAdapter(Media.class,
-			new InterfaceAdapter<Media<SpannableString>>()).create();
 	
 	/**
 	 * Empty constructor.

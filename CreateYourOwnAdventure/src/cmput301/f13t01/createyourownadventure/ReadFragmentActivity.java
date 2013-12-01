@@ -154,11 +154,15 @@ public class ReadFragmentActivity extends FragmentActivity {
 	}
 
 	/**
-	 * Saves the history.
+	 * Saves the history on stop.
 	 */
 	@Override
 	public void onStop() {
 		super.onStop();
+		storyManager.pushToStack(fragmentId);
+		GlobalManager.getLocalManager().saveStory(this.storyId, this.storyManager.getStory());
+		//log.d("HISTORY_DEBUG", "saving history in onStop");
+		
 	}
 
 	/**
