@@ -34,14 +34,12 @@ import java.util.Random;
 import java.util.UUID;
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 import cmput301.f13t01.createyourownadventure.GlobalManager;
 import cmput301.f13t01.createyourownadventure.LibraryManager;
 import cmput301.f13t01.createyourownadventure.LocalManager;
 import cmput301.f13t01.createyourownadventure.Media;
-import cmput301.f13t01.createyourownadventure.MediaType;
 import cmput301.f13t01.createyourownadventure.Story;
 import cmput301.f13t01.createyourownadventure.StoryFragment;
 import cmput301.f13t01.createyourownadventure.StoryFragmentInfo;

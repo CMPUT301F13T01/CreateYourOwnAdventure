@@ -36,14 +36,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-import cmput301.f13t01.elasticsearch.ESClient;
 import cmput301.f13t01.elasticsearch.ESManager;
-import cmput301.f13t01.elasticsearch.SearchManager;
 
 /**
  * Sets up and handles browse online ui that allows user to search for and display
  * stories online, select an online story to read from beginning, select an online
- * story to save
+ * story to save, or select aznd read a random online story
  * 
  * @author Gerald Manweiler
  * @version 1.0 Nov 23 2013
@@ -71,7 +69,11 @@ public class BrowseOnlineStoriesActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		//get last instance state and set view to main screen
 		super.onCreate(savedInstanceState);
-		//get view, set list view and, register it for contextual menu
+		//grab the managers
+		GlobalManager app = (GlobalManager) getApplication();
+		objLibrary = app.getLocalManager();
+		esLibrary = app.getESManager();
+		//get view, set list view and register it for contextual menu
 		setContentView(R.layout.browse_online_activity);
 		lsvStories = (ListView) findViewById(R.id.browse_online_activity_listview);
 		registerForContextMenu(lsvStories);		
@@ -80,28 +82,20 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		searchAuthor = (EditText) findViewById(R.id.search_author);
 		searchDesc = (EditText) findViewById(R.id.search_description);
 		
-		/*
-		//Set default click behaviour to read story from continue point
+		//Set default click behaviour to read story beginning
 		lsvStories.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				StoryInfo selectedStory = results.get(position); 
-				UUID clickId = selectedStory.getId();
-				//save to local
-				saveToLocal();
-				startAtBeginning(clickId);
+				StoryInfo storyPicked = results.get(position); 
+	            //save story locally and then read it from beginning
+	            UUID localId = esLibrary.downloadStory(storyPicked.getId());
+	        	startAtBeginning(localId);
 			}
 		});
-		*/
-		
-		//grab the managers
-		GlobalManager app = (GlobalManager) getApplication();
-		objLibrary = app.getLocalManager();
-		esLibrary = app.getESManager();
 	}
 	
 	/**
-	 * Resume activity clears the search input boxes
+	 * Resume activity clears the search input boxes and display any online stories
 	 */
 	protected void onResume() {
 		super.onResume();
@@ -212,23 +206,6 @@ public class BrowseOnlineStoriesActivity extends Activity{
 	}	
 	
 	/**
-	 * save online story to local device
-	 */
-	private void saveToLocal(){
-		//feedback to user, echoing menu text
-		Toast toast = Toast.makeText(getApplicationContext(), getResources()
-				.getString(R.string.action_save_online_story), Toast.LENGTH_SHORT);
-		toast.show();
-		
-		// Jesse's Additions past this point
-
-		// This function needs to be called on a specific story...
-		// It shouldn't be an action bar button
-		// This call will save the story from the server locally
-		// It returns the UUID of the story saved
-		// localId = esLibrary.downloadStory(id)
-	}
-	/**
 	 * clears input boxes for new search
 	 */
 	private void clearInputBoxes() {
@@ -249,16 +226,18 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		//feedback to user, echoing menu text
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.action_search_online_stories), Toast.LENGTH_SHORT);
-		toast.show();		
+		toast.show();
+		
 		// Grab the search parameters
 		String title = searchTitle.getText().toString();
 		String author = searchAuthor.getText().toString();
 		String desc = searchDesc.getText().toString();
 		
 		// Search for stories, 0 is just a default we leave there, it's needed
-		//results = esLibrary.searchOnlineStories(title, author, desc, 0);
+		results = esLibrary.searchOnlineStories(title, author, desc, 0);
+		
 		//this is test so I don'thave to type input
-		results = esLibrary.searchOnlineStories("w x y z", "a b c", "f", 0);
+		//results = esLibrary.searchOnlineStories("w x y z", "a b c", "f", 0);
 		
 		//initialize adapter and update the view
 		objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, results);
@@ -278,8 +257,6 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		// Index to start new query at (based on size of storyInfoList)
 		Integer index = results.size();
 		ArrayList<StoryInfo> next20 = esLibrary.getStoryInfoList(index);
-		
-		// You now have the next 20 StoryInfo objects in an ArrayList
 		//add them to list and update data set
 		results.addAll(next20);
 		objStoryAdapter.notifyDataSetChanged();		
@@ -301,8 +278,7 @@ public class BrowseOnlineStoriesActivity extends Activity{
 	
 	/**
 	 * Starts reading story at beginning child activity
-	 * 
-	 * @param storyId    UUID of story selected by user
+	 * storyId is UUID of story selected by user
 	 */
 	private void startAtBeginning(UUID storyId) {
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
@@ -315,23 +291,18 @@ public class BrowseOnlineStoriesActivity extends Activity{
         startActivity(intent);		
 	}
 	
-	/*
 	/**
 	 * select random story and opens it for reading from beginning
 	 */
-	
 	private void startRandomStory() {
 		//feedback to user, echoing menu text
 		Toast toast = Toast.makeText(getApplicationContext(), getResources()
 				.getString(R.string.action_random_story), Toast.LENGTH_SHORT);
 		toast.show();
 		
-		// Jesse's additions below
-		// A random story object. We can play with the returns later if you want
-		//Story randomStory = esLibrary.getRandomOnlineStory();
-		//now we need to save this story to local device, getting a new UUID for it
-		
+		//get the UUID of the local copy of a randomly selected on line story
+		UUID newUuid = esLibrary.getRandomOnlineStory();
 		//then we open the locally save story for local reading with the new UUID
-		//startAtBeginning(newUuid);
+		startAtBeginning(newUuid);
 	}	
 }

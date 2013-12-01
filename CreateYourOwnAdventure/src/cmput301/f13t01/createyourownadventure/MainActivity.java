@@ -65,13 +65,13 @@ public class MainActivity extends Activity {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		//get last instance state and set view to main screen
+		super.onCreate(savedInstanceState);
 		//allow network operation
 		if (android.os.Build.VERSION.SDK_INT > 9) {
 		      StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		      StrictMode.setThreadPolicy(policy);
-		}
-		//get last instance state and set view to main screen
-		super.onCreate(savedInstanceState);
+		}		
 		setContentView(R.layout.main_activity);
 		//set list view and register view for on long click contextual menu
 		lsvStories = (ListView) findViewById(R.id.main_activity_listview);
