@@ -84,6 +84,9 @@ public class EditAnnotationActivity extends Activity implements
 		layout = (LinearLayout) findViewById(R.id.edit_annotation_linear);
 		// Process intent
 		Intent intent = getIntent();
+		
+		annotation = new ArrayList<Media>();
+		
 		if (savedInstanceState != null) {
 			annotation = (ArrayList<Media>) intent
 					.getSerializableExtra(getResources().getString(
