@@ -249,7 +249,7 @@ public class ESClient {
 	 * @param num   The number of StoryInfo objects to fetch.
 	 * @return   The ArrayList of StoryInfo objects, or null if the fetch fails.
 	 */
-	protected ArrayList<StoryInfo> getStoryInfosByQuery(String query, int from, int num) {
+	public ArrayList<StoryInfo> getStoryInfosByQuery(String query, int from, int num) {
 		
 		// Make sure a positive number is passed
 		if (num <= 0 || from < 0) {
@@ -264,11 +264,6 @@ public class ESClient {
 				comma = "";
 			}
 			query = "{\"from\" : " + from + ", \"size\" : " + num + comma + query + "}";
-			//query = "{" + query + "}";
-			//query = "{\"query\" : {\"query_string\" : {\"default_field\" : \"title\",\"query\" : \"" + "a AND h" + "\"}}}";
-			//query = "{\"query\" : [{\"field\" : {\"title\" : \"" + "d AND f" + "\"}, {\"field\" : {\"author\" : \"" + "h AND j" + "\"}}, {\"field\" : {\"description\" : \"" + "f" + "\"}}";
-			//query = "{\"query\" : {\"query_string\" : {\"title\" : \"" + "d AND f" + "\"}}}";
-			//query = "{\"query\" : {\"bool\" : {\"must\" : [{\"field\" : {\"title\" : \"c AND h\"}}, {\"field\" : {\"author\" : \"i\"}}, {\"field\" : {\"description\" : \"f\"}}]}}}";
 			StringEntity stringentity = new StringEntity(query);
 
 			getRequest.setHeader("Accept", "application/json");
@@ -303,6 +298,22 @@ public class ESClient {
 			getRequest.setHeader("Accept", "application/json");
 
 			Story story = getData(getRequest, Story.class);
+			
+			//HttpResponse response = httpclient.execute(getRequest);
+
+			//String status = response.getStatusLine().toString();
+			//System.out.println(status);
+
+			//String json = getEntityContent(response);
+
+			//Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
+			//ElasticSearchResponse<Story> esResponse = gson.fromJson(json,
+			//		elasticSearchResponseType);
+			//Story data = esResponse.getSource();
+
+			//response.getEntity().consumeContent();
+			
+			//return data;
 
 			return story;
 
@@ -482,7 +493,7 @@ public class ESClient {
 		return;
 	}
 
-	private String getEntityContent(HttpResponse response) throws IOException {
+	private static String getEntityContent(HttpResponse response) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				(response.getEntity().getContent())));
 		String output;
@@ -606,91 +617,6 @@ public class ESClient {
 		response.getEntity().consumeContent();
 		
 		return infos;
-	}
-	
-	// For testing purposes only
-	public static void main(String[] args) {
-
-		ESClient client = new ESClient();
-
-		// Test posting, getting or deleting of StoryInfo objects
-		// testStoryInfo(client);
-		
-		// Test posting, getting or deleting of Story objects
-		// testStory(client);
-		
-		//Story story1 = new Story();
-		//Story story2 = new Story();
-		//Story story3 = new Story();
-		
-		//story1.setTitle("w x y z");
-		//story2.setTitle("e f g");
-		//story3.setTitle("v w x y z");
-		
-		//story1.setAuthor("a b c");
-		//story2.setAuthor("d e f");
-		//story3.setAuthor("g h i");
-		
-		//story1.setDescription("f");
-		//story2.setDescription("f");
-		//story3.setDescription("f");
-		
-		//StoryInfo storyInfo1 = new StoryInfo(UUID.randomUUID(), story1);
-		//StoryInfo storyInfo2 = new StoryInfo(UUID.randomUUID(), story2);
-		//StoryInfo storyInfo3 = new StoryInfo(UUID.randomUUID(), story3);
-		
-		//try {
-			//client.postStoryInfo(storyInfo1);
-		//} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		//} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		//}
-		
-		//try {
-			//client.postStoryInfo(storyInfo2);
-		//} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		//} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		//}
-		
-		//try {
-			//client.postStoryInfo(storyInfo3);
-		//} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		//} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		//}
-		
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		// Expect 1 StoryInfo object from this query
-		String query = SearchManager.createQuery("w x y z", "a b c", "f");
-		
-		ArrayList<StoryInfo> infos = client.getStoryInfosByQuery(query, 0, 1);
-		//ArrayList<StoryInfo> infos = client.getStoryInfos(0, 20);
-		
-		System.out.println(client.getStoryCount());
-		
-		System.out.println("Size of array is: "+infos.size());
-		
-		System.out.println("Size of full array is : " + client.getStoryInfos(0,20).size());
-		
-		for (StoryInfo info : infos) {
-			System.out.println(info.getTitle());
-		}
-	
 	}
 
 }

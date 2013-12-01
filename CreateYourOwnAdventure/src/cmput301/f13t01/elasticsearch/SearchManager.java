@@ -126,8 +126,6 @@ public class SearchManager {
 			parsedString = parsedString + str;
 		}
 		
-		System.out.println(parsedString);
-		
 		return parsedString;
 	}
 	
