@@ -105,7 +105,7 @@
     <string name="action_edit_from_internal">Story Images</string>
     <string name="title_activity_add_annotation">AddAnnotationActivity</string>
     <string name="title_activity_edit_annotation">EditAnnotationActivity</string>
-    
     <string name="annotation">Annotation</string>
+    <string name="title_activity_view_annotation">ViewAnnotationActivity</string>
 
 </resources>
