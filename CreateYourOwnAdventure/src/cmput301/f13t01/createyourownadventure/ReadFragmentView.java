@@ -78,6 +78,7 @@ public class ReadFragmentView extends Fragment {
 				R.string.destination_id);
 		fragmentId = getArguments().getInt(resourceString);
 
+		// shows all media in the fragment
 		ArrayList<Media> mediaList = storyManager.getMediaList(fragmentId);
 
 		StoryFragmentViewFactory.ConstructView(layout, mediaList, getActivity(), false);
@@ -86,7 +87,7 @@ public class ReadFragmentView extends Fragment {
 		ArrayList<Media> annotateList = storyManager
 				.getAnnotationList(fragmentId);
 
-		// add the re-factored view maker here
+		StoryFragmentViewFactory.ConstructView(layout, annotateList, getActivity(), false);
 
 		// from story level with fragment id, get the array list of choice
 		// objects

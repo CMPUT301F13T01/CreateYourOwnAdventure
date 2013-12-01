@@ -50,12 +50,18 @@
     <string name="action_edit_cancel">Cancel</string>
     <string name="pick_choice">Choose Choice</string>
     <string name="choice_list">Choice List</string>
-    <string name="action_return_to_previous_page">Return to Previous Page</string>
-    <string name="action_return_to_beginning">Return to Beginning</string>
     <string name="title_activity_edit_story">Edit Story</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_edit_edit_content">Edit Content</string>
-
+    
+     <!-- Readmode Related Strings -->
+    <string name="action_return_to_previous_page">Return to Previous Page</string>
+    <string name="action_return_to_beginning">Return to Beginning</string>
+    <string name="action_help">Help</string>
+    <string name="action_annotate">Annotate</string>
+    <string name="annotate_medialist">Annotation List</string>
+    <string name="title_activity_read_story">Read Story</string>
+        
     <!-- String used in layout of edit story activity -->
     <string name="story_title_hint">Story Title</string>
     <string name="story_author_hint">Story Author</string>
@@ -98,7 +104,7 @@
     <string name="choice">Choice</string>
     <string name="title_activity_preview_fragment">PreviewFragmentActivity</string>
     <string name="display_help">Help</string>
-    <string name="action_help">Help</string>
+
     <string name="story_URIs">URIs</string>
     <string name="action_edit_from_camera">Camera</string>
     <string name="action_edit_from_gallery">Gallery</string>

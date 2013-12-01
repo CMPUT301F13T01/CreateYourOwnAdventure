@@ -32,12 +32,9 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.Toast;
 
 /**
@@ -56,7 +53,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 	Integer fragmentId;
 	GlobalManager app;
 	LocalManager save;
-
+	private static final int annotateId = 404;
 	/**
 	 * Called when the activity is first created. Receives intent from main
 	 * activity to create the first fragment.
@@ -148,6 +145,9 @@ public class ReadFragmentActivity extends FragmentActivity {
 		case R.id.action_help:
 			onSelectHelp();
 			return true;
+		case R.id.action_annotate:
+			annotate();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -160,8 +160,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 	public void onStop() {
 		super.onStop();
 		storyManager.pushToStack(fragmentId);
-		GlobalManager.getLocalManager().saveStory(this.storyId, this.storyManager.getStory());
-		//log.d("HISTORY_DEBUG", "saving history in onStop");
+		save.saveStory(this.storyId, this.storyManager.getStory());
 		
 	}
 
@@ -290,6 +289,37 @@ public class ReadFragmentActivity extends FragmentActivity {
 		android.app.DialogFragment newFragment = (android.app.DialogFragment) HelpFragment
 				.newInstance(HelpMessage.READ_STORY);
 		newFragment.show(ft, "help_dialog");
+	}
+	
+	
+	/**
+	 * add annotation to the current fragment
+	 */
+	private void annotate() {
+		//create the intent and launch the annotation activity
+	    Intent intent = new Intent(this, EditAnnotationActivity.class);
+	    intent.putExtra(getResources().getString(R.string.annotate_medialist), true);
+        startActivityForResult(intent, annotateId);	
+		
+	}
+	
+	// on resume of activity after editing/adding an annotation
+	@SuppressWarnings("unchecked")
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if (resultCode == RESULT_OK) {
+			
+			Intent intent = getIntent();
+			
+			// receive the new annotation list from edit annotation activity
+			ArrayList<Media> newAnnotationList = (ArrayList<Media>) intent.getSerializableExtra(getResources()
+					.getString(R.string.annotation));
+			
+			storyManager.setAnnotation(fragmentId, newAnnotationList);
+
+		}
+		
 	}
 
 }

@@ -26,37 +26,36 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * StoryFragment object, essentially a single page for a story.
- * Has title and description attributes.
- * Composed of Content and Annotations, which implement the Media interface.
- * Content and Annotations can be one of:
- * Text, Image, Video, Sound
+ * StoryFragment object, essentially a single page for a story. Has title and
+ * description attributes. Composed of Content and Annotations, which implement
+ * the Media interface. Content and Annotations can be one of: Text, Image,
+ * Video, Sound
  * 
  * @author Jesse Chu <jhchu@ualberta.ca>
  */
 
 public class StoryFragment implements Serializable {
-	
+
 	/* Instance Variables for a Fragment */
 	// Attributes for a Fragment
 	private String title;
 	private String description;
-	
+
 	// Content/Annotation Lists for a Fragment
 	private ArrayList<Media> contentList;
 	private ArrayList<Media> annotationList;
-	
+
 	/**
-	 * Constructor. Initializes all instance variables.
-	 * Instantiated with default values.
+	 * Constructor. Initializes all instance variables. Instantiated with
+	 * default values.
 	 */
 	public StoryFragment() {
-//		this.title = "New Page";
-//		this.description = "A new page";
+		// this.title = "New Page";
+		// this.description = "A new page";
 		this.contentList = new ArrayList<Media>();
 		this.annotationList = new ArrayList<Media>();
 	}
-	
+
 	/**
 	 * Getter for Fragment title.
 	 * 
@@ -65,7 +64,7 @@ public class StoryFragment implements Serializable {
 	public String getTitle() {
 		return this.title;
 	}
-	
+
 	/**
 	 * Getter for Fragment description.
 	 * 
@@ -74,7 +73,7 @@ public class StoryFragment implements Serializable {
 	public String getDescription() {
 		return this.description;
 	}
-	
+
 	/**
 	 * Getter for the contentList for a Fragment
 	 * 
@@ -83,7 +82,7 @@ public class StoryFragment implements Serializable {
 	public ArrayList<Media> getContentList() {
 		return this.contentList;
 	}
-	
+
 	/**
 	 * Getter for the annotationList for a Fragment
 	 * 
@@ -92,41 +91,44 @@ public class StoryFragment implements Serializable {
 	public ArrayList<Media> getAnnotationList() {
 		return this.annotationList;
 	}
-	
+
 	/**
 	 * Setter for the title of the Fragment.
 	 * 
-	 * @param title the string to set the title to
+	 * @param title
+	 *            the string to set the title to
 	 * @return true if successful, false otherwise
 	 */
 	public boolean setTitle(String title) {
 		this.title = title;
 		return true;
 	}
-	
+
 	/**
 	 * Setter for the description of the Fragment.
 	 * 
-	 * @param title the string to set the description to
+	 * @param title
+	 *            the string to set the description to
 	 * @return true if successful, false otherwise
 	 */
 	public boolean setDescription(String description) {
 		this.description = description;
 		return true;
 	}
-	
+
 	public void displayFragment() {
-		
+
 	}
 
 	/**
 	 * Adds a given Media object to the contentList
 	 * 
-	 * @param content the Media to add to the Fragment
+	 * @param content
+	 *            the Media to add to the Fragment
 	 * @return true if successful, false otherwise
 	 */
 	public boolean addContent(Media content) {
-		if (!(content == null)){
+		if (!(content == null)) {
 			contentList.add(content);
 			return true;
 		} else {
@@ -137,7 +139,8 @@ public class StoryFragment implements Serializable {
 	/**
 	 * Removes a given Media object from the contentList.
 	 * 
-	 * @param content the Media to remove from the Fragment
+	 * @param content
+	 *            the Media to remove from the Fragment
 	 * @return true if successful, false otherwise
 	 */
 	public boolean removeContent(Media content) {
@@ -148,18 +151,19 @@ public class StoryFragment implements Serializable {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Clears the contentList.
 	 */
 	public void removeAllContent() {
 		this.contentList = new ArrayList<Media>();
 	}
-	
+
 	/**
 	 * Adds a given Media object to the annotationList.
 	 * 
-	 * @param annotation the Media to add to the Fragment
+	 * @param annotation
+	 *            the Media to add to the Fragment
 	 * @return true if successful, false otherwise
 	 */
 	public boolean addAnnotation(Media annotation) {
@@ -170,11 +174,28 @@ public class StoryFragment implements Serializable {
 			return false;
 		}
 	}
-	
+
+	/**
+	 * Sets the annotation list to be identical to the given one.
+	 * 
+	 * @param newAnnotationList
+	 *            List of annotations to be set as the new annotation list
+	 * @return true if successful, false otherwise
+	 */
+	public boolean setAnnotation(ArrayList<Media> newAnnotationList) {
+		if (!(newAnnotationList == null)) {
+			this.annotationList = newAnnotationList;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/**
 	 * Removes a given Media object from the annotationList.
 	 * 
-	 * @param annotation the Media to remove from the Fragment
+	 * @param annotation
+	 *            the Media to remove from the Fragment
 	 * @return true if successful, false otherwise
 	 */
 	public boolean removeAnnotation(Media annotation) {
@@ -185,46 +206,46 @@ public class StoryFragment implements Serializable {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Clears the annotationList.
 	 */
 	public void removeAllAnnotation() {
 		this.annotationList = new ArrayList<Media>();
 	}
-	
+
 	/* Methods required for Serializable Interface */
 	/**
 	 * Serializable method to write out a StoryFragment.
 	 * 
-	 * @param out an ObjectOutputSteam
+	 * @param out
+	 *            an ObjectOutputSteam
 	 * @throws IOException
 	 */
-	private void writeObject(java.io.ObjectOutputStream out)
-		     throws IOException {
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
 		out.writeObject(this.title);
 		out.writeObject(this.description);
 		out.writeObject(this.contentList);
 		out.writeObject(this.annotationList);
 	}
-	
-    /**
-     * Serializable method to read in a StoryFragment.
-     * 
-     * @param in an ObjectInputStream
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-	private void readObject(java.io.ObjectInputStream in)
-	    throws IOException, ClassNotFoundException {
+
+	/**
+	 * Serializable method to read in a StoryFragment.
+	 * 
+	 * @param in
+	 *            an ObjectInputStream
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private void readObject(java.io.ObjectInputStream in) throws IOException,
+			ClassNotFoundException {
 		this.title = (String) in.readObject();
 		this.description = (String) in.readObject();
 		this.contentList = (ArrayList<Media>) in.readObject();
 		this.annotationList = (ArrayList<Media>) in.readObject();
 	}
-	
-	private void readObjectNoData()
-	    throws ObjectStreamException{
+
+	private void readObjectNoData() throws ObjectStreamException {
 	}
-	
+
 }
