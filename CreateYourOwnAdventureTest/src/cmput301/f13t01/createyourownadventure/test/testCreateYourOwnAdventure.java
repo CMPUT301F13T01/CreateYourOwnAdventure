@@ -38,7 +38,7 @@ import cmput301.f13t01.createyourownadventure.StoryInfoListAdapter;
  *  @author Gerald Manweiler
  *  @version 1.0 Nov 25 2013
  */
-public class TestCreateYourOwnAdventure extends ActivityInstrumentationTestCase2<MainActivity>{
+public class testCreateYourOwnAdventure extends ActivityInstrumentationTestCase2<MainActivity>{
 	private MainActivity mainActivity;
 	// local manager object to handle local story saving
 	private LocalManager objLibrary;
@@ -53,7 +53,7 @@ public class TestCreateYourOwnAdventure extends ActivityInstrumentationTestCase2
 	/*
 	 * import an activity for testing
 	 */
-	public TestCreateYourOwnAdventure(){
+	public testCreateYourOwnAdventure(){
 		super(MainActivity.class);
 		
 	}
