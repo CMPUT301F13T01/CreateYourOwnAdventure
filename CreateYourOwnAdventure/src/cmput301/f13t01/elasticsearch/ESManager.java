@@ -103,15 +103,18 @@ public class ESManager implements LibraryManager {
 	 * 
 	 * @return   Returns the random Story object.
 	 */
-	public Story getRandomOnlineStory() {
+	public UUID getRandomOnlineStory() {
 		// Get count of total number of stories online
 		Integer totalOnlineStories = client.getStoryCount();
 		// Randomly selects an index within the total number
 		Random randSelect = new Random();
 		Integer index = randSelect.nextInt(totalOnlineStories);
-		// Grabs the story using the client
-		Story randomStory = client.getStoryByIndex(index);
-		return randomStory;
+		// Grabs the StoryInfo using the client
+		ArrayList<StoryInfo> infoList = client.getStoryInfos(index, 1);
+		UUID oldId = infoList.get(0).getId();
+		UUID newId = downloadStory(oldId);
+		
+		return newId;
 	}
 
 	/**
