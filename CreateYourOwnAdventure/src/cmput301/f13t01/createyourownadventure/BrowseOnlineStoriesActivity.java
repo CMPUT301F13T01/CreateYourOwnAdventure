@@ -109,7 +109,6 @@ public class BrowseOnlineStoriesActivity extends Activity{
 		clearInputBoxes();
 		//get all the story infos list from  es manager for the story list adapter
 		results = esLibrary.getStoryInfoList(0);
-		//results = esLibrary.searchOnlineStories("", "", "", 0);
 		//initialize adapter and update the view
 		objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, results);
 		lsvStories.setAdapter(objStoryAdapter);
