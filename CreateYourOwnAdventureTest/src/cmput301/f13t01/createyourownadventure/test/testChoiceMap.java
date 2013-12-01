@@ -39,7 +39,7 @@ public class testChoiceMap extends TestCase {
                 assertTrue(choice.getDestinationId() == 2);
                 
                 testList = choicemap.getChoices(2);
-                assertTrue(testList == null);
+                assertTrue(testList.size() == 0);
         }
         
         @Test
@@ -76,7 +76,7 @@ public class testChoiceMap extends TestCase {
                 //Should remove all choices referencing fragment 4
                 choicemap.cleanFragmentReferences(4);
                 ArrayList<Choice> testList = choicemap.getChoices(4);
-                assertTrue(testList == null);
+                assertTrue(testList.size() == 0);
                 testList = choicemap.getChoices(2);
                 assertTrue(testList.size() == 1);
         }
