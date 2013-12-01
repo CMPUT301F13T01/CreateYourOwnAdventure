@@ -4,9 +4,9 @@
     <string name="app_name">Create!</string>
     <!-- action bar items -->
     <string name="action_settings">Settings</string>
-    
+
     <!-- main screen -->
-    <string name="title_activity_local_stories">Browse Local</string>    
+    <string name="title_activity_local_stories">Browse Local</string>
     <string name="action_browse_online_stories">Browse Online Stories</string>
     <string name="action_create_new_story">Create New Story</string>
     <!-- read story on click contextual menu -->
@@ -15,16 +15,16 @@
     <!-- edit story on long click contextual menu -->
     <string name="action_edit_story">Edit Story</string>
     <string name="action_delete_story">Delete Story</string>
-    
-    <!--  random story selection -->
+
+    <!-- random story selection -->
     <string name="action_random_story">Select Random Story</string>
-     
+
     <!-- browse online -->
     <string name="title_activity_online_stories">Browse Online</string>
     <string name="action_new_search">New Search</string>
     <string name="action_search_online_stories">Search Online Stories</string>
     <string name="action_get_next_20">Next 20</string>
-    <string name="action_save_online_story">Save Online Story</string>             	
+    <string name="action_save_online_story">Save Online Story</string>
 
     <!-- Edit Fragment -->
     <string name="title_activity_edit_fragment">Edit Fragment</string>
@@ -97,13 +97,15 @@
     <string name="title_activity_edit_fragment_choice">Edit Choice</string>
     <string name="choice">Choice</string>
     <string name="title_activity_preview_fragment">PreviewFragmentActivity</string>
-    
     <string name="display_help">Help</string>
     <string name="action_help">Help</string>
-    
     <string name="story_URIs">URIs</string>
     <string name="action_edit_from_camera">Camera</string>
     <string name="action_edit_from_gallery">Gallery</string>
     <string name="action_edit_from_internal">Story Images</string>
+    <string name="title_activity_add_annotation">AddAnnotationActivity</string>
+    <string name="title_activity_edit_annotation">EditAnnotationActivity</string>
+    
+    <string name="annotation">Annotation</string>
 
 </resources>
