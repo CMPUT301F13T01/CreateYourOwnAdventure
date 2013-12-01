@@ -297,25 +297,18 @@ public class ESClient {
 							+ id.toString());
 			getRequest.setHeader("Accept", "application/json");
 
-			Story story = getData(getRequest, Story.class);
+			HttpResponse response = httpclient.execute(getRequest);
 			
-			//HttpResponse response = httpclient.execute(getRequest);
+			String json = getJson(response);
 
-			//String status = response.getStatusLine().toString();
-			//System.out.println(status);
+			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
+			ElasticSearchResponse<Story> esResponse = gson.fromJson(json,
+					elasticSearchResponseType);
+			Story data = esResponse.getSource();
 
-			//String json = getEntityContent(response);
-
-			//Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
-			//ElasticSearchResponse<Story> esResponse = gson.fromJson(json,
-			//		elasticSearchResponseType);
-			//Story data = esResponse.getSource();
-
-			//response.getEntity().consumeContent();
+			response.getEntity().consumeContent();
 			
-			//return data;
-
-			return story;
+			return data;
 
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -401,9 +394,18 @@ public class ESClient {
 					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/"+type.toString()+"/"+identifier);
 			getRequest.setHeader("Accept", "application/json");
 
-			String media = getData(getRequest, String.class);
+			HttpResponse response = httpclient.execute(getRequest);
+			
+			String json = getJson(response);
 
-			return media;
+			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<String>>(){}.getType();
+			ElasticSearchResponse<String> esResponse = gson.fromJson(json,
+					elasticSearchResponseType);
+			String data = esResponse.getSource();
+
+			response.getEntity().consumeContent();
+			
+			return data;
 
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -429,9 +431,18 @@ public class ESClient {
 
 			getRequest.setHeader("Accept", "application/json");
 			
-			StoryResource storyResource = getData(getRequest, StoryResource.class);
+			HttpResponse response = httpclient.execute(getRequest);
+			
+			String json = getJson(response);
 
-			return storyResource;
+			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<StoryResource>>(){}.getType();
+			ElasticSearchResponse<StoryResource> esResponse = gson.fromJson(json,
+					elasticSearchResponseType);
+			StoryResource data = esResponse.getSource();
+
+			response.getEntity().consumeContent();
+			
+			return data;
 			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -549,24 +560,15 @@ public class ESClient {
 		return;
 	}
 	
-	private <T> T getData(HttpGet getRequest, Class<T> type) 
+	private String getJson(HttpResponse response) 
 			throws ClientProtocolException, IOException {
-		
-		HttpResponse response = httpclient.execute(getRequest);
 
 		String status = response.getStatusLine().toString();
 		System.out.println(status);
 
 		String json = getEntityContent(response);
-
-		Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<T>>(){}.getType();
-		ElasticSearchResponse<T> esResponse = gson.fromJson(json,
-				elasticSearchResponseType);
-		T data = esResponse.getSource();
-
-		response.getEntity().consumeContent();
 		
-		return data;
+		return json;
 	}
 	
 	private void deleteData(HttpDelete httpDelete) 
