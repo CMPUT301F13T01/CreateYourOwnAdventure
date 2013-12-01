@@ -1,23 +1,27 @@
-package testSrc;
+package cmput301.f13t01.createyourownadventure.test;
 
 import java.util.ArrayList;
-
-import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import android.test.ActivityInstrumentationTestCase2;
 import cmput301.f13t01.createyourownadventure.Choice;
 import cmput301.f13t01.createyourownadventure.ChoiceMap;
+import cmput301.f13t01.createyourownadventure.MainActivity;
 import cmput301.f13t01.createyourownadventure.ReadStoryManager;
 import cmput301.f13t01.createyourownadventure.Story;
 import cmput301.f13t01.createyourownadventure.StoryFragment;
 import cmput301.f13t01.createyourownadventure.StoryFragmentInfo;
 import cmput301.f13t01.createyourownadventure.StoryFragmentList;
 
-public class ReadStoryManagerTest extends TestCase {
+public class testStoryManager extends ActivityInstrumentationTestCase2<MainActivity> {
 
 	ReadStoryManager manager;
+	
+	public testStoryManager() {
+		super(MainActivity.class);
+	}
 
 	@Before
 	public void setUp() throws Exception {

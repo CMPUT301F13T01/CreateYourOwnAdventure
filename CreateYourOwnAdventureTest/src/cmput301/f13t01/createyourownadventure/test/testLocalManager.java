@@ -1,6 +1,5 @@
-package testSrc;
+package cmput301.f13t01.createyourownadventure.test;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -13,9 +12,10 @@ import cmput301.f13t01.createyourownadventure.MainActivity;
 import cmput301.f13t01.createyourownadventure.Story;
 import cmput301.f13t01.createyourownadventure.StoryInfo;
 
-public class TestLocalManager extends
-		ActivityInstrumentationTestCase2<MainActivity> {
-	
+public class testLocalManager extends ActivityInstrumentationTestCase2<MainActivity> {
+	// Main Activity
+	private MainActivity mainActivity;
+	// Local Manager
 	private LocalManager local;
 	//Dummy UUID unassociated with any story
 	private UUID uuid;
@@ -25,11 +25,20 @@ public class TestLocalManager extends
 	//Instantiation of a LocalManager automatically calls
 	//loadStoryInfoList, so all tests inherently test this
 	//too
-	public TestLocalManager() {
+	public testLocalManager() {
 		super(MainActivity.class);
 		local = new LocalManager(this.getActivity());
 		uuid = UUID.randomUUID();
 	}
+	
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		// Get the activity and instantiate Local Manager
+		mainActivity = getActivity();
+		local = new LocalManager(mainActivity);
+	}
+	
 	
 	@After
 	protected void tearDown() throws Exception {
