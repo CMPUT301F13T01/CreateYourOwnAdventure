@@ -297,10 +297,11 @@ public class ReadFragmentActivity extends FragmentActivity {
 	 */
 	private void annotate() {
 		//create the intent and launch the annotation activity
-	    Intent intent = new Intent(this, EditAnnotationActivity.class);
-	    intent.putExtra(getResources().getString(R.string.annotate_medialist), true);
-        startActivityForResult(intent, annotateId);	
 		
+		ArrayList<Media> currentAnnotationList = storyManager.getAnnotationList(fragmentId);
+	    Intent intent = new Intent(this, EditAnnotationActivity.class);
+	    intent.putExtra(getResources().getString(R.string.annotation), currentAnnotationList);
+        startActivityForResult(intent, annotateId);	
 	}
 	
 	// on resume of activity after editing/adding an annotation
@@ -309,14 +310,22 @@ public class ReadFragmentActivity extends FragmentActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		
 		if (resultCode == RESULT_OK) {
-			
+
 			Intent intent = getIntent();
 			
 			// receive the new annotation list from edit annotation activity
-			ArrayList<Media> newAnnotationList = (ArrayList<Media>) intent.getSerializableExtra(getResources()
-					.getString(R.string.annotation));
+			ArrayList<Media> newAnnotationList = (ArrayList<Media>) data
+					.getSerializableExtra(getResources().getString(
+							R.string.annotation));
 			
 			storyManager.setAnnotation(fragmentId, newAnnotationList);
+			
+			Toast.makeText(getBaseContext(),
+					"Annotation Saved",
+					Toast.LENGTH_LONG).show();
+			
+			// refresh the view
+			commitFragment(fragmentId);
 
 		}
 		
