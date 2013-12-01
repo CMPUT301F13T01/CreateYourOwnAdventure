@@ -64,11 +64,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import cmput301.f13t01.createyourownadventure.MediaType;
+import android.text.SpannableString;
+import cmput301.f13t01.createyourownadventure.Media;
 import cmput301.f13t01.createyourownadventure.Story;
 import cmput301.f13t01.createyourownadventure.StoryInfo;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -83,13 +85,21 @@ import com.google.gson.reflect.TypeToken;
 public class ESClient {
 
 	private HttpClient httpclient = new DefaultHttpClient();
-	private Gson gson = new Gson();
-
+	private Gson gson;
+	private Gson mediaStringGson = new GsonBuilder().registerTypeAdapter(Media.class, 
+			new InterfaceAdapter<Media<String>>()).create();
+	private Gson mediaSpannableGson = new GsonBuilder().registerTypeAdapter(Media.class,
+			new InterfaceAdapter<Media<SpannableString>>()).create();
 	
 	/**
 	 * Empty constructor.
 	 */
 	public ESClient() {
+		
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(Media.class, new InterfaceAdapter<Media<String>>());
+		gsonBuilder.registerTypeAdapter(Media.class, new InterfaceAdapter<Media<SpannableString>>());
+		gson = gsonBuilder.create();
 		
 	}
 
