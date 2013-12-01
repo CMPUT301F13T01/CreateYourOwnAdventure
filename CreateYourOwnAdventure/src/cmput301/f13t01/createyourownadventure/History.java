@@ -90,12 +90,23 @@ public class History implements Serializable {
 	}
 	
 	/**
-	 * Pushes the newest fragment being viewed to the stack.
+	 * Pushes the newest fragment being viewed to the stack, if 
+	 * the most recent fragment is not at the top of the stack.
 	 * 
 	 * @param fragment_id   ID of fragment to be pushed to stack.
 	 */
 	public void pushToStack(Integer fragmentId) {
-		historyStack.add(fragmentId);
+		
+		Integer mostRecent = getMostRecent();
+		
+		if (mostRecent != null) {
+			if (fragmentId != mostRecent) {
+				historyStack.add(fragmentId); }
+		}
+		else {
+			historyStack.add(fragmentId);
+		}
+		
 		return;
 	}
 	

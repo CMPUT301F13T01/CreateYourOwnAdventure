@@ -1,4 +1,4 @@
-package testSrc;
+package cmput301.f13t01.createyourownadventure.test;
 
 import junit.framework.TestCase;
 

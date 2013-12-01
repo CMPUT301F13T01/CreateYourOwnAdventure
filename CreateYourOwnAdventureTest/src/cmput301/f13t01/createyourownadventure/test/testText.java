@@ -1,4 +1,4 @@
-package testSrc;
+package cmput301.f13t01.createyourownadventure.test;
 
 import junit.framework.TestCase;
 
@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import android.text.SpannableString;
-
 import cmput301.f13t01.createyourownadventure.Text;
 
 public class testText extends TestCase {
