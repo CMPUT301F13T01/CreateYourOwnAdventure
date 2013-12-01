@@ -60,6 +60,14 @@
             android:name="cmput301.f13t01.createyourownadventure.PreviewFragmentActivity"
             android:label="@string/title_activity_preview_fragment" >
         </activity>
+        <activity
+            android:name="cmput301.f13t01.createyourownadventure.AddAnnotationActivity"
+            android:label="@string/title_activity_add_annotation" >
+        </activity>
+        <activity
+            android:name="cmput301.f13t01.createyourownadventure.EditAnnotationActivity"
+            android:label="@string/title_activity_edit_annotation" >
+        </activity>
     </application>
 
 </manifest>

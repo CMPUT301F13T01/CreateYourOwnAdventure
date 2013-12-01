@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_edit_add_content"
+        android:icon="@drawable/add_content"
+        android:showAsAction="always"
+        android:title="@string/action_edit_add_content"/>
+    <item
+        android:id="@+id/action_edit_cancel"
+        android:title="@string/action_edit_cancel"/>
+
+</menu>
