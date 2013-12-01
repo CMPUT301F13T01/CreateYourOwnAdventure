@@ -52,8 +52,8 @@ public class GlobalManager extends Application {
 	/**
 	 * The Application's ReadStoryManager.
 	 * 
-	 * @see #getReadManager()
-	 * @see #setReadManager()
+	 * @see #getStoryManager()
+	 * @see #setStoryManager()
 	 */
 	private static ReadStoryManager readManager;
 
