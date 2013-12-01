@@ -70,7 +70,7 @@
         </activity>
         <activity
             android:name="cmput301.f13t01.createyourownadventure.ViewAnnotationActivty"
-            android:label="@string/title_activity_view_annotation_activty" >
+            android:label="@string/title_activity_view_annotation" >
         </activity>
     </application>
 
