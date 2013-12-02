@@ -248,6 +248,16 @@ public class ESManager implements LibraryManager {
 				e.printStackTrace();
 			}
 		}
+		
+		try {
+			client.postStory(id, story);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+			return false;
+		}
 
 		// Switch busy flag once finished
 		busy = false;
