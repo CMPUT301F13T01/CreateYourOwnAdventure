@@ -432,6 +432,7 @@ public class LocalManager implements Serializable, LibraryManager {
 		String title = targetStory.getTitle();
 		// Add " (Mirror)" to the title
 		title = title + " (Mirror)";
+		targetStory.setTitle(title);
 		// Add the mirror into the library
 		UUID newId = addStory(targetStory);
 		return newId;
