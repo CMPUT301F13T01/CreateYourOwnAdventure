@@ -203,6 +203,13 @@ public class EditStoryActivity extends FragmentActivity implements
 			manager.setDescription(desc.getText().toString());
 			
 			new PublishStoryTask().execute(storyId);
+			Toast startPublishToast = Toast.makeText(getApplicationContext(), 
+                    "Publishing, please wait...", Toast.LENGTH_LONG);
+			startPublishToast.show();
+			while (esManager.isBusy()) {}
+			Toast endPublishToast = Toast.makeText(getApplicationContext(), 
+                    "Finished Publishing.", Toast.LENGTH_SHORT);
+			endPublishToast.show();
 		}
 	}
 	
