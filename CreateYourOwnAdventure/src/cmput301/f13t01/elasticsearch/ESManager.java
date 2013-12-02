@@ -73,6 +73,7 @@ public class ESManager implements LibraryManager {
 		this.client = new ESClient();
 		this.localManager = GlobalManager.getLocalManager();
 		this.context = context;
+		this.busy = false;
 	}
 
 	/**
