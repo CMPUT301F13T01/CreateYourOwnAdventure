@@ -31,22 +31,23 @@ package cmput301.f13t01.elasticsearch;
  * A class to define the form of an ElasticSearch query response.
  * 
  * @author rayzhangcl
- *
- * @param <T>   The type the object being received from the server.
+ * 
+ * @param <T>
+ *            The type the object being received from the server.
  */
 
 public class ElasticSearchResponse<T> {
 	String _index;
-    String _type;
-    String _id;
-    T _source;
-    
-    /**
-     * Getter for the requested object from the server.
-     * 
-     * @return   The object received from the server.
-     */
-    public T getSource() {
-        return _source;
-    }
+	String _type;
+	String _id;
+	T _source;
+
+	/**
+	 * Getter for the requested object from the server.
+	 * 
+	 * @return The object received from the server.
+	 */
+	public T getSource() {
+		return _source;
+	}
 }

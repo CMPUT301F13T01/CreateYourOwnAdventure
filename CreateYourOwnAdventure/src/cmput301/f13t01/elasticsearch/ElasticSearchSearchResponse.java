@@ -35,24 +35,26 @@ import java.util.Collection;
  * A class allowing for the organization of objects received from the server.
  * 
  * @author Reginald Miller
- *
- * @param <T>   The type of the objects being received from the server.
+ * 
+ * @param <T>
+ *            The type of the objects being received from the server.
  */
 public class ElasticSearchSearchResponse<T> {
 
 	int took;
 	boolean timed_out;
-	transient Object  _shards;
+	transient Object _shards;
 	Hits<T> hits;
 	boolean exists;
+
 	public Collection<ElasticSearchResponse<T>> getHits() {
 		return hits.getHits();
 	}
-	
+
 	/**
 	 * Returns a collection of the objects received from the server.
 	 * 
-	 * @return   The collection of objects received from the server.
+	 * @return The collection of objects received from the server.
 	 */
 	public Collection<T> getSources() {
 		Collection<T> out = new ArrayList<T>();
@@ -61,23 +63,24 @@ public class ElasticSearchSearchResponse<T> {
 		}
 		return out;
 	}
-	
+
 	/**
 	 * The overrode toString method to output the class' data.
 	 * 
-	 * @return   The String output of the data.
+	 * @return The String output of the data.
 	 */
 	public String toString() {
-		return (super.toString() + ":" + took + "," + _shards + "," + exists + "," + hits);
+		return (super.toString() + ":" + took + "," + _shards + "," + exists
+				+ "," + hits);
 	}
-	
+
 	/**
 	 * Getter for the total number of hits found on the server.
 	 * 
-	 * @return   The total number of hits found on the server.
+	 * @return The total number of hits found on the server.
 	 */
 	public int getTotal() {
 		return hits.getTotal();
 	}
-	
+
 }

@@ -43,7 +43,7 @@ http://stackoverflow.com/questions/4795349/how-to-serialize-a-class-with-an-inte
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-*/
+ */
 
 package cmput301.f13t01.elasticsearch;
 
@@ -58,55 +58,63 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
- * This is an adapter to allow Gson to properly serialize and deserialize interface
- * objects so that they may retain knowledge of their type.
+ * This is an adapter to allow Gson to properly serialize and deserialize
+ * interface objects so that they may retain knowledge of their type.
  * 
- * @author    Maciek Makowski
- *
- * @param <T>   The object type (this is an interface)
+ * @author Maciek Makowski
+ * 
+ * @param <T>
+ *            The object type (this is an interface)
  */
 
-public class InterfaceAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T> {
-	
-	/**
-	 * This allows for the serialization of objects that use an interface to be wrapped and retain
-	 * memory of its type.
-	 * 
-	 * @return   Returns the JsonElement to be used by Gson
-	 */
-	public JsonElement serialize(T object, Type interfaceType, JsonSerializationContext context) {
-        final JsonObject wrapper = new JsonObject();
-        wrapper.addProperty("type", object.getClass().getName());
-        wrapper.add("data", context.serialize(object));
-        return wrapper;
-    }
+public class InterfaceAdapter<T> implements JsonSerializer<T>,
+		JsonDeserializer<T> {
 
 	/**
-	 * This allows for the deserialization of objects that use an interface in order to retain
-	 * information of the implementing object.
+	 * This allows for the serialization of objects that use an interface to be
+	 * wrapped and retain memory of its type.
 	 * 
-	 * @return   Returns the actual implementing object, with memory of its type.
+	 * @return Returns the JsonElement to be used by Gson
 	 */
-    public T deserialize(JsonElement elem, Type interfaceType, JsonDeserializationContext context) throws JsonParseException {
-        final JsonObject wrapper = (JsonObject) elem;
-        final JsonElement typeName = get(wrapper, "type");
-        final JsonElement data = get(wrapper, "data");
-        final Type actualType = typeForName(typeName); 
-        return context.deserialize(data, actualType);
-    }
+	public JsonElement serialize(T object, Type interfaceType,
+			JsonSerializationContext context) {
+		final JsonObject wrapper = new JsonObject();
+		wrapper.addProperty("type", object.getClass().getName());
+		wrapper.add("data", context.serialize(object));
+		return wrapper;
+	}
 
-    private Type typeForName(final JsonElement typeElem) {
-        try {
-            return Class.forName(typeElem.getAsString());
-        } catch (ClassNotFoundException e) {
-            throw new JsonParseException(e);
-        }
-    }
+	/**
+	 * This allows for the deserialization of objects that use an interface in
+	 * order to retain information of the implementing object.
+	 * 
+	 * @return Returns the actual implementing object, with memory of its type.
+	 */
+	public T deserialize(JsonElement elem, Type interfaceType,
+			JsonDeserializationContext context) throws JsonParseException {
+		final JsonObject wrapper = (JsonObject) elem;
+		final JsonElement typeName = get(wrapper, "type");
+		final JsonElement data = get(wrapper, "data");
+		final Type actualType = typeForName(typeName);
+		return context.deserialize(data, actualType);
+	}
 
-    private JsonElement get(final JsonObject wrapper, String memberName) {
-        final JsonElement elem = wrapper.get(memberName);
-        if (elem == null) throw new JsonParseException("no '" + memberName + "' member found in what was expected to be an interface wrapper");
-        return elem;
-    }
+	private Type typeForName(final JsonElement typeElem) {
+		try {
+			return Class.forName(typeElem.getAsString());
+		} catch (ClassNotFoundException e) {
+			throw new JsonParseException(e);
+		}
+	}
+
+	private JsonElement get(final JsonObject wrapper, String memberName) {
+		final JsonElement elem = wrapper.get(memberName);
+		if (elem == null)
+			throw new JsonParseException(
+					"no '"
+							+ memberName
+							+ "' member found in what was expected to be an interface wrapper");
+		return elem;
+	}
 
 }

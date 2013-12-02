@@ -26,8 +26,7 @@ as well as the on the server, can be known.
 
 package cmput301.f13t01.elasticsearch;
 
-import cmput301.f13t01.createyourownadventure.Media;
-import cmput301.f13t01.createyourownadventure.MediaType;
+import cmput301.f13t01.model.Media;
 
 /**
  * This is a class to keep track of the identifier/location of a Media object of

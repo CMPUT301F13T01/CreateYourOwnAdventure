@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cmput301.f13t01.createyourownadventure"
+    package="cmput301.f13t01"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -13,13 +13,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="cmput301.f13t01.createyourownadventure.GlobalManager"
+        android:name="cmput301.f13t01.storylibrary.GlobalManager"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo.Light" >
         <activity
-            android:name="cmput301.f13t01.createyourownadventure.MainActivity"
+            android:name="cmput301.f13t01.storylibrary.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,48 +28,44 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="cmput301.f13t01.createyourownadventure.BrowseOnlineStoriesActivity"
+            android:name="cmput301.f13t01.storylibrary.BrowseOnlineStoriesActivity"
             android:label="@string/title_activity_online_stories" >
         </activity>
         <activity
-            android:name="cmput301.f13t01.createyourownadventure.EditFragmentActivity"
+            android:name="cmput301.f13t01.editstory.EditFragmentActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="cmput301.f13t01.createyourownadventure.ReadFragmentActivity"
+            android:name="cmput301.f13t01.readstory.ReadFragmentActivity"
             android:label="@string/title_activity_read_story" >
         </activity>
         <activity
-            android:name="cmput301.f13t01.createyourownadventure.EditStoryActivity"
+            android:name="cmput301.f13t01.editstory.EditStoryActivity"
             android:configChanges="orientation|keyboardHidden|keyboard"
             android:label="@string/title_activity_edit_story" >
         </activity>
         <activity
-            android:name="cmput301.f13t01.createyourownadventure.EditFragmentInfoActivity"
+            android:name="cmput301.f13t01.editstory.EditFragmentInfoActivity"
             android:label="@string/title_activity_edit_fragment_info" >
         </activity>
         <activity
-            android:name="cmput301.f13t01.createyourownadventure.EditFragmentContentActivity"
+            android:name="cmput301.f13t01.editstory.EditFragmentContentActivity"
             android:label="@string/title_activity_edit_fragment_content" >
         </activity>
         <activity
-            android:name="cmput301.f13t01.createyourownadventure.EditFragmentChoiceActivity"
+            android:name="cmput301.f13t01.editstory.EditFragmentChoiceActivity"
             android:label="@string/title_activity_edit_fragment_choice" >
         </activity>
         <activity
-            android:name="cmput301.f13t01.createyourownadventure.PreviewFragmentActivity"
+            android:name="cmput301.f13t01.editstory.PreviewFragmentActivity"
             android:label="@string/title_activity_preview_fragment" >
         </activity>
         <activity
-            android:name="cmput301.f13t01.createyourownadventure.AddAnnotationActivity"
-            android:label="@string/title_activity_add_annotation" >
-        </activity>
-        <activity
-            android:name="cmput301.f13t01.createyourownadventure.EditAnnotationActivity"
+            android:name="cmput301.f13t01.editstory.EditAnnotationActivity"
             android:label="@string/title_activity_edit_annotation" >
         </activity>
         <activity
-            android:name="cmput301.f13t01.createyourownadventure.ViewAnnotationActivty"
+            android:name="cmput301.f13t01.readstory.ViewAnnotationActivty"
             android:label="@string/title_activity_view_annotation" >
         </activity>
     </application>

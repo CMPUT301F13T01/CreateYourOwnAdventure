@@ -37,16 +37,16 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
-import cmput301.f13t01.createyourownadventure.GlobalManager;
-import cmput301.f13t01.createyourownadventure.LibraryManager;
-import cmput301.f13t01.createyourownadventure.LocalManager;
-import cmput301.f13t01.createyourownadventure.Media;
-import cmput301.f13t01.createyourownadventure.Story;
-import cmput301.f13t01.createyourownadventure.StoryBitmapFactory;
-import cmput301.f13t01.createyourownadventure.StoryFragment;
-import cmput301.f13t01.createyourownadventure.StoryFragmentInfo;
-import cmput301.f13t01.createyourownadventure.StoryInfo;
-import cmput301.f13t01.createyourownadventure.Text;
+import cmput301.f13t01.editstory.StoryBitmapFactory;
+import cmput301.f13t01.model.Media;
+import cmput301.f13t01.model.Story;
+import cmput301.f13t01.model.StoryFragment;
+import cmput301.f13t01.model.StoryFragmentInfo;
+import cmput301.f13t01.model.StoryInfo;
+import cmput301.f13t01.model.Text;
+import cmput301.f13t01.storylibrary.GlobalManager;
+import cmput301.f13t01.storylibrary.LibraryManager;
+import cmput301.f13t01.storylibrary.LocalManager;
 
 /**
  * This class is designed to interact with stored stories on ElasticSearch.
@@ -67,7 +67,8 @@ public class ESManager implements LibraryManager {
 	/**
 	 * Initializes the ESClient and gets the LocalManager.
 	 * 
-	 * @param context   The context to be used for saving purposes.
+	 * @param context
+	 *            The context to be used for saving purposes.
 	 */
 	public ESManager(Context context) {
 		this.client = new ESClient();
@@ -102,10 +103,10 @@ public class ESManager implements LibraryManager {
 	}
 
 	/**
-	 * When this method is called, it handles the process of fetching a random story
-	 * amongst all stories available on the server.
+	 * When this method is called, it handles the process of fetching a random
+	 * story amongst all stories available on the server.
 	 * 
-	 * @return   Returns the random Story object.
+	 * @return Returns the random Story object.
 	 */
 	public UUID getRandomOnlineStory() {
 		// Get count of total number of stories online
@@ -117,7 +118,7 @@ public class ESManager implements LibraryManager {
 		ArrayList<StoryInfo> infoList = client.getStoryInfos(index, 1);
 		UUID oldId = infoList.get(0).getId();
 		UUID newId = downloadStory(oldId);
-		
+
 		return newId;
 	}
 
@@ -202,7 +203,7 @@ public class ESManager implements LibraryManager {
 	public boolean saveStory(UUID id, Story story) {
 		// Set busy flag
 		busy = true;
-		
+
 		try {
 			client.postStory(id, story);
 		} catch (IOException e) {
@@ -249,7 +250,7 @@ public class ESManager implements LibraryManager {
 				e.printStackTrace();
 			}
 		}
-		
+
 		try {
 			client.postStory(id, story);
 		} catch (IOException e) {
@@ -262,7 +263,7 @@ public class ESManager implements LibraryManager {
 
 		// Switch busy flag once finished
 		busy = false;
-		
+
 		return true;
 	}
 
@@ -287,7 +288,7 @@ public class ESManager implements LibraryManager {
 				resultSize);
 		return infos;
 	}
-	
+
 	/**
 	 * Checks if the ESManager is currently communicating with the ES Server.
 	 * Used to block calls that would crash the application.
@@ -353,19 +354,22 @@ public class ESManager implements LibraryManager {
 		// function.
 		try {
 			byte[] buf = new byte[1024];
-			
-			Bitmap map = StoryBitmapFactory.decodeUri(Uri.fromFile(media), StoryBitmapFactory.MAX_SIZE, StoryBitmapFactory.MAX_SIZE, context);
+
+			Bitmap map = StoryBitmapFactory.decodeUri(Uri.fromFile(media),
+					StoryBitmapFactory.MAX_SIZE, StoryBitmapFactory.MAX_SIZE,
+					context);
 			Log.d("Base64", "map size: " + map.getRowBytes() * map.getHeight());
-			
-			base64Media += Base64.encodeToString(buf, Base64.NO_WRAP | Base64.NO_PADDING);
-			
+
+			base64Media += Base64.encodeToString(buf, Base64.NO_WRAP
+					| Base64.NO_PADDING);
+
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			map.compress(Bitmap.CompressFormat.PNG, 100, out);
 			byte[] b = out.toByteArray();
 			Log.d("Base64", "Byte size: " + b.length);
 			base64Media = Base64.encodeToString(b, Base64.NO_WRAP
-						| Base64.NO_PADDING);
-			//Log.d("Base64", "Big encoded: " + base64Media);
+					| Base64.NO_PADDING);
+			// Log.d("Base64", "Big encoded: " + base64Media);
 			out.close();
 		} catch (FileNotFoundException e) {
 			Log.d("Base64", "File not found for loading encoded media");

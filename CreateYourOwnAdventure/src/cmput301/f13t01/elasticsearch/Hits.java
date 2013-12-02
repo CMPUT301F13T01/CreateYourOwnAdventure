@@ -31,12 +31,13 @@ package cmput301.f13t01.elasticsearch;
 import java.util.Collection;
 
 /**
- * The container for all the different responses received from the
- * server when multiple objects have been queried.
+ * The container for all the different responses received from the server when
+ * multiple objects have been queried.
  * 
  * @author Reginald Miller
- *
- * @param <T>   The type of object that is requested from the server.
+ * 
+ * @param <T>
+ *            The type of object that is requested from the server.
  */
 
 public class Hits<T> {
@@ -44,32 +45,32 @@ public class Hits<T> {
 	int total;
 	double max_score;
 	Collection<ElasticSearchResponse<T>> hits;
-	
+
 	/**
 	 * Getter for the collection of responses from the server.
 	 * 
-	 * @return   A collection of server responses.
+	 * @return A collection of server responses.
 	 */
 	public Collection<ElasticSearchResponse<T>> getHits() {
 		return hits;
 	}
-	
+
 	/**
 	 * The overrode toString method for error checking.
 	 * 
-	 * @return   The string output of the data.
+	 * @return The string output of the data.
 	 */
 	public String toString() {
 		return (super.toString() + "," + total + "," + max_score + "," + hits);
 	}
-	
+
 	/**
 	 * Getter for the total number of hits found on the server.
 	 * 
-	 * @return   The total number of hits found when server queried.
+	 * @return The total number of hits found when server queried.
 	 */
 	public int getTotal() {
 		return total;
 	}
-	
+
 }

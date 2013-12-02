@@ -66,10 +66,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.text.SpannableString;
 import android.util.Log;
-import cmput301.f13t01.createyourownadventure.Media;
-import cmput301.f13t01.createyourownadventure.Story;
-import cmput301.f13t01.createyourownadventure.StoryInfo;
-import cmput301.f13t01.createyourownadventure.Text;
+import cmput301.f13t01.model.Media;
+import cmput301.f13t01.model.Story;
+import cmput301.f13t01.model.StoryInfo;
+import cmput301.f13t01.model.Text;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -81,32 +81,37 @@ import com.google.gson.reflect.TypeToken;
  * deletion of various objects related to stories.
  * 
  * @author Reginald Miller, Jesse Chu
- *
+ * 
  */
 
 public class ESClient {
 
 	private HttpClient httpclient = new DefaultHttpClient();
 	private Gson gson;
-	
+
 	/**
 	 * Creates the gson object that knows how to serialize Media.
 	 */
 	public ESClient() {
-		
+
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(Media.class, new InterfaceAdapter<Media<String>>());
-		gsonBuilder.registerTypeAdapter(Media.class, new InterfaceAdapter<Media<SpannableString>>());
-		gsonBuilder.registerTypeAdapter(Media.class, new InterfaceAdapter<Media>());
+		gsonBuilder.registerTypeAdapter(Media.class,
+				new InterfaceAdapter<Media<String>>());
+		gsonBuilder.registerTypeAdapter(Media.class,
+				new InterfaceAdapter<Media<SpannableString>>());
+		gsonBuilder.registerTypeAdapter(Media.class,
+				new InterfaceAdapter<Media>());
 		gson = gsonBuilder.create();
-		
+
 	}
 
 	/**
 	 * This method is used to post a StoryInfo object to the appropriate
-	 * location on the server. Its server ID is the UUID of the story it represents.
+	 * location on the server. Its server ID is the UUID of the story it
+	 * represents.
 	 * 
-	 * @param info   The StoryInfo object to post to the server.
+	 * @param info
+	 *            The StoryInfo object to post to the server.
 	 * @throws IllegalStateException
 	 * @throws IOException
 	 */
@@ -115,18 +120,20 @@ public class ESClient {
 		HttpPost httpPost = new HttpPost(
 				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryInfo/"
 						+ info.getId().toString());
-		
+
 		postData(info, httpPost);
-		
+
 		return;
 	}
 
 	/**
-	 * This method is used to post a Story object to the appropriate
-	 * location on the server. Its server ID is its own UUID.
+	 * This method is used to post a Story object to the appropriate location on
+	 * the server. Its server ID is its own UUID.
 	 * 
-	 * @param id   The ID of the story to be posted to the server.
-	 * @param story   The Story object to be posted to the server.
+	 * @param id
+	 *            The ID of the story to be posted to the server.
+	 * @param story
+	 *            The Story object to be posted to the server.
 	 * @throws IOException
 	 * @throws IllegalStateException
 	 */
@@ -139,9 +146,9 @@ public class ESClient {
 		// Need to clear history before posting
 		story.clearHistory();
 
-		//postData(story, httpPost);
+		// postData(story, httpPost);
 		postStoryData(story, httpPost);
-		
+
 		return;
 	}
 
@@ -150,7 +157,8 @@ public class ESClient {
 	 * location on the server. Its server ID is the UUID of the story it
 	 * represents.
 	 * 
-	 * @param storyResource   The StoryResource object to be posted to the server.
+	 * @param storyResource
+	 *            The StoryResource object to be posted to the server.
 	 * @throws IOException
 	 * @throws IllegalStateException
 	 */
@@ -159,37 +167,42 @@ public class ESClient {
 		HttpPost httpPost = new HttpPost(
 				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryResource/"
 						+ storyResource.getStoryId().toString());
-		
+
 		postData(storyResource, httpPost);
-		
+
 		return;
 	}
 
 	/**
-	 * This method is used to post a Media object to the appropriate
-	 * location on the server. Its server ID is the identifier of the Media object
-	 * that is being posted.
+	 * This method is used to post a Media object to the appropriate location on
+	 * the server. Its server ID is the identifier of the Media object that is
+	 * being posted.
 	 * 
-	 * @param identifier   The unique identifier of the Media object, which will be its server ID.
-	 * @param type   The type of the Media object, to allow it to be posted to the proper type location.
-	 * @param data   The base64 String that is the encoded Media object.
+	 * @param identifier
+	 *            The unique identifier of the Media object, which will be its
+	 *            server ID.
+	 * @param type
+	 *            The type of the Media object, to allow it to be posted to the
+	 *            proper type location.
+	 * @param data
+	 *            The base64 String that is the encoded Media object.
 	 * @throws IOException
 	 * @throws IllegalStateException
 	 */
 	public void postMedia(String identifier, String type, String data)
 			throws IOException, IllegalStateException {
-		//Log.d("PUBLISH", "Make sure our string's still there: " + data);
+		// Log.d("PUBLISH", "Make sure our string's still there: " + data);
 		Log.d("PUBLISH", "String len: " + data.length());
 		Log.d("PUBLISH", "We try to post the media");
 		Log.d("PUBLISH", "File id: " + identifier);
 		Log.d("PUBLISH", "Type: " + type);
-		
+
 		// Queries if media already exists on server
 		HttpGet getRequest = new HttpGet(
 				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/"
 						+ type.toString() + "/" + identifier);
 		getRequest.setHeader("Accept", "application/json");
-		
+
 		HttpResponse getResponse = null;
 		try {
 			getResponse = httpclient.execute(getRequest);
@@ -198,7 +211,7 @@ public class ESClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		Log.d("PUBLISH", "Executed Get");
 
 		int getStatus = -1;
@@ -210,20 +223,20 @@ public class ESClient {
 		if (getStatus != 404) {
 			return;
 		}
-				
+
 		Log.d("PUBLISH", "Try to post now");
-		
+
 		getResponse.getEntity().consumeContent();
-		
+
 		// Media not found, post to server
 		HttpPost httpPost = new HttpPost(
 				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/"
 						+ type.toString() + "/" + identifier);
-		
+
 		postImageData(data, httpPost);
-		
+
 		Log.d("PUBLISH", "Finished posting.");
-		
+
 		return;
 	}
 
@@ -231,9 +244,13 @@ public class ESClient {
 	 * This method gets an ArrayList of a specified number of StoryInfo objects
 	 * starting at a given index based on their ordering on the server.
 	 * 
-	 * @param from   The starting index from which the StoryInfo objects will be fetched.
-	 * @param num   The number of StoryInfo objects to be fetched from the server.
-	 * @return   The ArrayList of StoryInfo objects returned from the server. Returns null on failure.
+	 * @param from
+	 *            The starting index from which the StoryInfo objects will be
+	 *            fetched.
+	 * @param num
+	 *            The number of StoryInfo objects to be fetched from the server.
+	 * @return The ArrayList of StoryInfo objects returned from the server.
+	 *         Returns null on failure.
 	 */
 	public ArrayList<StoryInfo> getStoryInfos(int from, int num) {
 
@@ -252,7 +269,7 @@ public class ESClient {
 			getRequest.setEntity(stringentity);
 
 			ArrayList<StoryInfo> infos = compileStoryInfoList(getRequest);
-			
+
 			return infos;
 
 		} catch (ClientProtocolException e) {
@@ -263,17 +280,23 @@ public class ESClient {
 
 		return null;
 	}
-	
+
 	/**
-	 * This method gets an ArrayList of StoryInfo objects based on a properly-constructed query String.
+	 * This method gets an ArrayList of StoryInfo objects based on a
+	 * properly-constructed query String.
 	 * 
-	 * @param query   The properly-constructed JSON String to query the server.
-	 * @param from   The starting index of the StoryInfo objects to fetch based on their ordering in the server.
-	 * @param num   The number of StoryInfo objects to fetch.
-	 * @return   The ArrayList of StoryInfo objects, or null if the fetch fails.
+	 * @param query
+	 *            The properly-constructed JSON String to query the server.
+	 * @param from
+	 *            The starting index of the StoryInfo objects to fetch based on
+	 *            their ordering in the server.
+	 * @param num
+	 *            The number of StoryInfo objects to fetch.
+	 * @return The ArrayList of StoryInfo objects, or null if the fetch fails.
 	 */
-	public ArrayList<StoryInfo> getStoryInfosByQuery(String query, int from, int num) {
-		
+	public ArrayList<StoryInfo> getStoryInfosByQuery(String query, int from,
+			int num) {
+
 		// Make sure a positive number is passed
 		if (num <= 0 || from < 0) {
 			return null;
@@ -286,12 +309,13 @@ public class ESClient {
 			if (query.isEmpty()) {
 				comma = "";
 			}
-			query = "{\"from\" : " + from + ", \"size\" : " + num + comma + query + "}";
+			query = "{\"from\" : " + from + ", \"size\" : " + num + comma
+					+ query + "}";
 			StringEntity stringentity = new StringEntity(query);
 
 			getRequest.setHeader("Accept", "application/json");
 			getRequest.setEntity(stringentity);
-			
+
 			ArrayList<StoryInfo> infos = compileStoryInfoList(getRequest);
 
 			return infos;
@@ -303,14 +327,15 @@ public class ESClient {
 		}
 
 		return null;
-		
+
 	}
 
 	/**
 	 * This method gets a Story object from the server based on a given UUID.
 	 * 
-	 * @param id   The UUID of the Story object to be fetched.
-	 * @return   Returns the Story object, or null if the fetch fails.
+	 * @param id
+	 *            The UUID of the Story object to be fetched.
+	 * @return Returns the Story object, or null if the fetch fails.
 	 */
 	public Story getStory(UUID id) {
 
@@ -321,16 +346,17 @@ public class ESClient {
 			getRequest.setHeader("Accept", "application/json");
 
 			HttpResponse response = httpclient.execute(getRequest);
-			
+
 			String json = getJson(response);
 
-			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>(){}.getType();
+			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<Story>>() {
+			}.getType();
 			ElasticSearchResponse<Story> esResponse = gson.fromJson(json,
 					elasticSearchResponseType);
 			Story data = esResponse.getSource();
 
 			response.getEntity().consumeContent();
-			
+
 			return data;
 
 		} catch (ClientProtocolException e) {
@@ -341,16 +367,18 @@ public class ESClient {
 
 		return null;
 	}
-	
+
 	/**
-	 * This method sends a simple request to the server in order to determine how many
-	 * stories currently exist on the server. This is generally used to determine which
-	 * range of values is needed in order to fetch a random story.
+	 * This method sends a simple request to the server in order to determine
+	 * how many stories currently exist on the server. This is generally used to
+	 * determine which range of values is needed in order to fetch a random
+	 * story.
 	 * 
-	 * @return   Returns an Integer object in order to help fetch a random story. Null if request fails.
+	 * @return Returns an Integer object in order to help fetch a random story.
+	 *         Null if request fails.
 	 */
 	protected Integer getStoryCount() {
-		
+
 		try {
 			HttpPost getRequest = new HttpPost(
 					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryInfo/_search?pretty=1");
@@ -368,16 +396,16 @@ public class ESClient {
 			String json = getEntityContent(response);
 
 			// We have to tell GSON what type we expect
-			Type elasticSearchSearchResponseType = 
-					new TypeToken<ElasticSearchSearchResponse<StoryInfo>>(){}.getType();
+			Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<StoryInfo>>() {
+			}.getType();
 			// Now we expect to get a StoryInfo response
 			ElasticSearchSearchResponse<StoryInfo> esResponse = gson.fromJson(
 					json, elasticSearchSearchResponseType);
-			
+
 			Integer total = esResponse.getTotal();
 
 			response.getEntity().consumeContent();
-			
+
 			return total;
 
 		} catch (ClientProtocolException e) {
@@ -385,16 +413,17 @@ public class ESClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
-	 * This method fetches a Story object from the server at the given index, based on
-	 * the ordering of the objects in the server.
+	 * This method fetches a Story object from the server at the given index,
+	 * based on the ordering of the objects in the server.
 	 * 
-	 * @param index   The index of the Story object to be fetched from the server.
-	 * @return   Returns the Story object fetched from the server.
+	 * @param index
+	 *            The index of the Story object to be fetched from the server.
+	 * @return Returns the Story object fetched from the server.
 	 */
 	public Story getStoryByIndex(Integer index) {
 		ArrayList<StoryInfo> infos = this.getStoryInfos(index, 1);
@@ -404,21 +433,25 @@ public class ESClient {
 	}
 
 	/**
-	 * This method gets a base64 String encoding of a requested Media object from the server.
+	 * This method gets a base64 String encoding of a requested Media object
+	 * from the server.
 	 * 
-	 * @param identifier   The identifier of the Media object to be fetched.
-	 * @param type   The type of the Media object that is being fetched.
-	 * @return   The base64 String encoding of the Media object.
+	 * @param identifier
+	 *            The identifier of the Media object to be fetched.
+	 * @param type
+	 *            The type of the Media object that is being fetched.
+	 * @return The base64 String encoding of the Media object.
 	 */
 	public String getMedia(String identifier, String type) {
 
 		try {
 			HttpGet getRequest = new HttpGet(
-					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/"+type.toString()+"/"+identifier);
+					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/"
+							+ type.toString() + "/" + identifier);
 			getRequest.setHeader("Accept", "application/json");
 
 			String data = getImageData(getRequest);
-			
+
 			return data;
 
 		} catch (ClientProtocolException e) {
@@ -431,10 +464,13 @@ public class ESClient {
 	}
 
 	/**
-	 * This method gets the StoryResource object associated with a given UUID from the server.
+	 * This method gets the StoryResource object associated with a given UUID
+	 * from the server.
 	 * 
-	 * @param id   The UUID of the story whose resources are being fetched from the server.
-	 * @return   The StoryResource object associated with the given UUID.
+	 * @param id
+	 *            The UUID of the story whose resources are being fetched from
+	 *            the server.
+	 * @return The StoryResource object associated with the given UUID.
 	 */
 	public StoryResource getStoryResources(UUID id) {
 
@@ -444,20 +480,21 @@ public class ESClient {
 							+ id.toString());
 
 			getRequest.setHeader("Accept", "application/json");
-			
+
 			HttpResponse response = httpclient.execute(getRequest);
-			
+
 			String json = getJson(response);
 
-			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<StoryResource>>(){}.getType();
-			ElasticSearchResponse<StoryResource> esResponse = gson.fromJson(json,
-					elasticSearchResponseType);
+			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<StoryResource>>() {
+			}.getType();
+			ElasticSearchResponse<StoryResource> esResponse = gson.fromJson(
+					json, elasticSearchResponseType);
 			StoryResource data = esResponse.getSource();
 
 			response.getEntity().consumeContent();
-			
+
 			return data;
-			
+
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -470,7 +507,8 @@ public class ESClient {
 	/**
 	 * Removes a StoryInfo object of the story associated with the given UUID.
 	 * 
-	 * @param id   The UUID of the story whose StoryInfo should be deleted.
+	 * @param id
+	 *            The UUID of the story whose StoryInfo should be deleted.
 	 * @throws IOException
 	 */
 	public void deleteStoryInfo(UUID id) throws IOException {
@@ -478,16 +516,17 @@ public class ESClient {
 				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/StoryInfo/"
 						+ id.toString());
 		httpDelete.addHeader("Accept", "application/json");
-		
+
 		deleteData(httpDelete);
-		
+
 		return;
 	}
 
 	/**
 	 * Removes a Story object of the story with the given UUID from the server.
 	 * 
-	 * @param id   The UUID of the story to be removed from the server.
+	 * @param id
+	 *            The UUID of the story to be removed from the server.
 	 * @throws IOException
 	 */
 	public void deleteStory(UUID id) throws IOException {
@@ -495,16 +534,19 @@ public class ESClient {
 				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/Story/"
 						+ id.toString());
 		httpDelete.addHeader("Accept", "application/json");
-		
+
 		deleteData(httpDelete);
 
 		return;
 	}
 
 	/**
-	 * Removes a StoryResource object of the story with the given UUID from the server.
+	 * Removes a StoryResource object of the story with the given UUID from the
+	 * server.
 	 * 
-	 * @param id   The UUID of the story whose StoryResource will be removed from the server.
+	 * @param id
+	 *            The UUID of the story whose StoryResource will be removed from
+	 *            the server.
 	 * @throws IOException
 	 */
 	public void deleteStoryResources(UUID id) throws IOException {
@@ -514,11 +556,12 @@ public class ESClient {
 		httpDelete.addHeader("Accept", "application/json");
 
 		deleteData(httpDelete);
-		
+
 		return;
 	}
 
-	private static String getEntityContent(HttpResponse response) throws IOException {
+	private static String getEntityContent(HttpResponse response)
+			throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				(response.getEntity().getContent())));
 		String output;
@@ -531,21 +574,21 @@ public class ESClient {
 		System.err.println("JSON:" + json);
 		return json;
 	}
-	
-	private void postStoryData(Story story, HttpPost httpPost) 
+
+	private void postStoryData(Story story, HttpPost httpPost)
 			throws IllegalStateException, IOException {
-		
+
 		StringEntity stringentity = null;
 		try {
-			
+
 			String json = gson.toJson(story);
 			stringentity = new StringEntity(json);
 			Log.d("Story", json);
-			
+
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		
+
 		httpPost.setHeader("Accept", "application/json");
 
 		httpPost.setEntity(stringentity);
@@ -557,7 +600,7 @@ public class ESClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		String status = response.getStatusLine().toString();
 		System.out.println(status);
 		HttpEntity entity = response.getEntity();
@@ -574,20 +617,20 @@ public class ESClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return;
 	}
-	
-	private <T> void postData(T data, HttpPost httpPost) 
+
+	private <T> void postData(T data, HttpPost httpPost)
 			throws IllegalStateException, IOException {
-				
+
 		StringEntity stringentity = null;
 		try {
 			String test = gson.toJson(data);
 			String str = "I've Got a Lovely Bunch of Coconuts";
 			String str_e = gson.toJson(new Text(new SpannableString(str)));
 			Log.d("PUBLISH", "test: " + str_e);
-			if(!test.equals(data)) {
+			if (!test.equals(data)) {
 				Log.d("PUBLISH", "Gson different from string");
 			}
 			Log.d("PUBLISH", "gson: " + test);
@@ -608,7 +651,7 @@ public class ESClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		Log.d("PUBLISH", "Made it past execute");
 
 		String status = response.getStatusLine().toString();
@@ -627,24 +670,24 @@ public class ESClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return;
 	}
-	
-	private void postImageData(String data, HttpPost httpPost) 
+
+	private void postImageData(String data, HttpPost httpPost)
 			throws IllegalStateException, IOException {
-				
+
 		StringEntity stringentity = null;
 		try {
 			Text holder = new Text(new SpannableString(data));
-			//Log.d("PUBLISH", "holder: " + holder.getContent());
+			// Log.d("PUBLISH", "holder: " + holder.getContent());
 			String test = gson.toJson(holder);
-			//Log.d("PUBLISH", "gson: " + test);
+			// Log.d("PUBLISH", "gson: " + test);
 			Log.d("PUBLISH", "size: " + test.length());
 			String content = test;
 			Log.d("PUBLISH", "holder size: " + content.length());
-			//Log.d("PUBLISH", "Last bit: " + content.subSequence(content.length()-128, content.length()));
-
+			// Log.d("PUBLISH", "Last bit: " +
+			// content.subSequence(content.length()-128, content.length()));
 
 			stringentity = new StringEntity(test);
 		} catch (UnsupportedEncodingException e) {
@@ -662,7 +705,7 @@ public class ESClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		Log.d("PUBLISH", "Made it past execute");
 
 		String status = response.getStatusLine().toString();
@@ -681,13 +724,13 @@ public class ESClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return;
 	}
-	
-	private String getImageData(HttpGet getRequest) throws 
-			ClientProtocolException, IOException {
-		
+
+	private String getImageData(HttpGet getRequest)
+			throws ClientProtocolException, IOException {
+
 		try {
 
 			HttpResponse response = httpclient.execute(getRequest);
@@ -696,14 +739,15 @@ public class ESClient {
 			System.out.println(status);
 
 			String json = getEntityContent(response);
-			
-			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<Text>>(){}.getType();
+
+			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<Text>>() {
+			}.getType();
 			ElasticSearchResponse<Text> esResponse = gson.fromJson(json,
 					elasticSearchResponseType);
 			Text data = esResponse.getSource();
 
 			response.getEntity().consumeContent();
-			
+
 			return data.getContent().toString();
 
 		} catch (ClientProtocolException e) {
@@ -714,21 +758,21 @@ public class ESClient {
 
 		return null;
 	}
-	
-	private String getJson(HttpResponse response) 
+
+	private String getJson(HttpResponse response)
 			throws ClientProtocolException, IOException {
 
 		String status = response.getStatusLine().toString();
 		System.out.println(status);
 
 		String json = getEntityContent(response);
-		
+
 		return json;
 	}
-	
-	private void deleteData(HttpDelete httpDelete) 
+
+	private void deleteData(HttpDelete httpDelete)
 			throws ClientProtocolException, IOException {
-		
+
 		HttpResponse response = httpclient.execute(httpDelete);
 
 		String status = response.getStatusLine().toString();
@@ -744,11 +788,11 @@ public class ESClient {
 		}
 
 		entity.consumeContent();
-		
+
 		return;
 	}
-	
-	private ArrayList<StoryInfo> compileStoryInfoList(HttpPost getRequest) 
+
+	private ArrayList<StoryInfo> compileStoryInfoList(HttpPost getRequest)
 			throws ClientProtocolException, IOException {
 
 		HttpResponse response = httpclient.execute(getRequest);
@@ -759,11 +803,11 @@ public class ESClient {
 		String json = getEntityContent(response);
 
 		// We have to tell GSON what type we expect
-		Type elasticSearchSearchResponseType = 
-				new TypeToken<ElasticSearchSearchResponse<StoryInfo>>(){}.getType();
+		Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<StoryInfo>>() {
+		}.getType();
 		// Now we expect to get a StoryInfo response
-		ElasticSearchSearchResponse<StoryInfo> esResponse = gson.fromJson(
-				json, elasticSearchSearchResponseType);
+		ElasticSearchSearchResponse<StoryInfo> esResponse = gson.fromJson(json,
+				elasticSearchSearchResponseType);
 		// We get the StoryInfo objects from it!
 		ArrayList<StoryInfo> infos = new ArrayList<StoryInfo>();
 		for (ElasticSearchResponse<StoryInfo> r : esResponse.getHits()) {
@@ -772,7 +816,7 @@ public class ESClient {
 		}
 
 		response.getEntity().consumeContent();
-		
+
 		return infos;
 	}
 
