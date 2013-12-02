@@ -136,6 +136,9 @@ public class EditFragmentChoiceActivity extends Activity implements
 			// Delete
 			onSelectDelete();
 			return true;
+		case R.id.action_help:
+			onSelectHelp();
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -169,6 +172,24 @@ public class EditFragmentChoiceActivity extends Activity implements
 		Intent intent = new Intent();
 		setResult(RESULT_CANCELED, intent);
 		finish();
+	}
+	
+	/**
+	 * Behaviour for showing help
+	 */
+	private void onSelectHelp() {
+		android.app.FragmentTransaction ft = getFragmentManager()
+				.beginTransaction();
+		android.app.Fragment prev = getFragmentManager().findFragmentByTag(
+				"help_dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		android.app.DialogFragment newFragment = (android.app.DialogFragment) HelpFragment
+				.newInstance(HelpMessage.EDIT_STORY);
+		newFragment.show(ft, "help_dialog");
 	}
 
 	@Override

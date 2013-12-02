@@ -62,12 +62,15 @@ public enum HelpMessage {
 			"Select the back button to return to the previously viewed page in the story. \n\r\n\r" +
 			"Select the calendar icon to return to the first page, clearing all history of pages that you have viewed for this story."),
 	EDIT_CONTENT(
-			"Add content to the story fragment by hitting the '+' icon \n\n. Click and hold on top of story content to access additional editing options.\n\n" +
+			"Add content to the story fragment by hitting the '+' icon. \n\n" +
+			"Click and hold on top of story content to access additional editing options.\n\n" +
 			"You can preview the changes you've made to a fragment without saving by selecting the preview action.\n\n" +
 			"You can return to the fragment information screen without saving yuor changes by selecting cancel."),
 	EDIT_CHOICE(
-			"The choice's source is automatically set to the fragment you were previously editing.\n\n Change the destination fragment by hitting the set button.\n\n" +
-			"Add text to be shown with the choice in the flavour box.\n\n If you do not set a destination, your choice will not be saved.");
+			"The choice's source is automatically set to the fragment you were previously editing.\n\n" + "" +
+			"Change the destination fragment by hitting the set button.\n\n" +
+			"Add text to be shown with the choice in the flavour box.\n\n" + "" +
+			"If you do not set a destination, your choice will not be saved.");
 
 	private String message;
 
