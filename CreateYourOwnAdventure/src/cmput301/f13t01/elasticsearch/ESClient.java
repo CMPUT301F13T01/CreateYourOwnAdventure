@@ -66,7 +66,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.text.SpannableString;
 import android.util.Log;
-import cmput301.f13t01.createyourownadventure.ImageHolder;
 import cmput301.f13t01.createyourownadventure.Media;
 import cmput301.f13t01.createyourownadventure.Story;
 import cmput301.f13t01.createyourownadventure.StoryInfo;
@@ -416,16 +415,7 @@ public class ESClient {
 					"http://cmput301.softwareprocess.es:8080/cmput301f13t01/"+type.toString()+"/"+identifier);
 			getRequest.setHeader("Accept", "application/json");
 
-			HttpResponse response = httpclient.execute(getRequest);
-			
-			String json = getJson(response);
-
-			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<String>>(){}.getType();
-			ElasticSearchResponse<String> esResponse = gson.fromJson(json,
-					elasticSearchResponseType);
-			String data = esResponse.getSource();
-
-			response.getEntity().consumeContent();
+			String data = getImageData(getRequest);
 			
 			return data;
 
@@ -645,6 +635,36 @@ public class ESClient {
 		}
 		
 		return;
+	}
+	
+	private String getImageData(HttpGet getRequest) throws 
+			ClientProtocolException, IOException {
+		
+		try {
+
+			HttpResponse response = httpclient.execute(getRequest);
+
+			String status = response.getStatusLine().toString();
+			System.out.println(status);
+
+			String json = getEntityContent(response);
+			
+			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<Text>>(){}.getType();
+			ElasticSearchResponse<Text> esResponse = gson.fromJson(json,
+					elasticSearchResponseType);
+			Text data = esResponse.getSource();
+
+			response.getEntity().consumeContent();
+			
+			return data.getContent().toString();
+
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 	
 	private String getJson(HttpResponse response) 
