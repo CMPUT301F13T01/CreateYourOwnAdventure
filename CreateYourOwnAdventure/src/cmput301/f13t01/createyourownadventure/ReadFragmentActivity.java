@@ -67,12 +67,15 @@ public class ReadFragmentActivity extends FragmentActivity {
 
 		setContentView(R.layout.activity_view_fragment);
 
+		// if it is not starting from beginning, start reading according to history
 		if (savedInstanceState != null) {
 			storyId = (UUID) savedInstanceState.getSerializable(getResources()
 					.getString(R.string.story_id));
 			app.setStoryManager(storyId);
 			this.storyManager = app.getStoryManager();
-			fragmentId = storyManager.getMostRecent();
+			System.out.println("");
+			fragmentId = storyManager.goBack();			
+			save.saveStory(this.storyId, this.storyManager.getStory());
 
 		} else {
 
@@ -186,6 +189,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 	public void toPrevious() {
 
 		// go back to previous, adjusting history stack properly
+		System.out.println("toPrevious");
 		Integer destinationId = storyManager.goBack();
 		save.saveStory(this.storyId, this.storyManager.getStory());
 
@@ -212,6 +216,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 	public void onFragmentListClick(View v, Integer fragmentId) {
 
 		// Save the history
+		System.out.println("Clicked choice");
 		storyManager.pushToStack(fragmentId);
 		save.saveStory(this.storyId, this.storyManager.getStory());
 
