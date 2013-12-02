@@ -38,6 +38,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
+import cmput301.f13t01.elasticsearch.ESManager;
 
 /**
  *  Sets up and handles main screen ui that allows user to 
@@ -282,11 +283,19 @@ public class MainActivity extends Activity {
 	 * Starts browse online story child activity
 	 */
 	private void startBrowseOnlineStories() {
-		//TODO quick and dirty test
-		//System.out.println("You selected Browse Online Stories");
-	    Intent intent = new Intent(this, BrowseOnlineStoriesActivity.class);
-		//intent.putExtra(getResources().getString(R.string.story_is_new), true);
-        startActivity(intent);		
+		// Check the state of the ESManager
+		ESManager esManager = GlobalManager.getESManager();
+		if (esManager.isBusy()) {
+			Toast toast = Toast.makeText(getApplicationContext(), 
+					                     "Online Connection Busy", Toast.LENGTH_SHORT);
+			toast.show();
+		} else {
+			//TODO quick and dirty test
+			//System.out.println("You selected Browse Online Stories");
+		    Intent intent = new Intent(this, BrowseOnlineStoriesActivity.class);
+			//intent.putExtra(getResources().getString(R.string.story_is_new), true);
+	        startActivity(intent);
+		}
 	}
 	
 	/**
