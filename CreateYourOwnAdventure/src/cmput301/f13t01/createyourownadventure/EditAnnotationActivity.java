@@ -99,6 +99,7 @@ public class EditAnnotationActivity extends Activity implements
 				annotation = (ArrayList<Media>) intent
 						.getSerializableExtra(getResources().getString(
 								R.string.annotation));
+				
 			}
 			imageURIs = new ArrayList<Uri>();
 			for (Media next : annotation) {
@@ -256,6 +257,9 @@ public class EditAnnotationActivity extends Activity implements
 		if (getParent() != null)
 			getParent().setResult(RESULT_OK, intent);
 		setResult(RESULT_OK, intent);
+		
+		int listsize = annotation.size();
+		System.out.println(listsize);
 
 		finish();
 	}

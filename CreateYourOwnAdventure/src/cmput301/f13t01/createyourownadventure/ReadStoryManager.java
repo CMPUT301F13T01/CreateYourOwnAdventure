@@ -337,5 +337,16 @@ public class ReadStoryManager {
 		StoryFragment fragment = getFragment(fragmentId);
 		return fragment.getAnnotationList();
 	}
+	
+	/**
+	 * Given an annotation list, set the fragment's annotation list to be the one given.
+	 * @param fragmentId Id of the Fragment
+	 * @param newAnnotationList
+	 * @return true if successful, false if it fails
+	 */
+	public boolean setAnnotation(Integer fragmentId, ArrayList<Media> newAnnotationList) {
+		StoryFragment fragment = getFragment(fragmentId);
+		return fragment.setAnnotation(newAnnotationList);
+	}
 
 }

@@ -15,6 +15,11 @@
         android:showAsAction="ifRoom"
         android:title="@string/action_return_to_previous_page"/>
     
+    <!-- annotate function -->
+    <item android:id="@+id/action_annotate"
+          android:title="@string/action_annotate" 
+          android:showAsAction="never" /> 
+    
     <!-- help function -->
     <item android:id="@+id/action_help"
           android:title="@string/action_help" 
