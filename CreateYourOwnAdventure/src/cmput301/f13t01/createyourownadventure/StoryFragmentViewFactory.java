@@ -114,17 +114,12 @@ public class StoryFragmentViewFactory {
 			imageView.setVisibility(View.VISIBLE);
 			imageView.setAdjustViewBounds(true);
 
-			Log.d("oops", "Layout width: " + layout.getWidth() + " height: "
+			Log.d("ImageDebug", "Layout width: " + layout.getWidth() + " height: "
 					+ layout.getHeight());
 
 			Log.d("ImageDebug", "addImage path: " + image.getPath());
 
-			Integer size = (int) (StoryBitmapFactory.DEFAULT_SIZE * (scale / 100.0));
-
-			Log.d("oops", "size: " + size);
-
-			Bitmap bitmap = StoryBitmapFactory.decodeUri(image, size, size,
-					context);
+			Bitmap bitmap = StoryBitmapFactory.decodeUriToScale(image, context, scale);
 
 			imageView.setImageBitmap(bitmap);
 			// imageView.setPadding(horizontalPadding, verticalPadding,
