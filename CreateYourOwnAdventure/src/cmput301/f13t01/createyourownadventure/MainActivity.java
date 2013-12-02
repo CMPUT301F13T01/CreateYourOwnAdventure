@@ -197,12 +197,29 @@ public class MainActivity extends Activity {
         //user wants to delete story
         case R.id.action_delete_story:
             startDeleteStory(storyPicked.getId());
-            return true;        	
+            return true;
+        case R.id.action_mirror_story:
+            startMirrorStory(storyPicked.getId());
+            return true;
         default:
             return super.onOptionsItemSelected(item);
 	    }		
 
 	}
+	
+	/**
+	 * mirrors a local story
+	 */
+	private void startMirrorStory(UUID storyId){
+		objLibrary.mirrorStory(storyId);
+		storyInfoList = objLibrary.getStoryInfoList();
+		//initialize adapter and update the view
+		objStoryAdapter = new StoryInfoListAdapter(this, R.layout.story_info_list_item, storyInfoList);
+		lsvStories.setAdapter(objStoryAdapter);
+		objStoryAdapter.notifyDataSetChanged();
+
+	}
+	
 	
 	/**
 	 * displays screen specific help

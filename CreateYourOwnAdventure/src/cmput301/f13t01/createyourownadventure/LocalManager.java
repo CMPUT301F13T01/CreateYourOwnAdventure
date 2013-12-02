@@ -310,7 +310,7 @@ public class LocalManager implements Serializable, LibraryManager {
 
 		// Copy the file over
 		try {
-			Bitmap toSave = StoryFragmentViewFactory.decodeUri(mediaUri, 512,
+			Bitmap toSave = StoryBitmapFactory.decodeUri(mediaUri, 512,
 					512, context);
 
 			// Save the media to the internal file directory.
