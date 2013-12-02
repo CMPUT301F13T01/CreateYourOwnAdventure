@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+	<item
+		android:id="@+id/action_edit_resize_image"
+		android:title="@string/action_edit_resize"/>
+
+    <item
+        android:id="@+id/action_edit_delete_content"
+        android:title="@string/action_edit_delete"/>
+
+</menu>
