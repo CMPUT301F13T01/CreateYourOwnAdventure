@@ -16,6 +16,9 @@
            
     <!--  delete story  -->
     <item android:id="@+id/action_delete_story" 
-          android:title="@string/action_delete_story" />        
+          android:title="@string/action_delete_story" />
+    
+    <item android:id="@+id/action_mirror_story" 
+          android:title="@string/action_mirror_story" />    
 
 </menu>
