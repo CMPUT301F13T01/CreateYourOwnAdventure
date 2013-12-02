@@ -222,12 +222,32 @@ public class ESManager implements LibraryManager {
 			e.printStackTrace();
 			return false;
 		}
+		
+		try {
+			client.postStory(id, story);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+			return false;
+		}
 
 		// Compiles the StoryResource to post
 		StoryResource storyResource = compileMediaResources(id, story);
 
 		try {
 			client.postStoryResources(storyResource);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		try {
+			client.postStory(id, story);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
