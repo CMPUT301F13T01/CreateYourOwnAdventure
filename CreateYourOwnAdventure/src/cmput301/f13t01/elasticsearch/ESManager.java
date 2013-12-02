@@ -60,6 +60,7 @@ public class ESManager implements LibraryManager {
 	private ESClient client;
 	private LocalManager localManager;
 	private Context context;
+	private boolean busy;
 
 	private int resultSize = 20;
 
@@ -198,7 +199,9 @@ public class ESManager implements LibraryManager {
 	 * @return true if successful, false otherwise
 	 */
 	public boolean saveStory(UUID id, Story story) {
-
+		// Set busy flag
+		busy = true;
+		
 		try {
 			client.postStory(id, story);
 		} catch (IOException e) {
@@ -246,6 +249,9 @@ public class ESManager implements LibraryManager {
 			}
 		}
 
+		// Switch busy flag once finished
+		busy = false;
+		
 		return true;
 	}
 
@@ -269,6 +275,16 @@ public class ESManager implements LibraryManager {
 		ArrayList<StoryInfo> infos = client.getStoryInfosByQuery(query, start,
 				resultSize);
 		return infos;
+	}
+	
+	/**
+	 * Checks if the ESManager is currently communicating with the ES Server.
+	 * Used to block calls that would crash the application.
+	 * 
+	 * @return true if ESManage is busy, else false
+	 */
+	public boolean isBusy() {
+		return busy;
 	}
 
 	private StoryResource compileMediaResources(UUID id, Story story) {

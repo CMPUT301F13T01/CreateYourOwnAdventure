@@ -39,6 +39,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import cmput301.f13t01.elasticsearch.ESManager;
 
 /**
  * The activity that allows the user to edit a story's information, in addition
@@ -186,16 +187,23 @@ public class EditStoryActivity extends FragmentActivity implements
 	}
 	
 	private void onSelectPublish() {
-		
-		EditText title = (EditText) findViewById(R.id.edit_story_title);
-		EditText author = (EditText) findViewById(R.id.edit_story_author);
-		EditText desc = (EditText) findViewById(R.id.edit_story_description);
-
-		manager.setTitle(title.getText().toString());
-		manager.setAuthor(author.getText().toString());
-		manager.setDescription(desc.getText().toString());
-		
-		new PublishStoryTask().execute(storyId);
+		// Check the status of the ESManager
+		ESManager esManager = GlobalManager.getESManager();
+		if (esManager.isBusy()) {
+			Toast toast = Toast.makeText(getApplicationContext(), 
+                    "Online Connection Busy", Toast.LENGTH_SHORT);
+			toast.show();
+		} else {
+			EditText title = (EditText) findViewById(R.id.edit_story_title);
+			EditText author = (EditText) findViewById(R.id.edit_story_author);
+			EditText desc = (EditText) findViewById(R.id.edit_story_description);
+	
+			manager.setTitle(title.getText().toString());
+			manager.setAuthor(author.getText().toString());
+			manager.setDescription(desc.getText().toString());
+			
+			new PublishStoryTask().execute(storyId);
+		}
 	}
 	
 	private class PublishStoryTask extends AsyncTask<UUID, Integer, Integer> {
