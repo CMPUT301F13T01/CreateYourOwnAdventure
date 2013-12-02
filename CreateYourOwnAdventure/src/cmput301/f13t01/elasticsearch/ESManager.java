@@ -26,10 +26,8 @@ package cmput301.f13t01.elasticsearch;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
@@ -44,10 +42,8 @@ import cmput301.f13t01.createyourownadventure.LibraryManager;
 import cmput301.f13t01.createyourownadventure.LocalManager;
 import cmput301.f13t01.createyourownadventure.Media;
 import cmput301.f13t01.createyourownadventure.Story;
-import cmput301.f13t01.createyourownadventure.StoryBitmapFactory;
 import cmput301.f13t01.createyourownadventure.StoryFragment;
 import cmput301.f13t01.createyourownadventure.StoryFragmentInfo;
-import cmput301.f13t01.createyourownadventure.StoryFragmentViewFactory;
 import cmput301.f13t01.createyourownadventure.StoryInfo;
 import cmput301.f13t01.createyourownadventure.Text;
 
