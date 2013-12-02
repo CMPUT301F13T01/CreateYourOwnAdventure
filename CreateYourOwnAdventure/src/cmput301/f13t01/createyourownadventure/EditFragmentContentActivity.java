@@ -329,7 +329,7 @@ public class EditFragmentContentActivity extends Activity implements
 		text.setTextColor(Color.BLACK);
 		text.setHint("Your Story Text");
 
-		text.setOnLongClickListener(new EditContentViewListener(layout));
+		text.setOnLongClickListener(new EditTextViewListener(layout));
 
 		layout.addView(text, params);
 	}
@@ -433,21 +433,25 @@ public class EditFragmentContentActivity extends Activity implements
 				Uri image = data.getData();
 				imageURIs.add(image);
 				StoryFragmentViewFactory.addImage(image, layout, this);
+				ImageView view = (ImageView) layout.getChildAt(layout.getChildCount()-1);
+				view.setOnLongClickListener(new EditImageViewListener(layout));
 			}
 			break;
 		case CAPTURE_IMAGE:
 			if (resultCode == RESULT_OK) {
 				imageURIs.add(cameraUri);
 				StoryFragmentViewFactory.addImage(cameraUri, layout, this);
+				ImageView view = (ImageView) layout.getChildAt(layout.getChildCount()-1);
+				view.setOnLongClickListener(new EditImageViewListener(layout));
 			}
 		}
 	}
 
-	class EditContentViewListener implements View.OnLongClickListener {
+	class EditTextViewListener implements View.OnLongClickListener {
 
 		private LinearLayout layout;
 
-		public EditContentViewListener(LinearLayout layout) {
+		public EditTextViewListener(LinearLayout layout) {
 			this.layout = layout;
 		}
 
@@ -456,6 +460,29 @@ public class EditFragmentContentActivity extends Activity implements
 			PopupMenu popup = new PopupMenu(getApplicationContext(), v);
 			MenuInflater inflater = popup.getMenuInflater();
 			inflater.inflate(R.menu.edit_long_click_menu, popup.getMenu());
+
+			popup.setOnMenuItemClickListener(new SimplePopupListener(v,
+					(ViewGroup) layout));
+
+			popup.show();
+
+			return true;
+		}
+	}
+	
+	class EditImageViewListener implements View.OnLongClickListener {
+
+		private LinearLayout layout;
+
+		public EditImageViewListener(LinearLayout layout) {
+			this.layout = layout;
+		}
+
+		@Override
+		public boolean onLongClick(View v) {
+			PopupMenu popup = new PopupMenu(getApplicationContext(), v);
+			MenuInflater inflater = popup.getMenuInflater();
+			inflater.inflate(R.menu.edit_image_long_click_menu, popup.getMenu());
 
 			popup.setOnMenuItemClickListener(new SimplePopupListener(v,
 					(ViewGroup) layout));
@@ -481,6 +508,39 @@ public class EditFragmentContentActivity extends Activity implements
 			switch (item.getItemId()) {
 			case R.id.action_edit_delete_content:
 				group.removeView(view);
+				return true;
+			}
+			return false;
+		}
+
+	}
+	
+	class ImagePopupListener implements OnMenuItemClickListener {
+
+		View view;
+		ViewGroup group;
+
+		ImagePopupListener(View v, ViewGroup group) {
+			this.view = v;
+			this.group = group;
+		}
+
+		@Override
+		public boolean onMenuItemClick(MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.action_edit_resize_image:
+				return true;
+			case R.id.action_edit_delete_content:
+				int imageCount = 0;
+				for(int i = 0; i < layout.getChildCount(); ++i) {
+					if(layout.getChildAt(i).equals(view)) {
+						group.removeView(view);
+						imageURIs.remove(imageCount);
+					} else if(layout.getChildAt(i) instanceof ImageView) {
+						imageCount++;
+					}
+				}
+				return true;
 			}
 			return false;
 		}
