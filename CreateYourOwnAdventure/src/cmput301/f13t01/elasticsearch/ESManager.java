@@ -44,6 +44,7 @@ import cmput301.f13t01.createyourownadventure.LibraryManager;
 import cmput301.f13t01.createyourownadventure.LocalManager;
 import cmput301.f13t01.createyourownadventure.Media;
 import cmput301.f13t01.createyourownadventure.Story;
+import cmput301.f13t01.createyourownadventure.StoryBitmapFactory;
 import cmput301.f13t01.createyourownadventure.StoryFragment;
 import cmput301.f13t01.createyourownadventure.StoryFragmentInfo;
 import cmput301.f13t01.createyourownadventure.StoryFragmentViewFactory;
@@ -329,7 +330,7 @@ public class ESManager implements LibraryManager {
 		try {
 			byte[] buf = new byte[1024];
 			
-			Bitmap map = StoryFragmentViewFactory.decodeUri(Uri.fromFile(media), 512, 512, context);
+			Bitmap map = StoryBitmapFactory.decodeUri(Uri.fromFile(media), 512, 512, context);
 			Log.d("Base64", "map size: " + map.getRowBytes() * map.getHeight());
 			
 			base64Media += Base64.encodeToString(buf, Base64.NO_WRAP | Base64.NO_PADDING);

@@ -66,7 +66,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.text.SpannableString;
 import android.util.Log;
-import cmput301.f13t01.createyourownadventure.ImageHolder;
 import cmput301.f13t01.createyourownadventure.Media;
 import cmput301.f13t01.createyourownadventure.Story;
 import cmput301.f13t01.createyourownadventure.StoryInfo;

@@ -27,14 +27,18 @@ package cmput301.f13t01.createyourownadventure;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -74,6 +78,8 @@ public class EditFragmentContentActivity extends Activity implements
 	private ArrayList<Uri> imageURIs;
 	private LinearLayout layout;
 	private Uri cameraUri;
+	private Context context;
+	private ProgressDialog bar;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -83,6 +89,9 @@ public class EditFragmentContentActivity extends Activity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		// Call super-class onCreate
 		super.onCreate(savedInstanceState);
+
+		context = this;
+
 		// Set-up display
 		setContentView(R.layout.activity_edit_fragment_content);
 		setupActionBar();
@@ -123,16 +132,23 @@ public class EditFragmentContentActivity extends Activity implements
 		ArrayList<Media> content = storyFragment.getContentList();
 		StoryFragmentViewFactory.ConstructView(layout, content,
 				getApplicationContext(), true);
+
+		bar = new ProgressDialog(context);
+		bar.setIndeterminate(true);
+		bar.setTitle("Saving Fragment");
+		bar.setMessage("Please Wait...");
+		bar.setCancelable(false);
+		bar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 	}
 
-//	@Override
-//	protected void onDestroy() {
-//		super.onDestroy();
-//		for (File child : tempFolder.listFiles()) {
-//			child.delete();
-//		}
-//		tempFolder.delete();
-//	}
+	// @Override
+	// protected void onDestroy() {
+	// super.onDestroy();
+	// for (File child : tempFolder.listFiles()) {
+	// child.delete();
+	// }
+	// tempFolder.delete();
+	// }
 
 	/**
 	 * Set up the {@link android.app.ActionBar}.
@@ -245,12 +261,12 @@ public class EditFragmentContentActivity extends Activity implements
 	private void onSelectGallery() {
 		String externalFolderPath = Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/StoryTime/";
-		File externalFile = new File(externalFolderPath);	
+		File externalFile = new File(externalFolderPath);
 		Log.d("oops", "external file path: " + externalFile.getAbsolutePath());
-		
+
 		Intent intent = new Intent();
-	    Uri external = Uri.fromFile(externalFile);
-	    //intent.setData(external);
+		Uri external = Uri.fromFile(externalFile);
+		// intent.setData(external);
 		intent.setDataAndType(external, "image/*");
 		intent.setAction(Intent.ACTION_GET_CONTENT);
 		startActivityForResult(intent, SELECT_IMAGE);
@@ -259,8 +275,8 @@ public class EditFragmentContentActivity extends Activity implements
 	private void onSelectCamera() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-		String cameraTempDir = GlobalManager.getTempDirectory().getAbsolutePath() + "/" + "tmp"
-				+ imageURIs.size();
+		String cameraTempDir = GlobalManager.getTempDirectory()
+				.getAbsolutePath() + "/" + "tmp" + imageURIs.size();
 		File imageFile = new File(cameraTempDir);
 		cameraUri = Uri.fromFile(imageFile);
 
@@ -271,6 +287,13 @@ public class EditFragmentContentActivity extends Activity implements
 
 	private void onSelectAddSound() {
 		// TODO: Implement this.
+		bar = new ProgressDialog(this);
+		bar.setIndeterminate(true);
+		bar.setTitle("Saving Fragment");
+		bar.setMessage("Please Wait...");
+		bar.setCancelable(true);
+		bar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		bar.show();
 	}
 
 	private void onSelectAddVideo() {
@@ -317,6 +340,23 @@ public class EditFragmentContentActivity extends Activity implements
 	 * Define Back behaviour
 	 */
 	public void onBackPressed() {
+//		Log.d("PROGRESS", "Initial bar: " + bar);
+//		bar = new ProgressDialog(this);
+//		bar.setIndeterminate(true);
+//		bar.setTitle("Saving Fragment");
+//		bar.setMessage("Please Wait...");
+//		bar.setCancelable(false);
+//		bar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//		bar.show();
+
+		Toast toast = Toast.makeText(getApplicationContext(),
+				"Saving Fragment", Toast.LENGTH_LONG);
+		toast.show();
+
+		toast = Toast.makeText(getApplicationContext(),
+				"Saving Fragment", Toast.LENGTH_SHORT);
+		toast.show();
+		
 		StoryFragment saveFragment = constructSaveFragmentFromView();
 
 		Intent intent = new Intent();
@@ -327,6 +367,10 @@ public class EditFragmentContentActivity extends Activity implements
 		if (getParent() != null)
 			getParent().setResult(RESULT_OK, intent);
 		setResult(RESULT_OK, intent);
+		
+		toast = Toast.makeText(getApplicationContext(),
+				"Fragment Saved", Toast.LENGTH_SHORT);
+		toast.show();
 
 		finish();
 	}
@@ -446,11 +490,36 @@ public class EditFragmentContentActivity extends Activity implements
 	}
 
 	private StoryFragment constructSaveFragmentFromView() {
+		// StoryFragment fragment = storyFragment;
+		// fragment.removeAllContent();
+
+		Log.d("ImageSaveDebug", "count: " + layout.getChildCount());
+
+		// ProgressDialog bar = new ProgressDialog(this);
+		// bar.setIndeterminate(true);
+		// bar.setTitle("Saving Fragment");
+		// bar.setMessage("Please Wait...");
+		// bar.setCancelable(false);
+		// bar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		// bar.show();
+
+		// for (int i = 0; i < layout.getChildCount(); i++) {
+		// View v = layout.getChildAt(i);
+		// if (v.getClass().equals(EditText.class)) {
+		// EditText text = (EditText) v;
+		// SpannableString string = new SpannableString(text.getText());
+		// fragment.addContent(new Text(string));
+		// } else if (v.getClass().equals(ImageView.class)) {
+		// String imageName = GlobalManager.getLocalManager().saveMedia(
+		// imageURIs.get(imageIndex), MediaType.IMAGE);
+		// fragment.addContent(new Image(imageName));
+		// imageIndex++;
+		// }
+		// }
 		StoryFragment fragment = storyFragment;
 		fragment.removeAllContent();
 
 		int imageIndex = 0;
-		Log.d("ImageSaveDebug", "count: " + layout.getChildCount());
 
 		for (int i = 0; i < layout.getChildCount(); i++) {
 			View v = layout.getChildAt(i);
@@ -459,15 +528,88 @@ public class EditFragmentContentActivity extends Activity implements
 				SpannableString string = new SpannableString(text.getText());
 				fragment.addContent(new Text(string));
 			} else if (v.getClass().equals(ImageView.class)) {
-				String imageName = GlobalManager.getLocalManager().saveMedia(
-						imageURIs.get(imageIndex), MediaType.IMAGE);
+				String imageName = GlobalManager.getLocalManager()
+						.saveMedia(imageURIs.get(imageIndex),
+								MediaType.IMAGE);
 				fragment.addContent(new Image(imageName));
 				imageIndex++;
 			}
 		}
 
 		return fragment;
+
+//		try {
+//			// bar = new ProgressDialog(this);
+//			SaveFragmentTask task = new SaveFragmentTask();
+//			task.execute(storyFragment);
+//			task.get();
+//			bar.dismiss();
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		} catch (ExecutionException e) {
+//			e.printStackTrace();
+//		}
+//
+//		return storyFragment;
 	}
+
+	private class SaveFragmentTask extends
+			AsyncTask<StoryFragment, Integer, StoryFragment> {
+
+		@Override
+		protected void onPreExecute() {
+			// // super.onPreExecute();
+			// bar.setIndeterminate(true);
+			// bar.setTitle("Saving Fragment");
+			// bar.setMessage("Please Wait...");
+			// //bar.setCancelable(false);
+			// bar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			// bar.show();
+			// Log.d("PROGRESS", "Should be showing... " + bar);
+		};
+
+		@Override
+		protected StoryFragment doInBackground(StoryFragment... params) {
+			Log.d("PROGRESS", "Doing work!");
+
+			StoryFragment fragment = params[0];
+			fragment.removeAllContent();
+
+			int imageIndex = 0;
+
+			for (int i = 0; i < layout.getChildCount(); i++) {
+				View v = layout.getChildAt(i);
+				if (v.getClass().equals(EditText.class)) {
+					EditText text = (EditText) v;
+					SpannableString string = new SpannableString(text.getText());
+					fragment.addContent(new Text(string));
+				} else if (v.getClass().equals(ImageView.class)) {
+					String imageName = GlobalManager.getLocalManager()
+							.saveMedia(imageURIs.get(imageIndex),
+									MediaType.IMAGE);
+					fragment.addContent(new Image(imageName));
+					imageIndex++;
+				}
+			}
+
+			return fragment;
+		}
+
+		@Override
+		protected void onPostExecute(StoryFragment result) {
+			Log.d("PROGRESS", "We've finished now " + bar);
+			// super.onPostExecute(result);
+
+			// bar.dismiss();
+			storyFragment = result;
+		}
+
+	}
+
+	// ProgressDialog GetProgressBar() {
+	// // return ProgressDialog.show(context, "Saving Fragment",
+	// // "Please wait...", true, false);
+	// }
 
 	private StoryFragment constructTemporaryFragmentFromView() {
 		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
