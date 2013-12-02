@@ -38,6 +38,7 @@ public class Image implements Media<String>, Serializable {
 	private static final String type = MediaType.IMAGE.toString();
 	
 	private String content;
+	private Integer scale;
 	private MediaInteractionManager manager;
 	
 	/**
@@ -53,6 +54,11 @@ public class Image implements Media<String>, Serializable {
 	 * Empty constructor
 	 */
 	public Image() { }
+
+	public Image(String content, Integer scale) {
+		this.content = content;
+		this.scale = scale;
+	}
 
 	/**
 	 * Returns the resource identifier string.
@@ -113,15 +119,25 @@ public class Image implements Media<String>, Serializable {
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
 		out.writeObject(content);
+		out.writeObject(scale);
 	}
 
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
 		content = (String) in.readObject();
+		scale = (Integer) in.readObject();
 	}
 
 	@Override
 	public String getType() {
 		return Image.type;
+	}
+
+	public Integer getScale() {
+		return scale;
+	}
+
+	public void setScale(Integer scale) {
+		this.scale = scale;
 	}
 }

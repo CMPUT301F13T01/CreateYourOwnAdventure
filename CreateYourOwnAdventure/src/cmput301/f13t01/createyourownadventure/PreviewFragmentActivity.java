@@ -29,12 +29,10 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.TypedValue;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 /**
  * This activity allows the user to preview a particular storyFragment's
@@ -66,6 +64,12 @@ public class PreviewFragmentActivity extends Activity {
 				LinearLayout.LayoutParams.MATCH_PARENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT);
 
+		for(int i = 0; i < content.size(); ++i) {
+			if(content.get(i) instanceof ImageUri) {
+				ImageUri image = (ImageUri) content.get(i);
+				Log.d("oops", "Content[" + i + "]: " + image.getScale() + " " + image.getContent());
+			}
+		}
 
 		StoryFragmentViewFactory.ConstructView(layout, content, this, false);
 	}

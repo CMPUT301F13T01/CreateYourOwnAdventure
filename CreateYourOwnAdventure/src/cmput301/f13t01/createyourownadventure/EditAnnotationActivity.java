@@ -276,13 +276,13 @@ public class EditAnnotationActivity extends Activity implements
 			if (resultCode == RESULT_OK) {
 				Uri image = data.getData();
 				imageURIs.add(image);
-				StoryFragmentViewFactory.addImage(image, layout, this);
+				StoryFragmentViewFactory.addImage(image, layout, this, 100);
 			}
 			break;
 		case CAPTURE_IMAGE:
 			if (resultCode == RESULT_OK) {
 				imageURIs.add(cameraUri);
-				StoryFragmentViewFactory.addImage(cameraUri, layout, this);
+				StoryFragmentViewFactory.addImage(cameraUri, layout, this, 100);
 			}
 		}
 	}

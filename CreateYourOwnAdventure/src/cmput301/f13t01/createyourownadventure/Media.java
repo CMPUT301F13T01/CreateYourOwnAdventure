@@ -38,7 +38,7 @@ public interface Media<T> {
 	 * @return the type of the media.
 	 */
 	public String getType();
-	
+
 	/**
 	 * Returns the content of the media type.
 	 * 
@@ -69,6 +69,6 @@ public interface Media<T> {
 	 *            media type.
 	 */
 	public void setManager(MediaInteractionManager manager);
-	
+
 	public String getResource();
 }
