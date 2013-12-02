@@ -1047,5 +1047,9 @@ ESDemo
 by rayzhangcl for CMPUT 301
 https://github.com/rayzhangcl/ESDemo
 
+ES Interface Adapter
+by user Maciek Makowski, StackOverflow
+http://stackoverflow.com/questions/4795349/how-to-serialize-a-class-with-an-interface
+
 IN CONSULTATION WITH
 Haiming Wang
