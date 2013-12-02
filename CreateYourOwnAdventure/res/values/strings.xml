@@ -15,6 +15,7 @@
     <!-- edit story on long click contextual menu -->
     <string name="action_edit_story">Edit Story</string>
     <string name="action_delete_story">Delete Story</string>
+    <string name="action_mirror_story">Mirror Story</string>
 
     <!-- random story selection -->
     <string name="action_random_story">Select Random Story</string>
