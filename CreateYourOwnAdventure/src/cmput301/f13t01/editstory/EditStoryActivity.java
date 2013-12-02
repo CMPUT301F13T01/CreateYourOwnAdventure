@@ -211,9 +211,6 @@ public class EditStoryActivity extends FragmentActivity implements
 
 			PublishStoryTask task = new PublishStoryTask();
 			task.execute(storyId);
-			// Lock
-			while (task.isLocked()) {
-			}
 
 			// Block while publishing
 			Toast startPublishToast = Toast.makeText(getApplicationContext(),
