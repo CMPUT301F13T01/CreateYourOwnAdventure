@@ -24,6 +24,7 @@ All saving & loading is handled here, along with deletion.
  */
 package cmput301.f13t01.elasticsearch;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,6 +35,8 @@ import java.util.Random;
 import java.util.UUID;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 import cmput301.f13t01.createyourownadventure.GlobalManager;
@@ -43,6 +46,7 @@ import cmput301.f13t01.createyourownadventure.Media;
 import cmput301.f13t01.createyourownadventure.Story;
 import cmput301.f13t01.createyourownadventure.StoryFragment;
 import cmput301.f13t01.createyourownadventure.StoryFragmentInfo;
+import cmput301.f13t01.createyourownadventure.StoryFragmentViewFactory;
 import cmput301.f13t01.createyourownadventure.StoryInfo;
 import cmput301.f13t01.createyourownadventure.Text;
 
@@ -315,6 +319,7 @@ public class ESManager implements LibraryManager {
 				+ type + "/" + identifier);
 
 		String base64Media = new String();
+		Log.d("Base64", "media: " + media.getAbsolutePath());
 
 		// We are assuming that all media files are already compressed by the
 		// time that we try to upload them onto the server. Therefore, encoding
@@ -322,17 +327,21 @@ public class ESManager implements LibraryManager {
 		// support to larger files, we'll need to rewrite this portion of the
 		// function.
 		try {
-			InputStream in = new FileInputStream(media.getAbsolutePath());
 			byte[] buf = new byte[1024];
-
-			int len = 0;
-			len = in.read(buf);
-			while (len > 0) {
-				base64Media += Base64.encodeToString(buf, Base64.NO_WRAP
+			
+			Bitmap map = StoryFragmentViewFactory.decodeUri(Uri.fromFile(media), 512, 512, context);
+			Log.d("Base64", "map size: " + map.getRowBytes() * map.getHeight());
+			
+			base64Media += Base64.encodeToString(buf, Base64.NO_WRAP | Base64.NO_PADDING);
+			
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			map.compress(Bitmap.CompressFormat.PNG, 100, out);
+			byte[] b = out.toByteArray();
+			Log.d("Base64", "Byte size: " + b.length);
+			base64Media = Base64.encodeToString(b, Base64.NO_WRAP
 						| Base64.NO_PADDING);
-				len = in.read(buf);
-			}
-			in.close();
+			//Log.d("Base64", "Big encoded: " + base64Media);
+			out.close();
 		} catch (FileNotFoundException e) {
 			Log.d("Base64", "File not found for loading encoded media");
 			e.printStackTrace();
@@ -340,6 +349,7 @@ public class ESManager implements LibraryManager {
 			e.printStackTrace();
 		}
 
+		Log.d("Base64", "Encoded size: " + base64Media.length());
 		return base64Media;
 	}
 }
