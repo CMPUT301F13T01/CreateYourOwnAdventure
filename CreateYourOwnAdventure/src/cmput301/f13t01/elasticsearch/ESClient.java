@@ -539,6 +539,7 @@ public class ESClient {
 			
 			String json = gson.toJson(story);
 			stringentity = new StringEntity(json);
+			Log.d("Story", json);
 			
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
