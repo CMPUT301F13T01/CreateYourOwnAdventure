@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <!--  action bar info -->
-    
-    <!--  browse online stories -->
-    <item android:id="@+id/action_browse_online_stories"
-          android:title="@string/action_browse_online_stories" 
-          android:icon="@drawable/browse_online_stories" 
-          android:showAsAction="ifRoom" /> 
-     
+        
     <!--  create new story  -->
     <item android:id="@+id/action_create_new_story" 
           android:title="@string/action_create_new_story" 
@@ -23,5 +17,11 @@
    <item android:id="@+id/action_help"
          android:title="@string/action_help"
          android:showAsAction="never" />
+   
+   <!--  browse online stories -->
+   <item android:id="@+id/action_browse_online_stories"
+         android:title="@string/action_browse_online_stories" 
+         android:icon="@drawable/browse_online_stories" 
+         android:showAsAction="ifRoom" />   
           
 </menu>
