@@ -72,5 +72,10 @@ public interface Media<T> {
 	 */
 	public void setManager(MediaInteractionManager manager);
 
+	/**
+	 * Returns the string resource of the media object
+	 * 
+	 * @return the resource of the media, as a string
+	 */
 	public String getResource();
 }

@@ -5,21 +5,19 @@ a fragment.
      Copyright  �2013 Jesse Huard
     <Contact: jhuard@ualberta.ca>
     
-    License GPLv3: GNU GPL Version 3
-    <http://gnu.org/licenses/gpl.html>.
-    
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * Copyright 2013 Gerald Manweiler Eddie Tai Jesse Chu Jesse Huard Reggie Miller
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package cmput301.f13t01.editstory;
@@ -60,6 +58,14 @@ public class StoryFragmentViewFactory {
 
 	// TODO: Make padding work correctly.
 	@SuppressWarnings("rawtypes")
+	/**
+	 * Instantiates a View for use
+	 * 
+	 * @param layout The layout for the View
+	 * @param content The content to display
+	 * @param context The context of the activity
+	 * @param forEdit Whether or not the View is editable
+	 */
 	public static void ConstructView(LinearLayout layout,
 			ArrayList<Media> content, Context context, Boolean forEdit) {
 
@@ -103,6 +109,14 @@ public class StoryFragmentViewFactory {
 		}
 	}
 
+	/**
+	 * Adds an image view to display.
+	 * 
+	 * @param image Uri of the image to add
+	 * @param layout The layout to display the image in
+	 * @param context The context of the activity
+	 * @param scale The scale of the image to display
+	 */
 	public static void addImage(Uri image, LinearLayout layout,
 			Context context, Integer scale) {
 		try {
@@ -115,12 +129,13 @@ public class StoryFragmentViewFactory {
 			imageView.setVisibility(View.VISIBLE);
 			imageView.setAdjustViewBounds(true);
 
-			Log.d("ImageDebug", "Layout width: " + layout.getWidth() + " height: "
-					+ layout.getHeight());
+			Log.d("ImageDebug", "Layout width: " + layout.getWidth()
+					+ " height: " + layout.getHeight());
 
 			Log.d("ImageDebug", "addImage path: " + image.getPath());
 
-			Bitmap bitmap = StoryBitmapFactory.decodeUriToScale(image, context, scale);
+			Bitmap bitmap = StoryBitmapFactory.decodeUriToScale(image, context,
+					scale);
 
 			imageView.setImageBitmap(bitmap);
 			// imageView.setPadding(horizontalPadding, verticalPadding,

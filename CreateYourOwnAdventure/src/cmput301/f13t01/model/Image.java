@@ -84,6 +84,9 @@ public class Image implements Media<String>, Serializable {
 	}
 	
 	@Override
+	/**
+	 * Returns the content string of the image
+	 */
 	public String getResource() {
 		return getContent();
 	}
@@ -131,14 +134,27 @@ public class Image implements Media<String>, Serializable {
 	}
 
 	@Override
+	/**
+	 * Override the getType function
+	 */
 	public String getType() {
 		return Image.type;
 	}
 
+	/**
+	 * Gets the scale of the image
+	 * 
+	 * @return the scale of the image
+	 */
 	public Integer getScale() {
 		return scale;
 	}
 
+	/**
+	 * Sets the scale of the image
+	 * 
+	 * @param scale the scale to set for the image
+	 */
 	public void setScale(Integer scale) {
 		this.scale = scale;
 	}

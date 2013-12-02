@@ -106,6 +106,9 @@ public class Sound implements Media<String>, Serializable {
 	}
 
 	@Override
+	/**
+	 * Override the getType method
+	 */
 	public String getType() {
 		return this.type;
 	}

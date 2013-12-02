@@ -46,6 +46,12 @@ public class HelpFragment extends DialogFragment {
 
 	private static final String helpString = "help";
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param messageType the type of help message to display
+	 * @return the HelpFragment made
+	 */
 	public static HelpFragment newInstance(HelpMessage messageType) {
 		HelpFragment f = new HelpFragment();
 
@@ -58,6 +64,9 @@ public class HelpFragment extends DialogFragment {
 	}
 
 	@Override
+	/**
+	 * Override the onCreateView function
+	 */
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 

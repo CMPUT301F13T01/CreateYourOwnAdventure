@@ -43,39 +43,65 @@ public class Text implements Media<SpannableString>, Serializable {
 	private SpannableString content;
 	private MediaInteractionManager manager;
 
+	/**
+	 * Constructor which sets content
+	 * 
+	 * @param content the content to set for the Text
+	 */
 	public Text(SpannableString content) {
 		this.content = content;
 	}
 
+	/**
+	 * Empty constructor
+	 */
 	public Text() {
 		this.content = new SpannableString("");
 	}
 
 	@Override
+	/**
+	 * Returns the content string of the Text
+	 */
 	public SpannableString getContent() {
 		return this.content;
 	}
 
 	@Override
+	/**
+	 * Sets the content of the Text
+	 */
 	public void setContent(SpannableString content) {
 		this.content = content;
 	}
 
 	@Override
+	/**
+	 * Gets the interaction manager for the text
+	 */
 	public MediaInteractionManager getManager() {
 		return this.manager;
 	}
 
 	@Override
+	/**
+	 * Sets the interaction manager for the text
+	 */
 	public void setManager(MediaInteractionManager manager) {
 		this.manager = manager;
 	}
 
 	@Override
+	/**
+	 * Returns a new resource string
+	 */
 	public String getResource() {
 		return new String();
 	}
 
+	/**
+	 * Return the content in String form
+	 */
 	public String toString() {
 		return this.content.toString();
 	}
@@ -90,6 +116,9 @@ public class Text implements Media<SpannableString>, Serializable {
 	}
 
 	@Override
+	/**
+	 * Override the getType function
+	 */
 	public String getType() {
 		return this.type;
 	}

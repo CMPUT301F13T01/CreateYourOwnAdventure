@@ -288,29 +288,6 @@ public class LocalManager implements Serializable, LibraryManager {
 		if (localFile.exists()) {
 			Log.d("ImageSaveDebug", "The file existed before save");
 
-			// Make sure the file is mirrored in the external directory.
-			// if (!externalFile.exists()) {
-			// try {
-			// Bitmap toSave = StoryFragmentViewFactory.decodeUri(
-			// mediaUri, StoryBitmapFactory.MAX_SIZE,
-			// StoryBitmapFactory.MAX_SIZE, context);
-			//
-			// FileOutputStream os = new FileOutputStream(externalFile);
-			// toSave.compress(Bitmap.CompressFormat.PNG, 100, os);
-			//
-			// os.flush();
-			// os.close();
-			//
-			// Log.d("ImageSaveDebug", "Saved deleted external file: " +
-			// externalFile.getAbsolutePath());
-			//
-			// } catch (FileNotFoundException e) {
-			// e.printStackTrace();
-			// } catch (IOException e) {
-			// e.printStackTrace();
-			// }
-			// }
-
 			return localFile.getName();
 		}
 
@@ -333,17 +310,6 @@ public class LocalManager implements Serializable, LibraryManager {
 					internalOutputStream);
 			internalOutputStream.flush();
 			internalOutputStream.close();
-
-			// // Save the media to the mirrored external file directory.
-			// FileOutputStream externalOutputStream = new FileOutputStream(
-			// externalFile);
-			// toSave.compress(Bitmap.CompressFormat.PNG, 100,
-			// externalOutputStream);
-			// externalOutputStream.flush();
-			// externalOutputStream.close();
-			//
-			// Log.d("ImageSaveDebug", "Saved new external file: " +
-			// externalFile.getAbsolutePath());
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

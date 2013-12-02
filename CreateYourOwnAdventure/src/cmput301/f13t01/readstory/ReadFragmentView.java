@@ -72,9 +72,6 @@ public class ReadFragmentView extends Fragment {
 		// Setup fragment's outer container-layout
 		LinearLayout layout = (LinearLayout) scrollable
 				.findViewById(R.id.view_fragment_linear);
-		// LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-		// LinearLayout.LayoutParams.MATCH_PARENT,
-		// LinearLayout.LayoutParams.WRAP_CONTENT);
 
 		// fetch story fragment Id
 		String resourceString = getResources().getString(

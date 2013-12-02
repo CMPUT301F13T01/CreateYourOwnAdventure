@@ -52,6 +52,11 @@ public class StoryFragmentListFragment extends DialogFragment {
 	private StoryFragmentListListener listener;
 	private FragmentListAdapter adapter;
 
+	/**
+	 * Constructor
+	 * 
+	 * @return an instance of StoryFragmentListFragment
+	 */
 	static StoryFragmentListFragment newInstance() {
 		StoryFragmentListFragment f = new StoryFragmentListFragment();
 
@@ -62,6 +67,9 @@ public class StoryFragmentListFragment extends DialogFragment {
 	}
 
 	@Override
+	/**
+	 * Override the onAttach function
+	 */
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		try {
@@ -73,6 +81,9 @@ public class StoryFragmentListFragment extends DialogFragment {
 	}
 
 	@Override
+	/**
+	 * Override the onCreateDialog function
+	 */
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -104,6 +115,9 @@ public class StoryFragmentListFragment extends DialogFragment {
 	 */
 
 	@Override
+	/**
+	 * Override the onCreate function
+	 */
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 

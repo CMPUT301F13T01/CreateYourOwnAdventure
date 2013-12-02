@@ -52,6 +52,11 @@ public class Choice implements Serializable {
 
 	}
 
+	/**
+	 * Another constructor, taking flavour text
+	 * 
+	 * @param flavourText the text for the choice
+	 */
 	public Choice(String flavourText) {
 		this.sourceId = 0;
 		this.destinationId = 0;

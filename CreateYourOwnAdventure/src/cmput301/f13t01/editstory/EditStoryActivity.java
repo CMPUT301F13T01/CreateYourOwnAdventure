@@ -63,6 +63,9 @@ public class EditStoryActivity extends FragmentActivity implements
 	private UUID storyId;
 
 	@Override
+	/**
+	 * Override onCreate function
+	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_story);

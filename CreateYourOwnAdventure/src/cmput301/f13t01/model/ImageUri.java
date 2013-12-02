@@ -39,11 +39,11 @@ import cmput301.f13t01.readstory.MediaInteractionManager;
 @SuppressWarnings("serial")
 public class ImageUri implements Media<Uri>, Serializable {
 	private final String type = MediaType.IMAGEURI.toString();
-	
+
 	private Uri content;
 	private Integer scale;
 	private MediaInteractionManager manager;
-	
+
 	public ImageUri(Uri content) {
 		this.content = content;
 	}
@@ -95,8 +95,11 @@ public class ImageUri implements Media<Uri>, Serializable {
 	public void setManager(MediaInteractionManager manager) {
 		this.manager = manager;
 	}
-	
+
 	@Override
+	/**
+	 * Returns the path for the Image Uri
+	 */
 	public String getResource() {
 		return getContent().getLastPathSegment();
 	}
@@ -120,16 +123,30 @@ public class ImageUri implements Media<Uri>, Serializable {
 		content = Uri.parse((String) in.readObject());
 		scale = (Integer) in.readObject();
 	}
-	
+
 	@Override
+	/**
+	 * Overrides the getType function
+	 */
 	public String getType() {
 		return this.type;
 	}
 
+	/**
+	 * Gets the scale of the image.
+	 * 
+	 * @return the scale of the image
+	 */
 	public Integer getScale() {
 		return scale;
 	}
 
+	/**
+	 * Sets the scale of the image
+	 * 
+	 * @param scale
+	 *            the scale of the image to set
+	 */
 	public void setScale(Integer scale) {
 		this.scale = scale;
 	}
