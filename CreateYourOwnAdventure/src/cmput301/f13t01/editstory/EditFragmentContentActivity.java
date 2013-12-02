@@ -37,7 +37,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -159,15 +158,6 @@ public class EditFragmentContentActivity extends Activity implements
 		bar.setCancelable(false);
 		bar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 	}
-
-	// @Override
-	// protected void onDestroy() {
-	// super.onDestroy();
-	// for (File child : tempFolder.listFiles()) {
-	// child.delete();
-	// }
-	// tempFolder.delete();
-	// }
 
 	/**
 	 * Set up the {@link android.app.ActionBar}.
@@ -370,14 +360,6 @@ public class EditFragmentContentActivity extends Activity implements
 	 * Define Back behaviour
 	 */
 	public void onBackPressed() {
-		// Log.d("PROGRESS", "Initial bar: " + bar);
-		// bar = new ProgressDialog(this);
-		// bar.setIndeterminate(true);
-		// bar.setTitle("Saving Fragment");
-		// bar.setMessage("Please Wait...");
-		// bar.setCancelable(false);
-		// bar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		// bar.show();
 
 		Toast toast = Toast.makeText(getApplicationContext(),
 				"Saving Fragment", Toast.LENGTH_LONG);

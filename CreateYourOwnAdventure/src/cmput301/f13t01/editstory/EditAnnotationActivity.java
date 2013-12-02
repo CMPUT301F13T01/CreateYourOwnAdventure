@@ -74,7 +74,8 @@ public class EditAnnotationActivity extends Activity implements
 	// Activity variables
 	@SuppressWarnings("rawtypes")
 	private ArrayList<Media> annotation;
-	private ArrayList<Uri> imageURIs;
+	private ArrayList<ImageInfo> imageInfos;
+
 	private LinearLayout layout;
 	private Uri cameraUri;
 
@@ -98,7 +99,7 @@ public class EditAnnotationActivity extends Activity implements
 			annotation = (ArrayList<Media>) intent
 					.getSerializableExtra(getResources().getString(
 							R.string.annotation));
-			imageURIs = (ArrayList<Uri>) savedInstanceState
+			imageInfos = (ArrayList<ImageInfo>) savedInstanceState
 					.getSerializable(getResources().getString(
 							R.string.story_URIs));
 		} else {
@@ -108,15 +109,16 @@ public class EditAnnotationActivity extends Activity implements
 								R.string.annotation));
 				
 			}
-			imageURIs = new ArrayList<Uri>();
+			imageInfos = new ArrayList<ImageInfo>();
 			for (Media next : annotation) {
 				if (next.getType() == MediaType.IMAGE.toString()) {
-					imageURIs.add(Uri.fromFile(new File(getFilesDir()
+					Image image = (Image) next;
+					imageInfos.add(new ImageInfo(Uri.fromFile(new File(getFilesDir()
 							.getAbsolutePath()
 							+ "/"
 							+ next.getType().toString()
 							+ "/"
-							+ next.getContent())));
+							+ next.getContent())), image.getScale()));
 				}
 			}
 		}
@@ -204,7 +206,7 @@ public class EditAnnotationActivity extends Activity implements
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
 		String cameraTempDir = GlobalManager.getTempDirectory()
-				.getAbsolutePath() + "/" + "tmp" + imageURIs.size();
+				.getAbsolutePath() + "/" + "tmp" + imageInfos.size();
 		File imageFile = new File(cameraTempDir);
 		cameraUri = Uri.fromFile(imageFile);
 
@@ -282,13 +284,13 @@ public class EditAnnotationActivity extends Activity implements
 		case SELECT_IMAGE:
 			if (resultCode == RESULT_OK) {
 				Uri image = data.getData();
-				imageURIs.add(image);
+				imageInfos.add(new ImageInfo(image, 100));
 				StoryFragmentViewFactory.addImage(image, layout, this, 100);
 			}
 			break;
 		case CAPTURE_IMAGE:
 			if (resultCode == RESULT_OK) {
-				imageURIs.add(cameraUri);
+				imageInfos.add(new ImageInfo(cameraUri, 100));
 				StoryFragmentViewFactory.addImage(cameraUri, layout, this, 100);
 			}
 		}
@@ -346,7 +348,7 @@ public class EditAnnotationActivity extends Activity implements
 		outState.putSerializable(getResources().getString(R.string.annotation),
 				saveAnnotation);
 		outState.putSerializable(getResources().getString(R.string.story_URIs),
-				imageURIs);
+				imageInfos);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -363,9 +365,10 @@ public class EditAnnotationActivity extends Activity implements
 				SpannableString string = new SpannableString(text.getText());
 				saveAnnotation.add(new Text(string));
 			} else if (v.getClass().equals(ImageView.class)) {
+				ImageInfo info = imageInfos.get(imageIndex);
 				String imageName = GlobalManager.getLocalManager().saveMedia(
-						imageURIs.get(imageIndex), MediaType.IMAGE);
-				saveAnnotation.add(new Image(imageName));
+						info.getImageUri(), MediaType.IMAGE);
+				saveAnnotation.add(new Image(imageName, info.getScale()));
 				imageIndex++;
 			}
 		}
@@ -386,7 +389,8 @@ public class EditAnnotationActivity extends Activity implements
 				SpannableString string = new SpannableString(text.getText());
 				tempAnnotation.add(new Text(string));
 			} else if (v.getClass().equals(ImageView.class)) {
-				tempAnnotation.add(new ImageUri(imageURIs.get(UriIndex)));
+				ImageInfo info = imageInfos.get(UriIndex);
+				tempAnnotation.add(new ImageUri(info.getImageUri(), info.getScale()));
 				UriIndex++;
 			}
 		}
