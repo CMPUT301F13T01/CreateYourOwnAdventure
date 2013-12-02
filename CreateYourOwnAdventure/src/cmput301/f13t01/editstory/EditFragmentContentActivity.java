@@ -573,7 +573,7 @@ public class EditFragmentContentActivity extends Activity implements
 
 						DialogFragment newFragment = (DialogFragment) ImageResizeFragment
 								.newInstance(imageInfos.get(imageCount).getScale(),
-										i);
+										imageCount);
 						newFragment.show(ft, "resize_dialog");
 					} else if (layout.getChildAt(i) instanceof ImageView) {
 						imageCount++;
@@ -611,32 +611,9 @@ public class EditFragmentContentActivity extends Activity implements
 	}
 
 	private StoryFragment constructSaveFragmentFromView() {
-		// StoryFragment fragment = storyFragment;
-		// fragment.removeAllContent();
 
 		Log.d("ImageSaveDebug", "count: " + layout.getChildCount());
 
-		// ProgressDialog bar = new ProgressDialog(this);
-		// bar.setIndeterminate(true);
-		// bar.setTitle("Saving Fragment");
-		// bar.setMessage("Please Wait...");
-		// bar.setCancelable(false);
-		// bar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		// bar.show();
-
-		// for (int i = 0; i < layout.getChildCount(); i++) {
-		// View v = layout.getChildAt(i);
-		// if (v.getClass().equals(EditText.class)) {
-		// EditText text = (EditText) v;
-		// SpannableString string = new SpannableString(text.getText());
-		// fragment.addContent(new Text(string));
-		// } else if (v.getClass().equals(ImageView.class)) {
-		// String imageName = GlobalManager.getLocalManager().saveMedia(
-		// imageInfos.get(imageIndex), MediaType.IMAGE);
-		// fragment.addContent(new Image(imageName));
-		// imageIndex++;
-		// }
-		// }
 		StoryFragment fragment = storyFragment;
 		fragment.removeAllContent();
 
@@ -658,72 +635,6 @@ public class EditFragmentContentActivity extends Activity implements
 		}
 
 		return fragment;
-
-		// try {
-		// // bar = new ProgressDialog(this);
-		// SaveFragmentTask task = new SaveFragmentTask();
-		// task.execute(storyFragment);
-		// task.get();
-		// bar.dismiss();
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// } catch (ExecutionException e) {
-		// e.printStackTrace();
-		// }
-		//
-		// return storyFragment;
-	}
-
-	private class SaveFragmentTask extends
-			AsyncTask<StoryFragment, Integer, StoryFragment> {
-
-		@Override
-		protected void onPreExecute() {
-			// // super.onPreExecute();
-			// bar.setIndeterminate(true);
-			// bar.setTitle("Saving Fragment");
-			// bar.setMessage("Please Wait...");
-			// //bar.setCancelable(false);
-			// bar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			// bar.show();
-			// Log.d("PROGRESS", "Should be showing... " + bar);
-		};
-
-		@Override
-		protected StoryFragment doInBackground(StoryFragment... params) {
-			Log.d("PROGRESS", "Doing work!");
-
-			StoryFragment fragment = params[0];
-			fragment.removeAllContent();
-
-			int imageIndex = 0;
-
-			for (int i = 0; i < layout.getChildCount(); i++) {
-				View v = layout.getChildAt(i);
-				if (v.getClass().equals(EditText.class)) {
-					EditText text = (EditText) v;
-					SpannableString string = new SpannableString(text.getText());
-					fragment.addContent(new Text(string));
-				} else if (v.getClass().equals(ImageView.class)) {
-					String imageName = GlobalManager.getLocalManager()
-							.saveMedia(imageInfos.get(imageIndex).getImageUri(),
-									MediaType.IMAGE);
-					fragment.addContent(new Image(imageName));
-					imageIndex++;
-				}
-			}
-
-			return fragment;
-		}
-
-		@Override
-		protected void onPostExecute(StoryFragment result) {
-			Log.d("PROGRESS", "We've finished now " + bar);
-			// super.onPostExecute(result);
-
-			// bar.dismiss();
-			storyFragment = result;
-		}
 
 	}
 
