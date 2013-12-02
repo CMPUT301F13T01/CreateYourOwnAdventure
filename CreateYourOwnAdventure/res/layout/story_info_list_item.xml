@@ -9,7 +9,7 @@
     	    android:layout_width="0dp"
     	    android:layout_height="wrap_content"
     	    android:layout_gravity="left"
-    	    android:layout_weight="1.5"
+    	    android:layout_weight="3"
     	    android:singleLine="true"
     	    android:text="@string/story_title"
     	    android:textStyle="bold" />
@@ -18,7 +18,7 @@
 	        android:id="@+id/item_author"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="1.5"
+	        android:layout_weight="1"
 	        android:layout_gravity="left"
 	        android:gravity="left"
 	        android:text="@string/story_author"
