@@ -91,9 +91,9 @@ public class EditAnnotationActivity extends Activity implements
 		layout = (LinearLayout) findViewById(R.id.edit_annotation_linear);
 		// Process intent
 		Intent intent = getIntent();
-
+		
 		annotation = new ArrayList<Media>();
-
+		
 		if (savedInstanceState != null) {
 			annotation = (ArrayList<Media>) intent
 					.getSerializableExtra(getResources().getString(
@@ -106,7 +106,7 @@ public class EditAnnotationActivity extends Activity implements
 				annotation = (ArrayList<Media>) intent
 						.getSerializableExtra(getResources().getString(
 								R.string.annotation));
-
+				
 			}
 			imageURIs = new ArrayList<Uri>();
 			for (Media next : annotation) {
@@ -264,7 +264,7 @@ public class EditAnnotationActivity extends Activity implements
 		if (getParent() != null)
 			getParent().setResult(RESULT_OK, intent);
 		setResult(RESULT_OK, intent);
-
+		
 		int listsize = annotation.size();
 		System.out.println(listsize);
 
@@ -283,13 +283,13 @@ public class EditAnnotationActivity extends Activity implements
 			if (resultCode == RESULT_OK) {
 				Uri image = data.getData();
 				imageURIs.add(image);
-				StoryFragmentViewFactory.addImage(image, layout, this);
+				StoryFragmentViewFactory.addImage(image, layout, this, 100);
 			}
 			break;
 		case CAPTURE_IMAGE:
 			if (resultCode == RESULT_OK) {
 				imageURIs.add(cameraUri);
-				StoryFragmentViewFactory.addImage(cameraUri, layout, this);
+				StoryFragmentViewFactory.addImage(cameraUri, layout, this, 100);
 			}
 		}
 	}

@@ -75,7 +75,7 @@ import cmput301.f13t01.storylibrary.HelpMessage;
  */
 
 public class EditFragmentContentActivity extends Activity implements
-		ChoiceListListener, OnMenuItemClickListener {
+		ChoiceListListener, ImageResizeListener, OnMenuItemClickListener {
 
 	// Intent Codes
 	private static final int EDIT_CHOICE = 0;
@@ -85,7 +85,7 @@ public class EditFragmentContentActivity extends Activity implements
 	// Activity variables
 	private StoryFragment storyFragment;
 	private int fragmentId;
-	private ArrayList<Uri> imageURIs;
+	private ArrayList<ImageInfo> imageInfos;
 	private LinearLayout layout;
 	private Uri cameraUri;
 	private Context context;
@@ -114,7 +114,7 @@ public class EditFragmentContentActivity extends Activity implements
 			storyFragment = (StoryFragment) savedInstanceState
 					.getSerializable(getResources().getString(
 							R.string.story_fragment));
-			imageURIs = (ArrayList<Uri>) savedInstanceState
+			imageInfos = (ArrayList<ImageInfo>) savedInstanceState
 					.getSerializable(getResources().getString(
 							R.string.story_URIs));
 		} else {
@@ -125,16 +125,15 @@ public class EditFragmentContentActivity extends Activity implements
 						.getSerializableExtra(getResources().getString(
 								R.string.story_fragment));
 			}
-			imageURIs = new ArrayList<Uri>();
+			imageInfos = new ArrayList<ImageInfo>();
 			ArrayList<Media> media = storyFragment.getContentList();
 			for (Media next : media) {
 				if (next.getType() == MediaType.IMAGE.toString()) {
-					imageURIs.add(Uri.fromFile(new File(getFilesDir()
-							.getAbsolutePath()
-							+ "/"
-							+ next.getType().toString()
-							+ "/"
-							+ next.getContent())));
+					Image image = (Image) next;
+					imageInfos.add(new ImageInfo(Uri.fromFile(new File(
+							getFilesDir().getAbsolutePath() + "/"
+									+ next.getType().toString() + "/"
+									+ next.getContent())), image.getScale()));
 				}
 			}
 		}
@@ -142,6 +141,16 @@ public class EditFragmentContentActivity extends Activity implements
 		ArrayList<Media> content = storyFragment.getContentList();
 		StoryFragmentViewFactory.ConstructView(layout, content,
 				getApplicationContext(), true);
+
+		for (int i = 0; i < layout.getChildCount(); ++i) {
+			if (layout.getChildAt(i) instanceof EditText) {
+				layout.getChildAt(i).setOnLongClickListener(
+						new EditTextViewListener(layout));
+			} else if (layout.getChildAt(i) instanceof ImageView) {
+				layout.getChildAt(i).setOnLongClickListener(
+						new EditImageViewListener(layout));
+			}
+		}
 
 		bar = new ProgressDialog(context);
 		bar.setIndeterminate(true);
@@ -314,7 +323,7 @@ public class EditFragmentContentActivity extends Activity implements
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
 		String cameraTempDir = GlobalManager.getTempDirectory()
-				.getAbsolutePath() + "/" + "tmp" + imageURIs.size();
+				.getAbsolutePath() + "/" + "tmp" + imageInfos.size();
 		File imageFile = new File(cameraTempDir);
 		cameraUri = Uri.fromFile(imageFile);
 
@@ -441,8 +450,11 @@ public class EditFragmentContentActivity extends Activity implements
 		case SELECT_IMAGE:
 			if (resultCode == RESULT_OK) {
 				Uri image = data.getData();
-				imageURIs.add(image);
-				StoryFragmentViewFactory.addImage(image, layout, this);
+				Integer scale = (int) ((float) StoryBitmapFactory.DEFAULT_SIZE
+						/ StoryBitmapFactory.DEFAULT_SIZE * 100);
+				Log.d("oops", "Select scale: " + scale);
+				imageInfos.add(new ImageInfo(image, scale));
+				StoryFragmentViewFactory.addImage(image, layout, this, scale);
 				ImageView view = (ImageView) layout.getChildAt(layout
 						.getChildCount() - 1);
 				view.setOnLongClickListener(new EditImageViewListener(layout));
@@ -450,8 +462,11 @@ public class EditFragmentContentActivity extends Activity implements
 			break;
 		case CAPTURE_IMAGE:
 			if (resultCode == RESULT_OK) {
-				imageURIs.add(cameraUri);
-				StoryFragmentViewFactory.addImage(cameraUri, layout, this);
+				Integer scale = (int) ((float) StoryBitmapFactory.DEFAULT_SIZE
+						/ StoryBitmapFactory.DEFAULT_SIZE * 100);
+				imageInfos.add(new ImageInfo(cameraUri, scale));
+				StoryFragmentViewFactory.addImage(cameraUri, layout, this,
+						scale);
 				ImageView view = (ImageView) layout.getChildAt(layout
 						.getChildCount() - 1);
 				view.setOnLongClickListener(new EditImageViewListener(layout));
@@ -496,7 +511,7 @@ public class EditFragmentContentActivity extends Activity implements
 			MenuInflater inflater = popup.getMenuInflater();
 			inflater.inflate(R.menu.edit_image_long_click_menu, popup.getMenu());
 
-			popup.setOnMenuItemClickListener(new SimplePopupListener(v,
+			popup.setOnMenuItemClickListener(new ImagePopupListener(v,
 					(ViewGroup) layout));
 
 			popup.show();
@@ -519,6 +534,7 @@ public class EditFragmentContentActivity extends Activity implements
 		public boolean onMenuItemClick(MenuItem item) {
 			switch (item.getItemId()) {
 			case R.id.action_edit_delete_content:
+				Log.d("oops", "Wrong Delete!");
 				group.removeView(view);
 				return true;
 			}
@@ -539,15 +555,37 @@ public class EditFragmentContentActivity extends Activity implements
 
 		@Override
 		public boolean onMenuItemClick(MenuItem item) {
+			int imageCount = 0;
+
 			switch (item.getItemId()) {
 			case R.id.action_edit_resize_image:
-				return true;
-			case R.id.action_edit_delete_content:
-				int imageCount = 0;
 				for (int i = 0; i < layout.getChildCount(); ++i) {
 					if (layout.getChildAt(i).equals(view)) {
+						Log.d("oops", "Resize the image!");
+						FragmentTransaction ft = getFragmentManager()
+								.beginTransaction();
+						Fragment prev = getFragmentManager().findFragmentByTag(
+								"resize_dialog");
+						if (prev != null) {
+							ft.remove(prev);
+						}
+						ft.addToBackStack(null);
+
+						DialogFragment newFragment = (DialogFragment) ImageResizeFragment
+								.newInstance(imageInfos.get(imageCount).getScale(),
+										i);
+						newFragment.show(ft, "resize_dialog");
+					} else if (layout.getChildAt(i) instanceof ImageView) {
+						imageCount++;
+					}
+				}
+				return true;
+			case R.id.action_edit_delete_content:
+				for (int i = 0; i < layout.getChildCount(); ++i) {
+					if (layout.getChildAt(i).equals(view)) {
+						Log.d("oops", "Delete the image!");
 						group.removeView(view);
-						imageURIs.remove(imageCount);
+						imageInfos.remove(imageCount);
 					} else if (layout.getChildAt(i) instanceof ImageView) {
 						imageCount++;
 					}
@@ -569,7 +607,7 @@ public class EditFragmentContentActivity extends Activity implements
 				getResources().getString(R.string.story_fragment),
 				savedFragment);
 		outState.putSerializable(getResources().getString(R.string.story_URIs),
-				imageURIs);
+				imageInfos);
 	}
 
 	private StoryFragment constructSaveFragmentFromView() {
@@ -594,7 +632,7 @@ public class EditFragmentContentActivity extends Activity implements
 		// fragment.addContent(new Text(string));
 		// } else if (v.getClass().equals(ImageView.class)) {
 		// String imageName = GlobalManager.getLocalManager().saveMedia(
-		// imageURIs.get(imageIndex), MediaType.IMAGE);
+		// imageInfos.get(imageIndex), MediaType.IMAGE);
 		// fragment.addContent(new Image(imageName));
 		// imageIndex++;
 		// }
@@ -611,9 +649,10 @@ public class EditFragmentContentActivity extends Activity implements
 				SpannableString string = new SpannableString(text.getText());
 				fragment.addContent(new Text(string));
 			} else if (v.getClass().equals(ImageView.class)) {
+				ImageInfo info = imageInfos.get(imageIndex);
 				String imageName = GlobalManager.getLocalManager().saveMedia(
-						imageURIs.get(imageIndex), MediaType.IMAGE);
-				fragment.addContent(new Image(imageName));
+						info.getImageUri(), MediaType.IMAGE);
+				fragment.addContent(new Image(imageName, info.getScale()));
 				imageIndex++;
 			}
 		}
@@ -667,7 +706,7 @@ public class EditFragmentContentActivity extends Activity implements
 					fragment.addContent(new Text(string));
 				} else if (v.getClass().equals(ImageView.class)) {
 					String imageName = GlobalManager.getLocalManager()
-							.saveMedia(imageURIs.get(imageIndex),
+							.saveMedia(imageInfos.get(imageIndex).getImageUri(),
 									MediaType.IMAGE);
 					fragment.addContent(new Image(imageName));
 					imageIndex++;
@@ -688,11 +727,6 @@ public class EditFragmentContentActivity extends Activity implements
 
 	}
 
-	// ProgressDialog GetProgressBar() {
-	// // return ProgressDialog.show(context, "Saving Fragment",
-	// // "Please wait...", true, false);
-	// }
-
 	private StoryFragment constructTemporaryFragmentFromView() {
 		LinearLayout layout = (LinearLayout) findViewById(R.id.edit_fragment_linear);
 		StoryFragment fragment = storyFragment;
@@ -707,11 +741,21 @@ public class EditFragmentContentActivity extends Activity implements
 				SpannableString string = new SpannableString(text.getText());
 				fragment.addContent(new Text(string));
 			} else if (v.getClass().equals(ImageView.class)) {
-				fragment.addContent(new ImageUri(imageURIs.get(UriIndex)));
+				ImageInfo info = imageInfos.get(UriIndex);
+				Log.d("oops", "Info: " + info.getImageUri() + " " + info.getScale());
+				ImageUri image = new ImageUri(info.getImageUri(), info.getScale());
+				Log.d("oops", "image: " + image.getContent() + " " + image.getScale());
+				fragment.addContent(image);
 				UriIndex++;
 			}
 		}
 
 		return fragment;
+	}
+
+	@Override
+	public void onScaleChoice(Integer value, Integer position) {
+		Log.d("oops", "Returned scale: " + value + " Position: " + position);
+		imageInfos.get(position).setScale(value);
 	}
 }

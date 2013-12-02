@@ -1,4 +1,4 @@
-package cmput301.f13t01.createyourownadventure;
+package cmput301.f13t01.editstory;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
+import cmput301.f13t01.R;
 
 public class ImageResizeFragment extends DialogFragment {
 	private static ImageResizeListener listener;

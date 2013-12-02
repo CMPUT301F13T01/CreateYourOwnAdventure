@@ -39,6 +39,22 @@ public class StoryBitmapFactory {
 				.openInputStream(selectedImage), null, options);
 	}
 
+	public static Bitmap decodeUriToScale(Uri selectedImage, Context context,
+			Integer scale) throws FileNotFoundException {
+		Bitmap b = StoryBitmapFactory.decodeUri(selectedImage, DEFAULT_SIZE,
+				DEFAULT_SIZE, context);
+		
+		Log.d("ImageDebug", "b dimenstions: " + b.getWidth() + " " + b.getHeight());
+
+		float size = (float) (scale / 100.0);
+
+		Bitmap scaled = Bitmap.createScaledBitmap(b,
+				(int) (b.getWidth() * size), (int) (b.getHeight() * size),
+				false);
+
+		return scaled;
+	}
+
 	public static int calculateInSampleSize(BitmapFactory.Options options,
 			int reqWidth, int reqHeight) {
 		// Raw height and width of image

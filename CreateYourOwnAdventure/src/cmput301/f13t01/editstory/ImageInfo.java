@@ -1,4 +1,4 @@
-package cmput301.f13t01.createyourownadventure;
+package cmput301.f13t01.editstory;
 
 import java.io.IOException;
 import java.io.Serializable;
