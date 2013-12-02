@@ -94,10 +94,11 @@ public class ESClient {
 	 */
 	public ESClient() {
 		
-		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(Media.class, new InterfaceAdapter<Media<String>>());
-		gsonBuilder.registerTypeAdapter(Media.class, new InterfaceAdapter<Media<SpannableString>>());
-		gson = gsonBuilder.create();
+		//GsonBuilder gsonBuilder = new GsonBuilder();
+		//gsonBuilder.registerTypeAdapter(Media.class, new InterfaceAdapter<Media<String>>());
+		//gsonBuilder.registerTypeAdapter(Media.class, new InterfaceAdapter<Media<SpannableString>>());
+		//gson = gsonBuilder.create();
+		gson = new Gson();
 		
 	}
 
