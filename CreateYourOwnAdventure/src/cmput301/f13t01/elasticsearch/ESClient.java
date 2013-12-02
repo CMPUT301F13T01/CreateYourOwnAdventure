@@ -65,9 +65,12 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.text.SpannableString;
+import android.util.Log;
+import cmput301.f13t01.createyourownadventure.ImageHolder;
 import cmput301.f13t01.createyourownadventure.Media;
 import cmput301.f13t01.createyourownadventure.Story;
 import cmput301.f13t01.createyourownadventure.StoryInfo;
+import cmput301.f13t01.createyourownadventure.Text;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -174,6 +177,11 @@ public class ESClient {
 	 */
 	public void postMedia(String identifier, String type, String data)
 			throws IOException, IllegalStateException {
+		//Log.d("PUBLISH", "Make sure our string's still there: " + data);
+		Log.d("PUBLISH", "String len: " + data.length());
+		Log.d("PUBLISH", "We try to post the media");
+		Log.d("PUBLISH", "File id: " + identifier);
+		Log.d("PUBLISH", "Type: " + type);
 		
 		// Queries if media already exists on server
 		HttpGet getRequest = new HttpGet(
@@ -189,6 +197,8 @@ public class ESClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		Log.d("PUBLISH", "Executed Get");
 
 		int getStatus = -1;
 		if (getResponse != null) {
@@ -199,13 +209,19 @@ public class ESClient {
 		if (getStatus != 404) {
 			return;
 		}
-
+				
+		Log.d("PUBLISH", "Try to post now");
+		
+		getResponse.getEntity().consumeContent();
+		
 		// Media not found, post to server
 		HttpPost httpPost = new HttpPost(
 				"http://cmput301.softwareprocess.es:8080/cmput301f13t01/"
 						+ type.toString() + "/" + identifier);
 		
-		postData(data, httpPost);
+		postImageData(data, httpPost);
+		
+		Log.d("PUBLISH", "Finished posting.");
 		
 		return;
 	}
@@ -526,10 +542,19 @@ public class ESClient {
 	
 	private <T> void postData(T data, HttpPost httpPost) 
 			throws IllegalStateException, IOException {
-		
+				
 		StringEntity stringentity = null;
 		try {
-			stringentity = new StringEntity(gson.toJson(data));
+			String test = gson.toJson(data);
+			String str = "I've Got a Lovely Bunch of Coconuts";
+			String str_e = gson.toJson(new Text(new SpannableString(str)));
+			Log.d("PUBLISH", "test: " + str_e);
+			if(!test.equals(data)) {
+				Log.d("PUBLISH", "Gson different from string");
+			}
+			Log.d("PUBLISH", "gson: " + test);
+			Log.d("PUBLISH", "size: " + test.length());
+			stringentity = new StringEntity(test);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -545,6 +570,62 @@ public class ESClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		Log.d("PUBLISH", "Made it past execute");
+
+		String status = response.getStatusLine().toString();
+		System.out.println(status);
+		HttpEntity entity = response.getEntity();
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				entity.getContent()));
+		String output;
+		System.err.println("Output from Server -> ");
+		while ((output = br.readLine()) != null) {
+			System.err.println(output);
+		}
+
+		try {
+			entity.consumeContent();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return;
+	}
+	
+	private void postImageData(String data, HttpPost httpPost) 
+			throws IllegalStateException, IOException {
+				
+		StringEntity stringentity = null;
+		try {
+			Text holder = new Text(new SpannableString(data));
+			//Log.d("PUBLISH", "holder: " + holder.getContent());
+			String test = gson.toJson(holder);
+			//Log.d("PUBLISH", "gson: " + test);
+			Log.d("PUBLISH", "size: " + test.length());
+			String content = test;
+			Log.d("PUBLISH", "holder size: " + content.length());
+			//Log.d("PUBLISH", "Last bit: " + content.subSequence(content.length()-128, content.length()));
+
+
+			stringentity = new StringEntity(test);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		httpPost.setHeader("Accept", "application/json");
+
+		httpPost.setEntity(stringentity);
+		HttpResponse response = null;
+		try {
+			response = httpclient.execute(httpPost);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Log.d("PUBLISH", "Made it past execute");
 
 		String status = response.getStatusLine().toString();
 		System.out.println(status);

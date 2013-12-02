@@ -342,6 +342,7 @@ public class LocalManager implements Serializable, LibraryManager {
 		Log.d("ImageSaveDebug",
 				"Save full path: " + mediaFile.getAbsolutePath());
 		Log.d("ImageSaveDebug", "uri: " + Uri.fromFile(mediaFile).getPath());
+		Log.d("ImageSaveDebug", "File size: " + mediaFile.length());
 
 		// Return the assigned file name
 		return mediaFile.getName();
