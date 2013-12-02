@@ -38,24 +38,28 @@ import cmput301.f13t01.readstory.MediaInteractionManager;
 @SuppressWarnings("serial")
 public class Image implements Media<String>, Serializable {
 	private static final String type = MediaType.IMAGE.toString();
-
+	
 	private String content;
+	private Integer scale;
 	private MediaInteractionManager manager;
-
+	
 	/**
 	 * Constructor.
 	 * 
-	 * @param content
-	 *            content to set as the image
+	 * @param content content to set as the image
 	 */
 	public Image(String content) {
 		this.content = content;
 	}
-
+	
 	/**
 	 * Empty constructor
 	 */
-	public Image() {
+	public Image() { }
+
+	public Image(String content, Integer scale) {
+		this.content = content;
+		this.scale = scale;
 	}
 
 	/**
@@ -78,7 +82,7 @@ public class Image implements Media<String>, Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-
+	
 	@Override
 	public String getResource() {
 		return getContent();
@@ -117,15 +121,25 @@ public class Image implements Media<String>, Serializable {
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
 		out.writeObject(content);
+		out.writeObject(scale);
 	}
 
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
 		content = (String) in.readObject();
+		scale = (Integer) in.readObject();
 	}
 
 	@Override
 	public String getType() {
 		return Image.type;
+	}
+
+	public Integer getScale() {
+		return scale;
+	}
+
+	public void setScale(Integer scale) {
+		this.scale = scale;
 	}
 }
