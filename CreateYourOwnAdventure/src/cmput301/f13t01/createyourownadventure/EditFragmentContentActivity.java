@@ -188,6 +188,9 @@ public class EditFragmentContentActivity extends Activity implements
 		case R.id.action_edit_add_choice:
 			onAddChoice();
 			return true;
+		case R.id.action_help:
+			onSelectHelp();
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -228,6 +231,31 @@ public class EditFragmentContentActivity extends Activity implements
 
 		popup.show();
 
+	}
+	
+	private void onSelectCancel() {
+		Toast toast = Toast.makeText(getApplicationContext(), getResources()
+				.getString(R.string.cancel_toast), Toast.LENGTH_SHORT);
+		toast.show();
+
+		Intent intent = new Intent();
+		setResult(RESULT_CANCELED, intent);
+		finish();
+	}
+	
+	private void onSelectHelp() {
+		android.app.FragmentTransaction ft = getFragmentManager()
+				.beginTransaction();
+		android.app.Fragment prev = getFragmentManager().findFragmentByTag(
+				"help_dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		android.app.DialogFragment newFragment = (android.app.DialogFragment) HelpFragment
+				.newInstance(HelpMessage.EDIT_CONTENT);
+		newFragment.show(ft, "help_dialog");
 	}
 
 	@Override
@@ -287,13 +315,6 @@ public class EditFragmentContentActivity extends Activity implements
 
 	private void onSelectAddSound() {
 		// TODO: Implement this.
-		bar = new ProgressDialog(this);
-		bar.setIndeterminate(true);
-		bar.setTitle("Saving Fragment");
-		bar.setMessage("Please Wait...");
-		bar.setCancelable(true);
-		bar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		bar.show();
 	}
 
 	private void onSelectAddVideo() {
@@ -323,16 +344,6 @@ public class EditFragmentContentActivity extends Activity implements
 		popup.setOnMenuItemClickListener(this);
 
 		popup.show();
-	}
-
-	private void onSelectCancel() {
-		Toast toast = Toast.makeText(getApplicationContext(), getResources()
-				.getString(R.string.cancel_toast), Toast.LENGTH_SHORT);
-		toast.show();
-
-		Intent intent = new Intent();
-		setResult(RESULT_CANCELED, intent);
-		finish();
 	}
 
 	@Override
