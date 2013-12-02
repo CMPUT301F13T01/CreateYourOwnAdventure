@@ -44,8 +44,9 @@ package cmput301.f13t01.createyourownadventure;
 // Enum of Help Strings
 public enum HelpMessage {
 	EDIT_STORY(
-			"You can edit the basic story information here. To set the first page, press the set button. "
-					+ "You will not be able to read your story unless you set the first page."),
+			"You can edit the basic story information here. To set the first page, press the set button. " + 
+			"You will not be able to read your story unless you set the first page. \n\n" +
+			"To share your story with others, choose the 'Publish' action."),
 	BROWSE_ONLINE(
 			"Select New Search to clear input boxes. Enter the Title and/or Author and/or Content to search for. "
 			+ " Select Next to get next batch of found stories. Select Save icon to save a selected story to local device \n\r\n\r"
@@ -59,7 +60,14 @@ public enum HelpMessage {
 			"You can read the content of a story here. Select the buttons at the bottom to make a choice, if any. If there are" +
 			" more than 2 available choices, there is an option to pick the choice randomly. \n\r\n\r" +
 			"Select the back button to return to the previously viewed page in the story. \n\r\n\r" +
-			"Select the calendar icon to return to the first page, clearing all history of pages that you have viewed for this story.");
+			"Select the calendar icon to return to the first page, clearing all history of pages that you have viewed for this story."),
+	EDIT_CONTENT(
+			"Add content to the story fragment by hitting the '+' icon. Click and hold on top of story content to access additional editing options." +
+			"You can preview the changes you've made to a fragment without saving by selecting the preview action." +
+			"You can return to the fragment information screen without saving yuor changes by selecting cancel."),
+	EDIT_CHOICE(
+			"The choice's source is automatically set to the fragment you were previously editing. Change the destination fragment by hitting the set button." +
+			"Add text to be shown with the choice in the flavour box. If you do not set a destination, your choice will not be saved.");
 
 	private String message;
 
