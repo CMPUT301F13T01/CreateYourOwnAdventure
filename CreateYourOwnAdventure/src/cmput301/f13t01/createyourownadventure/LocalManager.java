@@ -282,7 +282,7 @@ public class LocalManager implements Serializable, LibraryManager {
 //			if (!externalFile.exists()) {
 //				try {
 //					Bitmap toSave = StoryFragmentViewFactory.decodeUri(
-//							mediaUri, 512, 512, context);
+//							mediaUri, StoryBitmapFactory.MAX_SIZE, StoryBitmapFactory.MAX_SIZE, context);
 //
 //					FileOutputStream os = new FileOutputStream(externalFile);
 //					toSave.compress(Bitmap.CompressFormat.PNG, 100, os);
@@ -310,8 +310,8 @@ public class LocalManager implements Serializable, LibraryManager {
 
 		// Copy the file over
 		try {
-			Bitmap toSave = StoryBitmapFactory.decodeUri(mediaUri, 512,
-					512, context);
+			Bitmap toSave = StoryBitmapFactory.decodeUri(mediaUri, StoryBitmapFactory.MAX_SIZE,
+					StoryBitmapFactory.MAX_SIZE, context);
 
 			// Save the media to the internal file directory.
 			FileOutputStream internalOutputStream = new FileOutputStream(

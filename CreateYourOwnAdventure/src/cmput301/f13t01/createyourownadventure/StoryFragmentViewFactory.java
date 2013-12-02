@@ -44,8 +44,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * The StoryFragmentViewFactory class is used to generate the views for media within
- * a fragment.
+ * The StoryFragmentViewFactory class is used to generate the views for media
+ * within a fragment.
  * 
  * @author Jesse Huard
  * @version 1.0, 29/10/13
@@ -73,16 +73,16 @@ public class StoryFragmentViewFactory {
 					EditText edit = new EditText(context);
 					edit.setTextColor(Color.BLACK);
 					edit.setText(media.getContent().toString());
-//					edit.setPadding(horizontalPadding, verticalPadding,
-//							horizontalPadding, verticalPadding);
+					// edit.setPadding(horizontalPadding, verticalPadding,
+					// horizontalPadding, verticalPadding);
 					layout.addView(edit, params);
 				} else {
 					TextView text = new TextView(context);
 					text.setTextColor(Color.BLACK);
 					text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 					text.setText((CharSequence) media.getContent());
-//					text.setPadding(horizontalPadding, verticalPadding,
-//							horizontalPadding, verticalPadding);
+					// text.setPadding(horizontalPadding, verticalPadding,
+					// horizontalPadding, verticalPadding);
 					layout.addView(text, params);
 				}
 			} else if (media.getClass().equals(Image.class)) {
@@ -117,11 +117,13 @@ public class StoryFragmentViewFactory {
 
 			Log.d("ImageDebug", "addImage path: " + image.getPath());
 
-			Bitmap bitmap = StoryBitmapFactory.decodeUri(image, 256, 256, context);
+			Bitmap bitmap = StoryBitmapFactory.decodeUri(image,
+					StoryBitmapFactory.DEFAULT_SIZE,
+					StoryBitmapFactory.DEFAULT_SIZE, context);
 
 			imageView.setImageBitmap(bitmap);
-//			imageView.setPadding(horizontalPadding, verticalPadding,
-//					horizontalPadding, verticalPadding);
+			// imageView.setPadding(horizontalPadding, verticalPadding,
+			// horizontalPadding, verticalPadding);
 
 			layout.addView(imageView, params);
 
