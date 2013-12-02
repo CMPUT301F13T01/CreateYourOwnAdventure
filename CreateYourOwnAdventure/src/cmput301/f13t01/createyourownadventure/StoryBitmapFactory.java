@@ -14,8 +14,7 @@ public class StoryBitmapFactory {
 	public static final int MAX_SIZE = 512;
 	public static final int DEFAULT_SIZE = 256;
 	public static final int MIN_SIZE = 128;
-	
-	
+
 	public static Bitmap decodeUri(Uri selectedImage, int reqWidth,
 			int reqHeight, Context context) throws FileNotFoundException {
 
@@ -38,6 +37,22 @@ public class StoryBitmapFactory {
 		options.inJustDecodeBounds = false;
 		return BitmapFactory.decodeStream(context.getContentResolver()
 				.openInputStream(selectedImage), null, options);
+	}
+
+	public static Bitmap decodeUriToScale(Uri selectedImage, Context context,
+			Integer scale) throws FileNotFoundException {
+		Bitmap b = StoryBitmapFactory.decodeUri(selectedImage, DEFAULT_SIZE,
+				DEFAULT_SIZE, context);
+		
+		Log.d("ImageDebug", "b dimenstions: " + b.getWidth() + " " + b.getHeight());
+
+		float size = (float) (scale / 100.0);
+
+		Bitmap scaled = Bitmap.createScaledBitmap(b,
+				(int) (b.getWidth() * size), (int) (b.getHeight() * size),
+				false);
+
+		return scaled;
 	}
 
 	public static int calculateInSampleSize(BitmapFactory.Options options,

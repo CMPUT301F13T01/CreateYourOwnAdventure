@@ -93,15 +93,17 @@ public class StoryFragmentViewFactory {
 						+ "/"
 						+ image.getType().toString()
 						+ "/" + image.getContent()));
-				addImage(imageUri, layout, context);
-			} else if (media.getClass().equals(ImageUri.class)) {
+				addImage(imageUri, layout, context, image.getScale());
+			} else if (media instanceof ImageUri) {
 				ImageUri image = (ImageUri) media;
-				addImage(image.getContent(), layout, context);
+				Log.d("oops", "ImageUri scale: " + image.getScale());
+				addImage(image.getContent(), layout, context, image.getScale());
 			}
 		}
 	}
 
-	public static void addImage(Uri image, LinearLayout layout, Context context) {
+	public static void addImage(Uri image, LinearLayout layout,
+			Context context, Integer scale) {
 		try {
 
 			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -112,14 +114,12 @@ public class StoryFragmentViewFactory {
 			imageView.setVisibility(View.VISIBLE);
 			imageView.setAdjustViewBounds(true);
 
-			Log.d("oops", "Layout width: " + layout.getWidth() + " height: "
+			Log.d("ImageDebug", "Layout width: " + layout.getWidth() + " height: "
 					+ layout.getHeight());
 
 			Log.d("ImageDebug", "addImage path: " + image.getPath());
 
-			Bitmap bitmap = StoryBitmapFactory.decodeUri(image,
-					StoryBitmapFactory.DEFAULT_SIZE,
-					StoryBitmapFactory.DEFAULT_SIZE, context);
+			Bitmap bitmap = StoryBitmapFactory.decodeUriToScale(image, context, scale);
 
 			imageView.setImageBitmap(bitmap);
 			// imageView.setPadding(horizontalPadding, verticalPadding,

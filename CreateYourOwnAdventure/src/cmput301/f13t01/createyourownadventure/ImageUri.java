@@ -40,10 +40,16 @@ public class ImageUri implements Media<Uri>, Serializable {
 	private final String type = MediaType.IMAGEURI.toString();
 	
 	private Uri content;
+	private Integer scale;
 	private MediaInteractionManager manager;
 	
 	public ImageUri(Uri content) {
 		this.content = content;
+	}
+
+	public ImageUri(Uri imageUri, Integer scale) {
+		this.content = imageUri;
+		this.scale = scale;
 	}
 
 	/**
@@ -105,15 +111,25 @@ public class ImageUri implements Media<Uri>, Serializable {
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
 		out.writeObject(content.toString());
+		out.writeObject(scale);
 	}
 
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
 		content = Uri.parse((String) in.readObject());
+		scale = (Integer) in.readObject();
 	}
 	
 	@Override
 	public String getType() {
 		return this.type;
+	}
+
+	public Integer getScale() {
+		return scale;
+	}
+
+	public void setScale(Integer scale) {
+		this.scale = scale;
 	}
 }
