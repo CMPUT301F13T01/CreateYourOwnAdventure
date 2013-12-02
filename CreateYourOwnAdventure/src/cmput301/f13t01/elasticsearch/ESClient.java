@@ -88,7 +88,7 @@ public class ESClient {
 	private Gson gson;
 	
 	/**
-	 * Empty constructor.
+	 * Creates the gson object that knows how to serialize Media.
 	 */
 	public ESClient() {
 		
