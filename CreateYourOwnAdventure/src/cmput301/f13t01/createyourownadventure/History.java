@@ -81,7 +81,6 @@ public class History implements Serializable {
 			int lastIndex = size - 1;
 			int lastFragment = historyStack.get(lastIndex);
 			historyStack.remove(lastIndex);
-			printHistory();
 			return lastFragment;
 		}
 		//If stack is empty
@@ -101,7 +100,7 @@ public class History implements Serializable {
 		Integer mostRecent = getMostRecent();
 		
 		if (mostRecent != null) {
-			if (fragmentId != mostRecent) {
+			if (!fragmentId.equals(mostRecent)) {
 				historyStack.add(fragmentId); }
 			else {
 				return;
@@ -110,7 +109,6 @@ public class History implements Serializable {
 		else {
 			historyStack.add(fragmentId);
 		}
-		printHistory();
 		return;
 	}
 	
@@ -120,7 +118,6 @@ public class History implements Serializable {
 	 */
 	public void clearHistory() {
 		historyStack.clear();
-		printHistory();
 		return;
 	}
 	
@@ -154,15 +151,6 @@ public class History implements Serializable {
 	private void readObjectNoData() 
 		     throws ObjectStreamException {
 		return;
-	}
-	
-	// debug purpose only
-	private void printHistory() {
-		System.out.println("History Stack:");
-		for (int fragId : historyStack) {
-			System.out.print(fragId + " ");
-		}
-		System.out.println("Done printing.");
 	}
 	
 }

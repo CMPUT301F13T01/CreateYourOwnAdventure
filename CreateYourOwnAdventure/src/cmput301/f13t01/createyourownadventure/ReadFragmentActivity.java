@@ -73,9 +73,7 @@ public class ReadFragmentActivity extends FragmentActivity {
 					.getString(R.string.story_id));
 			app.setStoryManager(storyId);
 			this.storyManager = app.getStoryManager();
-			System.out.println("");
-			fragmentId = storyManager.goBack();			
-			save.saveStory(this.storyId, this.storyManager.getStory());
+			fragmentId = storyManager.getMostRecent();			
 
 		} else {
 
@@ -189,7 +187,6 @@ public class ReadFragmentActivity extends FragmentActivity {
 	public void toPrevious() {
 
 		// go back to previous, adjusting history stack properly
-		System.out.println("toPrevious");
 		Integer destinationId = storyManager.goBack();
 		save.saveStory(this.storyId, this.storyManager.getStory());
 
@@ -216,7 +213,6 @@ public class ReadFragmentActivity extends FragmentActivity {
 	public void onFragmentListClick(View v, Integer fragmentId) {
 
 		// Save the history
-		System.out.println("Clicked choice");
 		storyManager.pushToStack(fragmentId);
 		save.saveStory(this.storyId, this.storyManager.getStory());
 
