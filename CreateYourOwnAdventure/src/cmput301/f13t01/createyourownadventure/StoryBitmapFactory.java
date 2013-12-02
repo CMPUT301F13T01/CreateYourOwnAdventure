@@ -11,9 +11,9 @@ import android.net.Uri;
 import android.util.Log;
 
 public class StoryBitmapFactory {
-	public static int MAX_SIZE = 512;
-	public static int DEFAULT_SIZE = 256;
-	public static int MIN_SIZE = 128;
+	public static final int MAX_SIZE = 512;
+	public static final int DEFAULT_SIZE = 256;
+	public static final int MIN_SIZE = 128;
 	
 	
 	public static Bitmap decodeUri(Uri selectedImage, int reqWidth,
