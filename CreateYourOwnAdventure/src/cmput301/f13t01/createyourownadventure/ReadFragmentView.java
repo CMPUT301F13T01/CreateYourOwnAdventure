@@ -34,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
@@ -87,6 +88,20 @@ public class ReadFragmentView extends Fragment {
 		ArrayList<Media> annotateList = storyManager
 				.getAnnotationList(fragmentId);
 
+		// create an annotation header, if there is an annotation
+		if (annotateList.size() > 0) {
+
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+			LinearLayout.LayoutParams.MATCH_PARENT,
+			LinearLayout.LayoutParams.WRAP_CONTENT);
+
+			TextView text = new TextView(getActivity());
+			text.setTextColor(Color.BLACK);
+			text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+			text.setText("\n\n Reader's Annotations:");
+			layout.addView(text, params);	
+		}
+				
 		StoryFragmentViewFactory.ConstructView(layout, annotateList, getActivity(), false);
 
 		// from story level with fragment id, get the array list of choice
