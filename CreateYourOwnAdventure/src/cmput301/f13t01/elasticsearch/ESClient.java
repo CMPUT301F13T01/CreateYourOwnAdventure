@@ -97,6 +97,7 @@ public class ESClient {
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(Media.class, new InterfaceAdapter<Media<String>>());
 		gsonBuilder.registerTypeAdapter(Media.class, new InterfaceAdapter<Media<SpannableString>>());
+		gsonBuilder.registerTypeAdapter(Media.class, new InterfaceAdapter<Media>());
 		gson = gsonBuilder.create();
 		
 	}
@@ -138,7 +139,8 @@ public class ESClient {
 		// Need to clear history before posting
 		story.clearHistory();
 
-		postData(story, httpPost);
+		//postData(story, httpPost);
+		postStoryData(story, httpPost);
 		
 		return;
 	}
@@ -528,6 +530,52 @@ public class ESClient {
 		}
 		System.err.println("JSON:" + json);
 		return json;
+	}
+	
+	private void postStoryData(Story story, HttpPost httpPost) 
+			throws IllegalStateException, IOException {
+		
+		StringEntity stringentity = null;
+		try {
+			
+			String json = gson.toJson(story);
+			stringentity = new StringEntity(json);
+			Log.d("Story", json);
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		httpPost.setHeader("Accept", "application/json");
+
+		httpPost.setEntity(stringentity);
+		HttpResponse response = null;
+		try {
+			response = httpclient.execute(httpPost);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		String status = response.getStatusLine().toString();
+		System.out.println(status);
+		HttpEntity entity = response.getEntity();
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				entity.getContent()));
+		String output;
+		System.err.println("Output from Server -> ");
+		while ((output = br.readLine()) != null) {
+			System.err.println(output);
+		}
+
+		try {
+			entity.consumeContent();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return;
 	}
 	
 	private <T> void postData(T data, HttpPost httpPost) 
