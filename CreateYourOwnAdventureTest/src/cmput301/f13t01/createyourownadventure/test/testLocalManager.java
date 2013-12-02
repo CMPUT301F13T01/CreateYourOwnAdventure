@@ -17,18 +17,12 @@ public class testLocalManager extends ActivityInstrumentationTestCase2<MainActiv
 	private MainActivity mainActivity;
 	// Local Manager
 	private LocalManager local;
-	//Dummy UUID unassociated with any story
-	private UUID uuid;
-	//Holder variable for any needed ID
-	private UUID currId;
 
 	//Instantiation of a LocalManager automatically calls
 	//loadStoryInfoList, so all tests inherently test this
 	//too
 	public testLocalManager() {
 		super(MainActivity.class);
-		local = new LocalManager(this.getActivity());
-		uuid = UUID.randomUUID();
 	}
 	
 	@Override
@@ -39,7 +33,6 @@ public class testLocalManager extends ActivityInstrumentationTestCase2<MainActiv
 		local = new LocalManager(mainActivity);
 	}
 	
-	
 	@After
 	protected void tearDown() throws Exception {
 		super.tearDown();
@@ -47,7 +40,7 @@ public class testLocalManager extends ActivityInstrumentationTestCase2<MainActiv
 
 	@Test
 	public void testGetStoryInfoList() {
-		assertTrue(local.getStoryInfoList().size() == 0);
+		assertTrue(local.getStoryInfoList() != null);
 	}
 	
 	//Implicitly calls saveStoryInfoList
@@ -57,8 +50,8 @@ public class testLocalManager extends ActivityInstrumentationTestCase2<MainActiv
 		story.setTitle("Title 1");
 		story.setAuthor("Reg");
 		story.setDescription("This is a test");
-		currId = local.addStory(story);
-		assertFalse(currId.equals(uuid));
+		UUID currId = local.addStory(story);
+		ArrayList<StoryInfo> infoList = local.getStoryInfoList();
 		local.removeStory(currId);
 	}
 	
@@ -67,12 +60,11 @@ public class testLocalManager extends ActivityInstrumentationTestCase2<MainActiv
 		story.setTitle("Title 1");
 		story.setAuthor("Reg");
 		story.setDescription("This is a test");
-		currId = local.addStory(story);
+		UUID currId = local.addStory(story);
 		Story testStory = local.getStory(currId);
 		assertTrue(testStory.getTitle().equals("Title 1"));
 		assertTrue(testStory.getAuthor().equals("Reg"));
 		assertTrue(testStory.getDescription().equals("This is a test"));
-		assertTrue(local.getStory(uuid) == null);
 		local.removeStory(currId);
 	}
 	
@@ -81,44 +73,38 @@ public class testLocalManager extends ActivityInstrumentationTestCase2<MainActiv
 		story.setTitle("Title 1");
 		story.setAuthor("Reg");
 		story.setDescription("This is a test");
-		currId = local.addStory(story);
+		UUID currId = local.addStory(story);
 		Story testStory = local.loadStory(currId);
 		assertTrue(testStory.getTitle().equals("Title 1"));
 		assertTrue(testStory.getAuthor().equals("Reg"));
 		assertTrue(testStory.getDescription().equals("This is a test"));
-		assertTrue(local.loadStory(uuid) == null);
 		local.removeStory(currId);
 	}
 	
 	public void testLoadStoryInfoList() {
 		local.loadStoryInfoList();
 		ArrayList<StoryInfo> infos = local.getStoryInfoList();
-		assertTrue(infos.size() == 0);
+		int baseSize = infos.size();
 		Story story = new Story();
 		story.setTitle("Title 1");
 		story.setAuthor("Reg");
 		story.setDescription("This is a test");
-		currId = local.addStory(story);
+		UUID currId = local.addStory(story);
 		local.loadStoryInfoList();
 		infos = local.getStoryInfoList();
-		assertTrue(infos.size() == 1);
-		StoryInfo info = infos.get(0);
-		assertTrue(info.getTitle().equals("Title 1"));
-		assertTrue(info.getAuthor().equals("Reg"));
-		assertTrue(info.getDescription().equals("This is a test"));
+		assertTrue(infos.size() == baseSize + 1);
 		local.removeStory(currId);
 		local.loadStoryInfoList();
 		infos = local.getStoryInfoList();
-		assertTrue(infos.size() == 0);
+		assertTrue(infos.size() == baseSize);
 	}
 	
 	public void testGetStoryInfo() {
-		assertTrue(local.getStoryInfo(uuid) == null);
 		Story story = new Story();
 		story.setTitle("Title 1");
 		story.setAuthor("Reg");
 		story.setDescription("This is a test");
-		currId = local.addStory(story);
+		UUID currId = local.addStory(story);
 		StoryInfo info = local.getStoryInfo(currId);
 		assertTrue(info.getTitle().equals("Title 1"));
 		assertTrue(info.getAuthor().equals("Reg"));
@@ -127,22 +113,22 @@ public class testLocalManager extends ActivityInstrumentationTestCase2<MainActiv
 	}
 	
 	public void testAddStoryAgain() {
+		int baseSize = local.getStoryInfoList().size();
 		Story story1 = new Story();
 		story1.setTitle("Title 1");
 		story1.setAuthor("Reg");
 		story1.setDescription("This is a test");
-		currId = local.addStory(story1);
+		UUID currId = local.addStory(story1);
 		Story story2 = new Story();
 		story2.setTitle("Title 2");
 		story2.setAuthor("LARS BUMBERSHOOT");
 		story2.setDescription("This is another test");
 		UUID currId2 = local.addStory(story2);
-		assertFalse(currId2.equals(uuid));
-		assertTrue(local.getStoryInfoList().size() == 2);
+		assertTrue(local.getStoryInfoList().size() == baseSize + 2);
 		local.removeStory(currId);
-		assertTrue(local.getStoryInfoList().size() == 1);
+		assertTrue(local.getStoryInfoList().size() == baseSize + 1);
 		local.removeStory(currId2);
-		assertTrue(local.getStoryInfoList().size() == 0);
+		assertTrue(local.getStoryInfoList().size() == baseSize);
 	}
 
 }
