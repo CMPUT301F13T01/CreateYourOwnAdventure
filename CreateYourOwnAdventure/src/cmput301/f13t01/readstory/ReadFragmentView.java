@@ -57,8 +57,7 @@ public class ReadFragmentView extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		GlobalManager app = (GlobalManager) activity.getApplication();
-		this.storyManager = app.getStoryManager();
+		this.storyManager = GlobalManager.getStoryManager();
 	}
 
 	@Override

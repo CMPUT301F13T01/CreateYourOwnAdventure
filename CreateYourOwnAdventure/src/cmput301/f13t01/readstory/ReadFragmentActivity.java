@@ -70,9 +70,8 @@ public class ReadFragmentActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		GlobalManager app = (GlobalManager) getApplication();
-		save = app.getLocalManager();
+		app = (GlobalManager) getApplication();
+		save = GlobalManager.getLocalManager();
 
 		setContentView(R.layout.activity_view_fragment);
 
@@ -331,6 +330,8 @@ public class ReadFragmentActivity extends FragmentActivity {
 							R.string.annotation));
 
 			storyManager.setAnnotation(fragmentId, newAnnotationList);
+			// Save the story with new annotations
+			save.saveStory(this.storyId, this.storyManager.getStory());
 
 			Toast.makeText(getBaseContext(), "Annotation Saved",
 					Toast.LENGTH_LONG).show();
